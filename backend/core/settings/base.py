@@ -1,16 +1,23 @@
 from pathlib import Path
+import environ
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+PROJECT_PACKAGE = Path(__file__).resolve().parent.parent
+BASE_DIR = PROJECT_PACKAGE.parent
 
 
-SECRET_KEY = 'django-insecure-ng=5s0zfu)1dp#3&y#=f*mljkqh+^t@eo7^3)^(h^w(^su*ckf'
+env = environ.Env(
+    DJANGO_DEBUG=(bool, False),
+    DJANGO_ALLOWED_HOSTS=(list, []),
+    DJANGO_DB_ENGINE=(str, 'sqlite3'),
+)
 
-DEBUG = True
+env.read_env(BASE_DIR / '../env/local.env')
 
 
-ALLOWED_HOSTS = []
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS')
 
 
 INSTALLED_APPS = [
@@ -57,19 +64,10 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
 ASGI_APPLICATION = 'core.asgi.application'
-
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -88,7 +86,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -101,15 +98,12 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
-
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
-        'rest_framework.parsers.FormParser',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -118,23 +112,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
-
-
-
-"""
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
-}
-"""
-
-
-
-CORS_ALLOW_ALL_ORIGINS = True
 
 
 AUTH_USER_MODEL = 'users.User'
