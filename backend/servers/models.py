@@ -81,3 +81,11 @@ class ServerInvite(models.Model):
     def is_expired(self):
         return timezone.now() > self.expires_at
     
+
+class ServerMember(models.Model):
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid7)
+
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    server = models.ForeignKey(Server, on_delete=models.CASCADE)
+
+    joined_at = models.DateTimeField(auto_now_add=True)

@@ -84,3 +84,22 @@ class ServerInviteAdmin(admin.ModelAdmin):
             return self.add_fieldsets
         else:
             return self.fieldsets
+
+
+@admin.register(models.ServerMember)
+class ServerAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'server', 'joined_at']
+    readonly_fields = ['id', 'joined_at']
+
+
+    fieldsets = [
+        ["Basic Info", {
+            'fields': ['id']
+        }],
+        ["Related Objects", {
+            'fields': ['user', 'server']
+        }],
+        ["Dates", {
+            'fields': ['joined_at']
+        }],
+    ]
