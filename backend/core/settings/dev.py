@@ -16,10 +16,24 @@ DATABASES = {
 }
 
 
+REST_FRAMEWORK['DEFAULT_PARSER_CLASSES'] = [
+    'rest_framework.parsers.JSONParser',
+    'rest_framework.parsers.FormParser',
+    'rest_framework.parsers.MultiPartParser',
+]
+
 REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
     'rest_framework.renderers.JSONRenderer',
     'rest_framework.renderers.BrowsableAPIRenderer',
 ]
+
+REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = [
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'rest_framework.authentication.SessionAuthentication',
+]
+
+
+SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']: timedelta(hours=8)
 
 
 CHANNEL_LAYERS = {
@@ -30,3 +44,4 @@ CHANNEL_LAYERS = {
 
 
 CORS_ALLOW_ALL_ORIGINS = True
+
