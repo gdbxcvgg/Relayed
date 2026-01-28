@@ -51,4 +51,9 @@ class UserSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if User.objects.filter(username=username).exclude(pk=user.id).exists():
             raise ValidationError("User with this username already exists.")
+        if len(username) < 2:
+            raise ValidationError("Username is too short. Minimum 2 characters are required.")
+        if len(username) > 64:
+            raise ValidationError("Username is too long. Maximum 64 characters are allowed.")
+
         return username
