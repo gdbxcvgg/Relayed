@@ -11,7 +11,7 @@ auth_urlpatterns = [
 
 
 users_urlpatterns = [
-
+    path('@me', views.UserRetrieveAPIView.as_view()),
 ]
 
 

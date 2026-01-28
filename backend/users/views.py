@@ -12,4 +12,9 @@ class RegisterAPIView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     queryset = User.objects.none()
     
-        
+
+class UserRetrieveAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = serializers.UserSerializer
+
+    def get_object(self):
+        return self.request.user
