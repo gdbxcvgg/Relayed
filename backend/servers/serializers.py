@@ -11,17 +11,18 @@ class PartialServerSerializer(serializers.ModelSerializer):
 
 
 class ServerSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+    owner = UserSerializer(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
+
     class Meta:
-        id = serializers.UUIDField(read_only=True)
-        owner = UserSerializer(read_only=True)
-        created_at = serializers.DateTimeField(read_only=True)
-        
         model = models.Server
         fields = ['id', 'owner', 'name', 'icon', 'created_at']
 
 
 class ServerMembershipSerializer(serializers.ModelSerializer):
     user_id = serializers.UUIDField(source='user.id')
+    
     class Meta:
         model = models.ServerMember
         fields = ['id', 'user_id', 'joined_at']
