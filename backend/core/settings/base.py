@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'api',
     'servers',
     'rooms',
+    'chat_messages',
 ]
 
 MIDDLEWARE = [
