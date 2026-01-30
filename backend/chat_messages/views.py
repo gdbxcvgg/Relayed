@@ -7,13 +7,13 @@ from . import models, serializers
 from servers.models import ServerMember
 
 
-class MessageRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
+class MessageRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.MessageSerializer
     queryset = models.Message.objects.all()
 
     def get_object(self):
-        room = get_object_or_404(Room, pk=self.kwargs['room_pk'])
-        message = get_object_or_404(models.Message, room=room, pk=self.kwargs['msg_pk'])
+        room = get_object_or_404(Room, pk=self.kwargs['room_pk'], is_deleted=False)
+        message = get_object_or_404(models.Message, room=room, pk=self.kwargs['msg_pk'], is_deleted=False)
 
         return message
 
@@ -26,17 +26,25 @@ class MessageRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         
         serializer.save(edited_at=timezone.now())
 
+    
+    def perform_destroy(self, instance):
+        if instance.author != self.request.user:
+            raise PermissionDenied
+            
+        instance.is_deleted = True
+        instance.save()
+
 
 class MessageListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = serializers.MessageSerializer
 
     def get_queryset(self):
-        room = get_object_or_404(Room, pk=self.kwargs['room_pk'])
+        room = get_object_or_404(Room, pk=self.kwargs['room_pk'], is_deleted=False)
 
         if room.server and not ServerMember.objects.filter(server=room.server, user=self.request.user):
             raise PermissionDenied
 
-        return models.Message.objects.filter(room=room)
+        return models.Message.valid_objects.filter(room=room)
 
     def perform_create(self, serializer):
         room = get_object_or_404(Room, pk=self.kwargs['room_pk'])

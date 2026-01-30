@@ -7,6 +7,11 @@ import uuid
 User = get_user_model()
 
 
+class MessagesFilteredManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False)
+
+
 class Message(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid7)
     
@@ -18,6 +23,9 @@ class Message(models.Model):
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(null=True, blank=True)
+
+    objects = models.Manager()
+    valid_objects = MessagesFilteredManager()
 
     def __str__(self):
         return self.content

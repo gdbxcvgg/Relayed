@@ -6,7 +6,7 @@ from . import models
 class MessageAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'room', 'author', 'created_at', 
-        'edited', 'edited_at', 'content'
+        'edited', 'edited_at', 'content', 'is_deleted'
     ]
 
     readonly_fields = ['id', 'created_at', 'author', 'room']
