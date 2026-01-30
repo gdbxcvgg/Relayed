@@ -25,3 +25,7 @@ class Message(models.Model):
     @property
     def edited(self):
         return self.edited_at is not None
+
+
+    class Meta:
+        ordering = ['-id']
