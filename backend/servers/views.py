@@ -1,8 +1,9 @@
-from rest_framework import generics
+from rest_framework import generics, response, views, status
 from . import models, serializers
 from rooms.serializers import RoomSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import AllowAny
 
 
 class ServerRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
@@ -38,3 +39,27 @@ class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
             raise PermissionDenied
         
         serializer.save(server=server)
+
+
+class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = serializers.ServerInviteSerializer
+
+
+    def get_object(self):
+        invite_code = self.kwargs['invite_code']
+        invite = get_object_or_404(models.ServerInvite, code=invite_code)
+        return invite
+
+
+    # Join Server
+    def post(self, request, *args, **kwargs):
+        invite = self.get_object()
+
+        if models.ServerMember.objects.filter(server=invite.server, user=self.request.user):
+            return response.Response(
+                data={'message': 'You are already a member of this server'},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        models.ServerMember.objects.create(server=invite.server, user=self.request.user)
+        return response.Response(status=status.HTTP_200_OK)

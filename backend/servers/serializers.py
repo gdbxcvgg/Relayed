@@ -26,3 +26,12 @@ class ServerMembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ServerMember
         fields = ['id', 'user_id', 'joined_at']
+
+
+class ServerInviteSerializer(serializers.ModelSerializer):
+    server = PartialServerSerializer(read_only=True)
+    inviter = UserSerializer(read_only=True)
+
+    class Meta:
+        model = models.ServerInvite
+        fields = ['id', 'inviter', 'server', 'code', 'created_at', 'expires_at']
