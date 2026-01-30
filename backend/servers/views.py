@@ -1,4 +1,4 @@
-from rest_framework import generics, response, views, status
+from rest_framework import generics, response, views, status, mixins
 from . import models, serializers
 from rooms.serializers import RoomSerializer
 from django.shortcuts import get_object_or_404
@@ -41,7 +41,7 @@ class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(server=server)
 
 
-class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveUpdateAPIView):
+class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveAPIView, mixins.CreateModelMixin):
     serializer_class = serializers.ServerInviteSerializer
 
 
