@@ -63,3 +63,19 @@ class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveAPIView, mixins.Cre
 
         models.ServerMember.objects.create(server=invite.server, user=self.request.user)
         return response.Response(status=status.HTTP_200_OK)
+
+
+class CreateServerAPIView(generics.CreateAPIView):
+    serializer_class = serializers.ServerSerializer
+
+    def perform_create(self, serializer):
+        server = serializer.save(owner=self.request.user)
+        models.ServerMember.objects.create(server=server, user=self.request.user)
+
+
+class ListServerMembersAPIView(generics.ListAPIView):
+    serializer_class = serializers.ServerMembershipSerializer
+
+    def get_queryset(self):
+        server = get_object_or_404(models.Server, pk=self.kwargs['pk'])
+        return models.ServerMember.objects.filter(server=server)

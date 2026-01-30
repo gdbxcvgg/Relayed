@@ -3,8 +3,10 @@ from . import views
 
 
 servers_urlpatterns = [
+    path('', views.CreateServerAPIView.as_view()),
     path('<uuid:pk>', views.ServerRetrieveUpdateAPIView.as_view()),
     path('<uuid:pk>/rooms', views.ServerRoomsListCreateAPIView.as_view()),
+    path('<uuid:pk>/members', views.ListServerMembersAPIView.as_view()),
 ]
 
 
