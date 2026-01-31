@@ -26,7 +26,7 @@ class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
     def get_queryset(self):
         from rooms.models import Room
 
-        server = get_object_or_404(models.Server, pk=self.kwargs['pk'])
+        server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
         
         if not models.ServerMember.objects.filter(server=server, user=self.request.user):
             raise PermissionDenied
@@ -47,7 +47,7 @@ class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveAPIView, mixins.Cre
 
     def get_object(self):
         invite_code = self.kwargs['invite_code']
-        invite = get_object_or_404(models.ServerInvite, code=invite_code)
+        invite = get_object_or_404(models.ServerInvite, code=invite_code, is_deleted=False)
         return invite
 
 
@@ -62,6 +62,14 @@ class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveAPIView, mixins.Cre
             )
 
         models.ServerMember.objects.create(server=invite.server, user=self.request.user)
+
+        invite.uses += 1
+        invite.save()
+
+        if invite.is_expired:
+            invite.is_deleted = True
+            invite.save()
+
         return response.Response(status=status.HTTP_200_OK)
 
 

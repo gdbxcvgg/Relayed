@@ -55,7 +55,7 @@ class ServerInvite(models.Model):
     uses = models.IntegerField(default=0)
     max_uses = models.IntegerField(null=True, blank=True)
 
-    objects = ServerInviteFilteredManager()
+    objects = models.Manager()
     valid_objects = ServerInviteFilteredManager()
 
 
@@ -79,8 +79,11 @@ class ServerInvite(models.Model):
     
     @property
     def is_expired(self):
-        return timezone.now() > self.expires_at
-    
+        if timezone.now() > self.expires_at:
+            return True
+        if self.max_uses and self.uses >= self.max_uses:
+            return True
+        return False
 
 class ServerMember(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid7)
