@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'servers',
     'rooms',
     'chat_messages',
+    'gateway',
 ]
 
 MIDDLEWARE = [
