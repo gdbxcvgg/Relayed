@@ -4,6 +4,9 @@ from asgiref.sync import async_to_sync
 from .authentication import JWTGatewayAuth
 from . import opcodes as OPCODES
 from . import serializers
+from django.shortcuts import get_object_or_404
+from servers.models import Server
+from rooms.models import Room
 
 
 class GatewayConsumer(JsonWebsocketConsumer):
@@ -32,6 +35,12 @@ class GatewayConsumer(JsonWebsocketConsumer):
         if opcode == OPCODES.IDENTIFY:
             self.handle_identify(data)
 
+        if not self.user:
+            return self.close()
+        
+        if opcode == OPCODES.GUILD_SUBSCRIBE:
+            self.handle_subscribe(data)
+
 
     def handle_identify(self, data):
         serializer = serializers.IdentifyDataSerializer(data=data)
@@ -42,7 +51,28 @@ class GatewayConsumer(JsonWebsocketConsumer):
         token = serializer.validated_data['token']
         self.login(token)
 
+    
+    def handle_subscribe(self, data):
+        serializer = serializers.ServerSubscribeDataSerializer(data=data)
+
+        if not serializer.is_valid():
+            return self.close()
         
+        server_id = serializer.validated_data['server_id']
+        server = get_object_or_404(Server, pk=server_id)
+
+        rooms = serializer.validated_data['rooms']
+
+        for room in rooms:
+            room_id = room['id']
+            room = get_object_or_404(Room, pk=room_id)
+
+            if room.server != server:
+                return self.close()
+            
+            self.subscribe(f'room_{room_id}')
+
+
     def login(self, token):
         self.user = JWTGatewayAuth.authenticate(token)
 
@@ -56,7 +86,12 @@ class GatewayConsumer(JsonWebsocketConsumer):
 
 
     def subscribe(self, group_name):
+        if group_name in self.subscriptions:
+            return
+        
         async_to_sync(self.channel_layer.group_add)(
             group_name, self.channel_name
         )
         self.subscriptions.append(group_name)
+
+        

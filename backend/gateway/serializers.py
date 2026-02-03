@@ -8,3 +8,12 @@ class GatewaySendPayloadSerializer(serializers.Serializer):
 
 class IdentifyDataSerializer(serializers.Serializer):
     token = serializers.CharField()
+
+
+class RoomSubscribeSerializer(serializers.Serializer):
+    id = serializers.UUIDField()
+
+
+class ServerSubscribeDataSerializer(serializers.Serializer):
+    server_id = serializers.UUIDField()
+    rooms = RoomSubscribeSerializer(many=True)
