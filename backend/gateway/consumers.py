@@ -3,6 +3,7 @@ from channels import auth
 from asgiref.sync import async_to_sync
 from .authentication import JWTGatewayAuth
 from . import opcodes as OPCODES
+from . import events as EVENTS
 from . import serializers
 from django.shortcuts import get_object_or_404
 from servers.models import Server
@@ -94,4 +95,24 @@ class GatewayConsumer(JsonWebsocketConsumer):
         )
         self.subscriptions.append(group_name)
 
-        
+    
+    def dispatch_message(self, event):
+        message = event['message']
+        self.dispatch_event(
+            opcode=OPCODES.DISPATCH, 
+            data=message, 
+            e_type=EVENTS.ROOM_MESSAGE_SEND
+        )
+
+    
+    def dispatch_event(self, opcode, data, e_type):
+        serializer = serializers.GatewayDispatchEventSerializer(data={
+            'opcode': opcode,
+            'data': data,
+            'type': e_type
+        })
+
+        if not serializer.is_valid():
+            return self.close()
+
+        self.send_json(serializer.validated_data)
