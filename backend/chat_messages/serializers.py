@@ -14,3 +14,12 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Message 
         fields = ['id', 'content', 'author', 'room_id', 'created_at', 'edited_at']
+
+
+class MessageDeletedSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+    room_id = serializers.UUIDField(read_only=True, source='room.id')
+
+    class Meta:
+        model = models.Message 
+        fields = ['id', 'room_id']
