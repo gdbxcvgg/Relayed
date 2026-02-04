@@ -61,8 +61,8 @@ class GatewayConsumer(websocket.JsonWebsocketConsumer):
         
         server_id = serializer.validated_data['server_id']
         server = get_object_or_404(Server, pk=server_id)
-
-        rooms = serializer.validated_data['rooms']
+    
+        rooms = serializer.validated_data.get('rooms', [])
 
         for room in rooms:
             room_id = room['id']

@@ -16,7 +16,7 @@ class RoomSubscribeSerializer(serializers.Serializer):
 
 class ServerSubscribeDataSerializer(serializers.Serializer):
     server_id = serializers.UUIDField()
-    rooms = RoomSubscribeSerializer(many=True)
+    rooms = RoomSubscribeSerializer(many=True, required=False)
 
 
 class GatewayDispatchEventSerializer(serializers.Serializer):

@@ -29,8 +29,7 @@ def send_new_room_message_to_gateway(sender, instance, created, **kwargs):
 
 @receiver(signals.post_delete, sender=models.Message)
 def dispatch_message_deleted_to_gateway(sender, instance, soft_delete=False, **kwargs):
-    if instance.is_deleted and not soft_delete:
-        return
+    if instance.is_deleted and not soft_delete: return
 
     group_name = f'room_{instance.room.id}'
     channel_layer = get_channel_layer()
