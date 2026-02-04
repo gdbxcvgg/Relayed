@@ -3,7 +3,7 @@ from asgiref.sync import async_to_sync
 from channels.generic import websocket
 from channels import auth
 from .authentication import JWTGatewayAuth
-from servers.models import Server
+from servers.models import Server, ServerMember
 from rooms.models import Room
 from . import opcodes as OPCODES
 from . import serializers
@@ -61,6 +61,11 @@ class GatewayConsumer(websocket.JsonWebsocketConsumer):
         
         server_id = serializer.validated_data['server_id']
         server = get_object_or_404(Server, pk=server_id)
+
+        member = ServerMember.objects.filter(user=self.user, server=server)
+
+        if not member.exists():
+            return
     
         rooms = serializer.validated_data.get('rooms', [])
 
