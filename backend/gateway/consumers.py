@@ -6,7 +6,6 @@ from .authentication import JWTGatewayAuth
 from servers.models import Server
 from rooms.models import Room
 from . import opcodes as OPCODES
-from . import events as EVENTS
 from . import serializers
 
 
@@ -99,16 +98,11 @@ class GatewayConsumer(websocket.JsonWebsocketConsumer):
         self.subscriptions.append(group_name)
 
     
-    def dispatch_message(self, event):
-        message = event['message']
-        self.dispatch_event(
-            opcode=OPCODES.DISPATCH, 
-            data=message, 
-            e_type=EVENTS.ROOM_MESSAGE_SEND
-        )
+    def dispatch_event(self, event):
+        opcode = event['opcode']
+        data = event['data']
+        e_type = event['e_type']
 
-    
-    def dispatch_event(self, opcode, data, e_type):
         serializer = serializers.GatewayDispatchEventSerializer(data={
             'opcode': opcode,
             'data': data,
