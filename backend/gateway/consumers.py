@@ -1,16 +1,16 @@
-from channels.generic.websocket import JsonWebsocketConsumer
-from channels import auth
+from django.shortcuts import get_object_or_404
 from asgiref.sync import async_to_sync
+from channels.generic import websocket
+from channels import auth
 from .authentication import JWTGatewayAuth
+from servers.models import Server
+from rooms.models import Room
 from . import opcodes as OPCODES
 from . import events as EVENTS
 from . import serializers
-from django.shortcuts import get_object_or_404
-from servers.models import Server
-from rooms.models import Room
 
 
-class GatewayConsumer(JsonWebsocketConsumer):
+class GatewayConsumer(websocket.JsonWebsocketConsumer):
     def connect(self):
         self.user = None
         self.subscriptions = []
@@ -23,6 +23,7 @@ class GatewayConsumer(JsonWebsocketConsumer):
                 group,
                 self.channel_name
             )
+
 
     def receive_json(self, content, **kwargs): 
         serializer = serializers.GatewaySendPayloadSerializer(data=content)
@@ -72,6 +73,8 @@ class GatewayConsumer(JsonWebsocketConsumer):
                 return self.close()
             
             self.subscribe(f'room_{room_id}')
+
+        self.subscribe(f'server_{server_id}')
 
 
     def login(self, token):
