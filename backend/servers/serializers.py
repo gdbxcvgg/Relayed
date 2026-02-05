@@ -3,7 +3,6 @@ from users.serializers import UserSerializer
 from . import models
 
 
-
 class PartialServerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Server
@@ -35,3 +34,11 @@ class ServerInviteSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ServerInvite
         fields = ['id', 'inviter', 'server', 'code', 'created_at', 'expires_at']
+
+
+class ServerLeftSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+
+    class Meta:
+        model = models.Server 
+        fields = ['id']
