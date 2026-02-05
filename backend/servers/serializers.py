@@ -24,7 +24,7 @@ class ServerMembershipSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = models.ServerMember
-        fields = ['id', 'user_id', 'joined_at']
+        fields = ['user_id', 'joined_at']
 
 
 class ServerInviteSerializer(serializers.ModelSerializer):

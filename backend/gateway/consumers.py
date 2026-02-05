@@ -6,6 +6,7 @@ from .authentication import JWTGatewayAuth
 from servers.models import Server, ServerMember
 from rooms.models import Room
 from . import opcodes as OPCODES
+from . import events as EVENTS
 from . import serializers
 
 
@@ -117,4 +118,17 @@ class GatewayConsumer(websocket.JsonWebsocketConsumer):
         if not serializer.is_valid():
             return self.close()
 
+        if e_type == EVENTS.USER_SERVER_LEFT:
+            server = Server.objects.get(pk=data['id'])
+            self.unsubscribe(f'server_{server.id}')
+
         self.send_json(serializer.validated_data)
+    
+
+    def unsubscribe(self, group_name):
+        if group_name not in self.subscriptions: return
+        
+        async_to_sync(self.channel_layer.group_discard)(
+            group_name, self.channel_name
+        )
+        self.subscriptions.remove(group_name)
