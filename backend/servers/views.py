@@ -3,21 +3,15 @@ from . import models, serializers
 from rooms.serializers import RoomSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny
+from .permissions import IsServerOwnerOrMemberRetrieve
 
 
 class ServerRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = serializers.ServerSerializer
-
-    def get_queryset(self):
-        return models.Server.objects.filter(servermember__user=self.request.user)
-
-    def perform_update(self, serializer):
-        server = self.get_object()
-        if server.owner != self.request.user:
-            raise PermissionDenied
-
-        super().perform_update(serializer)
+    queryset = models.Server.objects
+    
+    perm_server_path = 'self'
+    permission_classes = [IsServerOwnerOrMemberRetrieve]
 
 
 class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
