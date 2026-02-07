@@ -1,9 +1,10 @@
 from rest_framework import generics, response, views, status, mixins
-from . import models, serializers
-from rooms.serializers import RoomSerializer
-from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404
 from .permissions import IsServerOwnerOrMemberRetrieve
+from rooms.serializers import RoomSerializer
+from rooms.models import Room
+from . import models, serializers
 
 
 class ServerRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
@@ -17,14 +18,12 @@ class ServerRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
 class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = RoomSerializer
 
+    perm_server_kwargs = 'pk'
+    perm_server_path = 'server'
+    permission_classes = [IsServerOwnerOrMemberRetrieve]
+
     def get_queryset(self):
-        from rooms.models import Room
-
         server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
-        
-        if not models.ServerMember.objects.filter(server=server, user=self.request.user):
-            raise PermissionDenied
-
         return Room.objects.filter(server=server)
 
     def perform_create(self, serializer):
@@ -38,12 +37,10 @@ class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
 class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveAPIView, mixins.CreateModelMixin):
     serializer_class = serializers.ServerInviteSerializer
 
-
     def get_object(self):
         invite_code = self.kwargs['invite_code']
         invite = get_object_or_404(models.ServerInvite, code=invite_code, is_deleted=False)
         return invite
-
 
     # Join Server
     def post(self, request, *args, **kwargs):
@@ -77,6 +74,9 @@ class CreateServerAPIView(generics.CreateAPIView):
 
 class ListServerMembersAPIView(generics.ListAPIView):
     serializer_class = serializers.ServerMembershipSerializer
+
+    perm_server_kwargs = 'pk'
+    permission_classes = [IsServerOwnerOrMemberRetrieve]
 
     def get_queryset(self):
         server = get_object_or_404(models.Server, pk=self.kwargs['pk'])
