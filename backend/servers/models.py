@@ -85,6 +85,7 @@ class ServerInvite(models.Model):
             return True
         return False
 
+
 class ServerMember(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid7)
 
@@ -92,3 +93,8 @@ class ServerMember(models.Model):
     server = models.ForeignKey(Server, on_delete=models.CASCADE)
 
     joined_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'server'], name='unique_user_per_server')
+        ]
