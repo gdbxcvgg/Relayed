@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from servers.models import Server
 import uuid
@@ -25,3 +26,22 @@ class Room(models.Model):
 
     def __str__(self):
         return f"{self.name} [{self.get_room_type_display()}]"
+
+    def clean(self):
+        TEXT = 1
+        CATEGORY = 2
+
+        if not self.parent: return
+
+        if self.room_type == CATEGORY:
+            raise ValidationError('Category cannot have parent!')
+
+        if self.parent.room_type != CATEGORY:
+            raise ValidationError('Room parent must be of category type!')
+        
+        if self.server != self.parent.server:
+            raise ValidationError('Room\'s parent must be in the same server!')
+
+    def save(self, **kwargs):
+        self.full_clean()
+        super().save(**kwargs)
