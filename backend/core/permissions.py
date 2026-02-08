@@ -11,3 +11,8 @@ class BasePermission(permissions.BasePermission):
                 raise AttributeError(f'Object {obj.id} does not have an attribute of {path}')
             v = getattr(obj, attr)
         return v
+
+
+class ReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS

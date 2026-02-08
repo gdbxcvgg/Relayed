@@ -4,7 +4,8 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from . import models, serializers
-from servers.permissions import IsServerOwner, IsServerMember, ReadOnly
+from servers.permissions import IsServerOwner, IsServerMember
+from core.permissions import ReadOnly
 
 
 class RoomRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):

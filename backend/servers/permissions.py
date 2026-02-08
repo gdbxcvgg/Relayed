@@ -46,7 +46,3 @@ class IsServerMember(permissions.BasePermission):
             server=server, user=request.user
         ).exists()
 
-
-class ReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.method in SAFE_METHODS

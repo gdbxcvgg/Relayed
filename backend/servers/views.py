@@ -2,7 +2,8 @@ from rest_framework import generics, response, views, status, mixins
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from .permissions import IsServerOwner, IsServerMember, ReadOnly
+from .permissions import IsServerOwner, IsServerMember
+from core.permissions import ReadOnly
 from rooms.serializers import RoomSerializer
 from rooms.models import Room
 from . import models, serializers
