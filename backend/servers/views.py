@@ -1,7 +1,8 @@
 from rest_framework import generics, response, views, status, mixins
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from .permissions import IsServerOwnerOrMemberRetrieve
+from .permissions import IsServerOwner, IsServerMember, ReadOnly
 from rooms.serializers import RoomSerializer
 from rooms.models import Room
 from . import models, serializers
@@ -12,7 +13,7 @@ class ServerRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = models.Server.objects
     
     perm_server_path = 'self'
-    permission_classes = [IsServerOwnerOrMemberRetrieve]
+    permission_classes = [IsAuthenticated, IsServerOwner | IsServerMember & ReadOnly]
 
 
 class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
@@ -20,7 +21,7 @@ class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
 
     perm_server_kwargs = 'pk'
     perm_server_path = 'server'
-    permission_classes = [IsServerOwnerOrMemberRetrieve]
+    permission_classes = [IsAuthenticated, IsServerOwner | IsServerMember & ReadOnly]
 
     def get_queryset(self):
         server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
@@ -76,7 +77,7 @@ class ListServerMembersAPIView(generics.ListAPIView):
     serializer_class = serializers.ServerMembershipSerializer
 
     perm_server_kwargs = 'pk'
-    permission_classes = [IsServerOwnerOrMemberRetrieve]
+    permission_classes = [IsAuthenticated, IsServerMember & ReadOnly]
 
     def get_queryset(self):
         server = get_object_or_404(models.Server, pk=self.kwargs['pk'])

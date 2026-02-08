@@ -1,35 +1,52 @@
 from django.shortcuts import get_object_or_404
-from core import permissions
+from rest_framework.permissions import SAFE_METHODS
 from .models import Server, ServerMember
+from core import permissions
 
 
-class IsServerOwnerOrMemberRetrieve(permissions.BasePermission):
+class IsServerOwner(permissions.BasePermission):
     def has_permission(self, request, view):
+        if not hasattr(view, 'perm_server_kwargs'):
+            return True
         
-        if hasattr(view, 'perm_server_kwargs'):
-            server_pk = view.kwargs.get(view.perm_server_kwargs)
-            server = get_object_or_404(Server, pk=server_pk)
-
-            if request.method == 'GET':
-                is_member = ServerMember.objects.filter(server=server, user=request.user).exists()
-                return is_member
-
-            return server.owner == request.user
-
-        return request.user.is_authenticated
+        server_pk = view.kwargs.get(view.perm_server_kwargs)
+        server = get_object_or_404(Server, pk=server_pk)
+        return server.owner == request.user
 
     def has_object_permission(self, request, view, obj):
         if not hasattr(view, 'perm_server_path'):
             raise AttributeError(f'You need to add perm_server_path if you want to use {self.__class__.__name__} permission')
+        
+        server = self._get_nested_attribute(view.perm_server_path, obj)
 
-        path = view.perm_server_path
-        server = self._get_nested_attribute(path, obj)
+        if not server: return True
+        return server.owner == request.user
 
-        if server is None:
+
+class IsServerMember(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if not hasattr(view, 'perm_server_kwargs'):
             return True
 
-        if request.method == 'GET':
-            is_member = ServerMember.objects.filter(server=server, user=request.user).exists()
-            if is_member: return True
+        server_pk = view.kwargs.get(view.perm_server_kwargs)
+        server = get_object_or_404(Server, pk=server_pk)
 
-        return request.user == server.owner
+        return ServerMember.objects.filter(
+            server=server, user=request.user
+        ).exists()
+    
+    def has_object_permission(self, request, view, obj):
+        if not hasattr(view, 'perm_server_path'):
+            raise AttributeError(f'You need to add perm_server_path if you want to use {self.__class__.__name__} permission')
+        
+        server = self._get_nested_attribute(view.perm_server_path, obj)
+        
+        if not server: return True
+        return ServerMember.objects.filter(
+            server=server, user=request.user
+        ).exists()
+
+
+class ReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS

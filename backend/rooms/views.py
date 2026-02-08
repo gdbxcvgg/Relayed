@@ -1,16 +1,17 @@
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from . import models, serializers
-from servers.permissions import IsServerOwnerOrMemberRetrieve
+from servers.permissions import IsServerOwner, IsServerMember, ReadOnly
 
 
 class RoomRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.RoomSerializer
 
     perm_server_path = 'server'
-    permission_classes = [IsServerOwnerOrMemberRetrieve]
+    permission_classes = [IsAuthenticated, IsServerOwner | IsServerMember & ReadOnly]
 
     def get_object(self):
         obj = get_object_or_404(models.Room, pk=self.kwargs['pk'], is_deleted=False)
