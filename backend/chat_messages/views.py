@@ -5,11 +5,18 @@ from django.utils import timezone
 from rooms.models import Room
 from . import models, serializers
 from servers.models import ServerMember
+from servers.permissions import IsServerOwner, IsServerMember
+from core.permissions import ReadOnly
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsMessageAuthor
 
 
 class MessageRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.MessageSerializer
     queryset = models.Message.objects.all()
+
+    perm_server_path = 'room.server'
+    permission_classes = [IsAuthenticated, IsServerOwner | IsMessageAuthor | IsServerMember & ReadOnly]
 
     def get_object(self):
         room = get_object_or_404(Room, pk=self.kwargs['room_pk'], is_deleted=False)
@@ -17,20 +24,11 @@ class MessageRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
 
         return message
 
-
     def perform_update(self, serializer):
         message = self.get_object()
-
-        if message.author != self.request.user:
-            raise PermissionDenied
-        
         serializer.save(edited_at=timezone.now())
 
-    
-    def perform_destroy(self, instance):
-        if instance.author != self.request.user:
-            raise PermissionDenied
-            
+    def perform_destroy(self, instance):      
         instance.is_deleted = True
         instance.save()
 

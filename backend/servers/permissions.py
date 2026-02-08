@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import SAFE_METHODS
 from .models import Server, ServerMember
 from core import permissions
 
