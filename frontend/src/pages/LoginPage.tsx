@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
 
+import FormInput from "../components/FormInput";
+
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -20,39 +22,21 @@ const LoginPage = () => {
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-12">
                     <div className="flex flex-col gap-7">
-                        <div className="flex flex-col gap-2">
-                            <label
-                                htmlFor="email"
-                                className="flex flex-row gap-1"
-                            >
-                                Email
-                                <span className="text-red-600">*</span>
-                            </label>
-                            <input
-                                required
-                                type="email"
-                                id="email"
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="bg-[#0A0A0A] border-2 border-[#1C1C1C] h-12 rounded-lg px-3"
-                            />
-                        </div>
+                        <FormInput
+                            id="email"
+                            type="email"
+                            required
+                            onChange={(e) => setEmail(e.target.value)}
+                            label_text="Email"
+                        />
 
-                        <div className="flex flex-col gap-2">
-                            <label
-                                htmlFor="password"
-                                className="flex flex-row gap-1"
-                            >
-                                Password
-                                <span className="text-red-600">*</span>
-                            </label>
-                            <input
-                                required
-                                type="password"
-                                id="password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="bg-[#0A0A0A] border-2 border-[#1C1C1C] h-12 rounded-lg px-3"
-                            />
-                        </div>
+                        <FormInput
+                            id="password"
+                            type="password"
+                            required
+                            onChange={(e) => setPassword(e.target.value)}
+                            label_text="Password"
+                        />
                     </div>
 
                     <button
