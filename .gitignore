@@ -9,5 +9,5 @@ dist
 .vscode/
 .DS_Store
 
-env/local.env
-env/prod.env
+env/env.local
+env/env.prod
