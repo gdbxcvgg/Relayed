@@ -13,7 +13,7 @@ env = environ.Env(
     DJANGO_DB_ENGINE=(str, 'sqlite3'),
 )
 
-env.read_env(BASE_DIR / '../env/env.local')
+env.read_env(BASE_DIR / '../env/.env.local')
 
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
