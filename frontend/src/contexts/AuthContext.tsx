@@ -14,6 +14,7 @@ export const AuthContext = createContext<ProviderProps>({
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const checkToken = async () => {
@@ -33,8 +34,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
         };
 
-        checkToken();
-    }, []);
+        checkToken().then(() => {
+            setLoading(false);
+        });
+    }, [loading]);
 
     const _login = async (
         email: string,
@@ -45,11 +48,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return res;
     };
 
-    return (
+    return !loading ? (
         <AuthContext
             value={{ login: _login, isAuthenticated: isAuthenticated }}
         >
             {children}
         </AuthContext>
-    );
+    ) : null;
 };
