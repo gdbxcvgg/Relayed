@@ -3,6 +3,7 @@ import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import AppPage from "../pages/AppPage";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const MainRouter = () => {
     return (
@@ -11,7 +12,14 @@ const MainRouter = () => {
                 <Route index element={<HomePage />} />
                 <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<RegisterPage />} />
-                <Route path="app" element={<AppPage />} />
+                <Route
+                    path="app"
+                    element={
+                        <ProtectedRoute>
+                            <AppPage />
+                        </ProtectedRoute>
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );

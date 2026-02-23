@@ -1,20 +1,6 @@
 import axios from "axios";
-import {jwtDecode} from 'jwt-decode';
-import { refresh } from "./auth";
+import { refresh, isTokenExpired} from "./auth";
 
-
-
-const isTokenExpired = (token:string): boolean => {
-    try {
-        const decodedToken = jwtDecode(token)
-        const currentTime = Date.now() / 1000
-        if (!decodedToken.exp) return true
-        return decodedToken.exp < currentTime
-    } catch (error) {
-        console.log('Error decoding token: ', error)
-        return true
-    }
-}
 
 
 const api = axios.create({

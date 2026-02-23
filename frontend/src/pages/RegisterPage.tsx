@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useContext, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router";
 
 import FormInput from "../components/FormInput";
 import { register } from "../services/auth";
+import { AuthContext } from "../contexts/AuthContext";
 
 const RegisterPage = () => {
     const [email, setEmail] = useState("");
@@ -27,6 +28,9 @@ const RegisterPage = () => {
             navigate("/login");
         }
     };
+
+    const { isAuthenticated } = useContext(AuthContext);
+    if (isAuthenticated) return <Navigate to="/app" replace />;
 
     return (
         <div className="flex flex-row justify-center items-center min-h-dvh sm:bg-[url(./background.png)] bg-fixed bg-cover bg-center">

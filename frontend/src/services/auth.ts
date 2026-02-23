@@ -1,5 +1,6 @@
 import axios from "axios";
 import api from "./api"
+import {jwtDecode} from 'jwt-decode';
 
 
 interface RegisterData {
@@ -61,5 +62,18 @@ export const refresh = async (): Promise<boolean> => {
     } catch (error){
         console.error(error)
         return false
+    }
+}
+
+
+export const isTokenExpired = (token:string): boolean => {
+    try {
+        const decodedToken = jwtDecode(token)
+        const currentTime = Date.now() / 1000
+        if (!decodedToken.exp) return true
+        return decodedToken.exp < currentTime
+    } catch (error) {
+        console.log('Error decoding token: ', error)
+        return true
     }
 }
