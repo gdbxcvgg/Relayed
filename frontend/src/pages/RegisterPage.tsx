@@ -1,18 +1,31 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import FormInput from "../components/FormInput";
+import { register } from "../services/auth";
 
 const RegisterPage = () => {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [displayName, setDisplayName] = useState("");
-    const [dateOfBirth, setDateOfBirth] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState<string>("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // [ register logic ]
+        const registered = await register({
+            email,
+            username,
+            password,
+            display_name: displayName,
+            date_of_birth: dateOfBirth.toString(),
+        });
+
+        if (registered) {
+            navigate("/login");
+        }
     };
 
     return (

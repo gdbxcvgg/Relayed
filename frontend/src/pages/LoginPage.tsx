@@ -1,15 +1,23 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import FormInput from "../components/FormInput";
+
+import { login } from "../services/auth";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // [ login logic ]
+        const loggedIn = await login(email, password);
+
+        if (loggedIn) {
+            navigate("/app");
+        }
     };
 
     return (
