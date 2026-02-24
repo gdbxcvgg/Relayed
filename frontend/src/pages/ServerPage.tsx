@@ -31,7 +31,9 @@ const ServerPage = () => {
     return (
         <>
             <h1>server</h1>
-            <p>{server?.id}</p>
+            <p>
+                {server?.id} {server?.name}
+            </p>
 
             <h1>room</h1>
             <p>{roomId}</p>
