@@ -5,8 +5,9 @@ import RegisterPage from "../pages/RegisterPage";
 import AppPage from "../pages/AppPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 import DefaultLayout from "../layouts/DefaultLayout";
-import ServerLayout from "../layouts/ServerLayout";
 import FriendsLayout from "../layouts/FriendsLayout";
+
+import { serverRoutes } from "./serverRoutes";
 
 const MainRouter = () => {
     return (
@@ -28,14 +29,7 @@ const MainRouter = () => {
                         <Route path="channels/@me" element={<AppPage />} />
                     </Route>
 
-                    <Route element={<ServerLayout />}>
-                        <Route path="channels/:serverId">
-                            <Route index element={<AppPage />} />
-                            <Route path=":roomId">
-                                <Route index element={<AppPage />} />
-                            </Route>
-                        </Route>
-                    </Route>
+                    {serverRoutes}
                 </Route>
             </Routes>
         </BrowserRouter>
