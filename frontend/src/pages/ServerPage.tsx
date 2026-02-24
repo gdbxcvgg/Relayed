@@ -1,43 +1,37 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
-import api from "../services/api";
-
-interface ServerRoom {
-    created_at: string;
-    id: string;
-    name: string;
-    room_type: number;
-}
-
-type ServerRoomResponse = ServerRoom[];
+import useServer from "../hooks/useServer";
 
 const ServerPage = () => {
     const { serverId, roomId } = useParams();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const openFirstRoom = async () => {
-            const res = await api.get<ServerRoomResponse>(
-                `servers/${serverId}/rooms`,
-            );
-            if (res.status !== 200) return;
+    const { server, setServer } = useServer();
 
-            res.data.forEach((room) => {
-                if (room.room_type === 1) {
-                    navigate(`${room.id}`);
-                }
-            });
+    useEffect(() => {
+        if (!serverId) return;
+
+        const loadServer = async () => {
+            await setServer(serverId);
         };
 
-        if (!roomId) {
-            openFirstRoom();
+        loadServer();
+    }, [serverId]);
+
+    useEffect(() => {
+        if (!server || roomId) return;
+
+        const firstRoom = server.rooms?.find((room) => room.room_type === 1);
+
+        if (firstRoom) {
+            navigate(firstRoom.id);
         }
-    });
+    }, [server, roomId, navigate]);
 
     return (
         <>
             <h1>server</h1>
-            <p>{serverId}</p>
+            <p>{server?.id}</p>
 
             <h1>room</h1>
             <p>{roomId}</p>
