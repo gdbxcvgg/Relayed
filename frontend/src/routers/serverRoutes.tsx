@@ -1,15 +1,13 @@
 import { Route } from "react-router";
 import ServerLayout from "../layouts/ServerLayout";
-import AppPage from "../pages/AppPage";
+import ServerPage from "../pages/ServerPage";
 
 export const serverRoutes = (
     <>
         <Route element={<ServerLayout />}>
             <Route path="channels/:serverId">
-                <Route index element={<AppPage />} />
-                <Route path=":roomId">
-                    <Route index element={<AppPage />} />
-                </Route>
+                <Route index element={<ServerPage />} />
+                <Route path=":roomId" element={<ServerPage />} />
             </Route>
         </Route>
     </>

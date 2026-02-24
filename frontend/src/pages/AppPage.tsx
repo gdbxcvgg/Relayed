@@ -1,5 +1,7 @@
+import { Navigate } from "react-router";
+
 const AppPage = () => {
-    return <>App</>;
+    return <Navigate to="/channels/@me" replace />;
 };
 
 export default AppPage;
