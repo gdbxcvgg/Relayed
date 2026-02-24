@@ -8,6 +8,7 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import FriendsLayout from "../layouts/FriendsLayout";
 
 import { serverRoutes } from "./serverRoutes";
+import { UserProvider } from "../contexts/UserContext";
 
 const MainRouter = () => {
     return (
@@ -18,9 +19,11 @@ const MainRouter = () => {
                 <Route path="register" element={<RegisterPage />} />
                 <Route
                     element={
-                        <ProtectedRoute>
-                            <DefaultLayout />
-                        </ProtectedRoute>
+                        <UserProvider>
+                            <ProtectedRoute>
+                                <DefaultLayout />
+                            </ProtectedRoute>
+                        </UserProvider>
                     }
                 >
                     <Route path="app" element={<AppPage />} />

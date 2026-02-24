@@ -10,7 +10,7 @@ interface RoomType {
     created_at: string;
 }
 
-interface ServerType {
+export interface ServerType {
     id: string;
     name: string;
     icon: string | null;
