@@ -49,7 +49,7 @@ const RoomView = () => {
             </div>
             <div className="flex flex-row grow min-h-0">
                 <div className="w-full border-r border-r-(--border-color) flex flex-col">
-                    <div className="grow overflow-y-auto p-3">
+                    <div className="grow overflow-y-auto p-3 [&::-webkit-scrollbar]:[width:6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 overflow-y-auto [&::-webkit-scrollbar-thumb]:[border-radius:3px]">
                         <MessagesList />
                     </div>
                     <div className="p-3 ">

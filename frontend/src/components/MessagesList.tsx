@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useRoom from "../hooks/useRoom";
 import api from "../services/api";
+import Message from "./Message";
 
 interface MessageAuthorType {
     id: string;
@@ -43,22 +44,33 @@ const MessagesList = () => {
                 {messages
                     .slice(0)
                     .reverse()
-                    .map((message) => (
-                        <div key={message.id}>
-                            {new Date(message.created_at).toLocaleString(
-                                undefined,
-                                {
-                                    day: "2-digit",
-                                    month: "2-digit",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: false,
-                                },
-                            )}{" "}
-                            {message.author.username}: {message.content}
-                        </div>
-                    ))}
+                    .map((message, index) => {
+                        let small = false;
+                        if (index > 0) {
+                            const prevMsg = messages.slice(0).reverse()[
+                                index - 1
+                            ];
+
+                            if (prevMsg.author.id === message.author.id)
+                                small = true;
+
+                            const prevDate = new Date(prevMsg.created_at);
+                            const currDate = new Date(message.created_at);
+
+                            if (
+                                Number(currDate) - Number(prevDate) >
+                                30 * 60 * 1000
+                            )
+                                small = false;
+                        }
+                        return (
+                            <Message
+                                message={message}
+                                key={message.id}
+                                small={small}
+                            />
+                        );
+                    })}
             </div>
         </>
     );
