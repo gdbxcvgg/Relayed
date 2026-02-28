@@ -1,5 +1,5 @@
-import { Link } from "react-router";
 import useUser from "../hooks/useUser";
+import NavIcon from "./NavIcon";
 
 const ServersList = () => {
     const { servers } = useUser();
@@ -7,9 +7,7 @@ const ServersList = () => {
     return (
         <>
             {servers?.map((server) => (
-                <Link to={`/channels/${server.id}`} key={server.id}>
-                    <div>{server.name}</div>
-                </Link>
+                <NavIcon server={server} key={server.id} />
             ))}
         </>
     );
