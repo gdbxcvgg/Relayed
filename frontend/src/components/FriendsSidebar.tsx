@@ -4,15 +4,15 @@ import ServersList from "./ServersList";
 const FriendsSidebar = () => {
     return (
         <div className="flex flex-row h-dvh">
-            <div className="w-20 border-r border-r-(--border-color) flex flex-col gap-5 items-center p-3">
+            <div className="w-25 border-r border-r-(--border-color) flex flex-col gap-5 items-center p-3 scrollbar-hide overflow-y-scroll">
                 <Link
                     to={`/app`}
-                    className="bg-[#785D94] hover:bg-[#4d3c5f] w-[50px] h-[50px] flex flex-col justify-around rounded-lg"
+                    className="bg-[#785D94] hover:bg-[#4d3c5f] w-[50px] h-[50px] flex flex-col justify-around rounded-lg min-h-[50px]"
                 >
                     <div className="text-center">Home</div>
                 </Link>
 
-                <div className="w-[50px] h-0.25 bg-[#323232]"></div>
+                <div className="w-[50px] h-0.25 min-h-0.25 bg-[#323232]"></div>
 
                 <ServersList />
             </div>
