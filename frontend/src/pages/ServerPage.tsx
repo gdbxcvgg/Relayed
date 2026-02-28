@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import useServer from "../hooks/useServer";
+import RoomView from "../components/RoomView";
+import { RoomProvider } from "../contexts/RoomContext";
 
 const ServerPage = () => {
-    const { serverId } = useParams();
+    const { serverId, roomId } = useParams();
     const { server, setServer } = useServer();
 
     const navigate = useNavigate();
@@ -19,13 +21,16 @@ const ServerPage = () => {
         loadServer();
     }, [serverId]);
 
-    return (
-        <>
-            <h1>server</h1>
-            <p>
-                {server?.id} {server?.name}
-            </p>
-        </>
+    return roomId ? (
+        <RoomProvider>
+            <RoomView />
+        </RoomProvider>
+    ) : (
+        <div className="h-full w-full flex flex-col items-center justify-center pb-50">
+            <div className="w-lg h-fit">
+                {`Welcome to ${server?.name}! Select room from the sidebar and start chatting.`}
+            </div>
+        </div>
     );
 };
 
