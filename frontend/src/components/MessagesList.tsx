@@ -31,7 +31,7 @@ const MessagesList = () => {
             );
             if (res.status !== 200) return;
 
-            setMessages([...messages, ...res.data]);
+            setMessages(res.data);
         };
 
         getMessages();
