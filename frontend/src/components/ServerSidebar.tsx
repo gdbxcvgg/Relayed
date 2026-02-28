@@ -1,7 +1,10 @@
 import { Link } from "react-router";
 import ServersList from "./ServersList";
+import useServer from "../hooks/useServer";
 
 const ServerSidebar = () => {
+    const { server } = useServer();
+    if (!server) return null;
     return (
         <div className="flex flex-row h-dvh">
             <div className="w-20 border-r border-r-(--border-color) flex flex-col gap-5 items-center p-3">
@@ -16,7 +19,23 @@ const ServerSidebar = () => {
 
                 <ServersList />
             </div>
-            <div>Channels List</div>
+            <div className="w-full">
+                <div className="h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
+                    <div>{server.name}</div>
+                </div>
+                <div className="p-3">
+                    {server.rooms
+                        ?.filter((room) => room.room_type === 1)
+                        .map((room) => (
+                            <Link
+                                to={`/channels/${server.id}/${room.id}`}
+                                key={room.id}
+                            >
+                                <div># {room.name}</div>
+                            </Link>
+                        ))}
+                </div>
+            </div>
         </div>
     );
 };
