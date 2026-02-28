@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import useRoom from "../hooks/useRoom";
 import useServer from "../hooks/useServer";
 import MessagesList from "./MessagesList";
+import MemberList from "./MemberList";
 
 const RoomView = () => {
     const { server } = useServer();
@@ -52,7 +53,9 @@ const RoomView = () => {
                         </form>
                     </div>
                 </div>
-                <div className="w-[300px] p-3">member list</div>
+                <div className="w-[300px] p-3">
+                    <MemberList />
+                </div>
             </div>
         </div>
     );
