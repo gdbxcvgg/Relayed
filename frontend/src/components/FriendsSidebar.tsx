@@ -16,7 +16,13 @@ const FriendsSidebar = () => {
 
                 <ServersList />
             </div>
-            <div>Friends List</div>
+
+            <div className="w-full">
+                <div className="h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
+                    <div>Friends List</div>
+                </div>
+                <div className="p-3"></div>
+            </div>
         </div>
     );
 };
