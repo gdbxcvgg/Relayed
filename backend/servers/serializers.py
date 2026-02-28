@@ -20,11 +20,11 @@ class ServerSerializer(serializers.ModelSerializer):
 
 
 class ServerMembershipSerializer(serializers.ModelSerializer):
-    user_id = serializers.UUIDField(source='user.id')
-    
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = models.ServerMember
-        fields = ['user_id', 'joined_at']
+        fields = ['user', 'joined_at']
 
 
 class ServerInviteSerializer(serializers.ModelSerializer):
