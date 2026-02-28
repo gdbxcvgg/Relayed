@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import useRoom from "../hooks/useRoom";
 import useServer from "../hooks/useServer";
+import MessagesList from "./MessagesList";
 
 const RoomView = () => {
     const { server } = useServer();
@@ -38,7 +39,7 @@ const RoomView = () => {
             <div className="flex flex-row grow min-h-0">
                 <div className="w-full border-r border-r-(--border-color) flex flex-col">
                     <div className="grow overflow-y-auto p-3">
-                        <div>msg..</div>
+                        <MessagesList />
                     </div>
                     <div className="p-3 ">
                         <form onSubmit={handleSubmit}>
