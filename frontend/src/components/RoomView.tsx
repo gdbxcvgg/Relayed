@@ -4,6 +4,7 @@ import useRoom from "../hooks/useRoom";
 import useServer from "../hooks/useServer";
 import MessagesList from "./MessagesList";
 import MemberList from "./MemberList";
+import api from "../services/api";
 
 const RoomView = () => {
     const { server } = useServer();
@@ -25,9 +26,18 @@ const RoomView = () => {
     const [message, setMessage] = useState<string>("");
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        if (!room) return;
         e.preventDefault();
-        console.log(message);
-        // [send message logic]
+        try {
+            const res = await api.post(`rooms/${room.id}/messages`, {
+                content: message,
+            });
+            if (res.status !== 201) return;
+
+            setMessage("");
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     if (!room) return null;
@@ -48,6 +58,7 @@ const RoomView = () => {
                                 className="w-full h-[50px] bg-[#141414] outline-0 p-3 rounded-lg"
                                 type="text"
                                 onChange={(e) => setMessage(e.target.value)}
+                                value={message}
                                 placeholder={`Message in #${room.name}`}
                             />
                         </form>
