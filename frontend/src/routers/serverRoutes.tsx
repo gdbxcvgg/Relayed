@@ -14,7 +14,6 @@ export const serverRoutes = (
         >
             <Route path="channels/:serverId">
                 <Route index element={<ServerPage />} />
-                <Route path=":roomId" element={<ServerPage />} />
             </Route>
         </Route>
     </>

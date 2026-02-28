@@ -3,30 +3,21 @@ import { useNavigate, useParams } from "react-router";
 import useServer from "../hooks/useServer";
 
 const ServerPage = () => {
-    const { serverId, roomId } = useParams();
-    const navigate = useNavigate();
-
+    const { serverId } = useParams();
     const { server, setServer } = useServer();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!serverId) return;
 
         const loadServer = async () => {
-            await setServer(serverId);
+            const res = await setServer(serverId);
+            if (res === false) navigate("/channels/@me");
         };
 
         loadServer();
     }, [serverId]);
-
-    useEffect(() => {
-        if (!server || roomId) return;
-
-        const firstRoom = server.rooms?.find((room) => room.room_type === 1);
-
-        if (firstRoom) {
-            navigate(firstRoom.id);
-        }
-    }, [server, roomId, navigate]);
 
     return (
         <>
@@ -34,9 +25,6 @@ const ServerPage = () => {
             <p>
                 {server?.id} {server?.name}
             </p>
-
-            <h1>room</h1>
-            <p>{roomId}</p>
         </>
     );
 };

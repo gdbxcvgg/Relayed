@@ -33,11 +33,16 @@ export const ServerProvider = ({ children }: { children: React.ReactNode }) => {
             if (res.status !== 200) return [];
             return res.data;
         };
-        const res = await api.get<ServerType>(`servers/${serverId}`);
-        if (res.status !== 200) return false;
+        try {
+            const res = await api.get<ServerType>(`servers/${serverId}`);
+            if (res.status !== 200) return false;
 
-        const rooms = await getRooms(serverId);
-        _setServer({ ...res.data, rooms: rooms });
+            const rooms = await getRooms(serverId);
+            _setServer({ ...res.data, rooms: rooms });
+        } catch {
+            _setServer(null);
+            return false;
+        }
 
         return true;
     };

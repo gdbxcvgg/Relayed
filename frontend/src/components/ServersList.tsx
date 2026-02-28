@@ -7,8 +7,8 @@ const ServersList = () => {
     return (
         <>
             {servers?.map((server) => (
-                <Link to={`/channels/${server.id}`}>
-                    <div key={server.id}>{server.name}</div>
+                <Link to={`/channels/${server.id}`} key={server.id}>
+                    <div>{server.name}</div>
                 </Link>
             ))}
         </>
