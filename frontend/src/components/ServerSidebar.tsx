@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import ServersList from "./ServersList";
 import useServer from "../hooks/useServer";
+import RoomsList from "./RoomsList";
 
 const ServerSidebar = () => {
     const { server } = useServer();
@@ -24,16 +25,7 @@ const ServerSidebar = () => {
                     <div>{server.name}</div>
                 </div>
                 <div className="p-3">
-                    {server.rooms
-                        ?.filter((room) => room.room_type === 1)
-                        .map((room) => (
-                            <Link
-                                to={`/channels/${server.id}/${room.id}`}
-                                key={room.id}
-                            >
-                                <div># {room.name}</div>
-                            </Link>
-                        ))}
+                    <RoomsList />
                 </div>
             </div>
         </div>
