@@ -65,6 +65,7 @@ const RoomsList = () => {
                                 {root.children.map((room) => (
                                     <Link
                                         to={`/channels/${server.id}/${room.id}`}
+                                        key={room.id}
                                     >
                                         <div className="hover:bg-[#121212]">
                                             # {room.name}

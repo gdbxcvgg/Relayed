@@ -40,7 +40,7 @@ const Message = ({ message, small }: MessagePropsType) => {
     if (small)
         return (
             <div className="flex group hover:bg-[#121212] items-center">
-                <div className="w-12 invisible group-hover:visible text-[#676767] text-xs">
+                <div className="w-12 min-w-12 invisible group-hover:visible text-[#676767] text-xs">
                     {formatDate(message.created_at, true)}
                 </div>
                 <div>{message.content}</div>
@@ -48,7 +48,7 @@ const Message = ({ message, small }: MessagePropsType) => {
         );
     return (
         <div className="flex mt-8 hover:bg-[#121212]">
-            <div className="w-12">
+            <div className="w-12 min-w-12">
                 <div className="bg-[#272727] w-9 h-9 rounded-4xl flex justify-center items-center">
                     {message.author.username.slice(0, 1)}
                 </div>
