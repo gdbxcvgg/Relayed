@@ -44,7 +44,7 @@ const RoomView = () => {
 
     return (
         <div className="flex flex-col h-full">
-            <div className="h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
+            <div className="h-[50px] min-h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
                 # {room.name}
             </div>
             <div className="flex flex-row grow min-h-0">
@@ -64,7 +64,7 @@ const RoomView = () => {
                         </form>
                     </div>
                 </div>
-                <div className="w-[300px] p-3">
+                <div className="w-[300px] p-3 hidden md:block">
                     <MemberList />
                 </div>
             </div>
