@@ -1,5 +1,5 @@
 import {use} from 'react'
-import { ServerContext } from '../contexts/ServerContext';
+import ServerContext from '../contexts/ServerContext';
 
 const useServer = () => {
     const context = use(ServerContext)

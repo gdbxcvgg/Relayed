@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router";
 
 import FormInput from "../components/FormInput";
 
-import { AuthContext } from "../contexts/AuthContext";
+import AuthContext from "../contexts/AuthContext";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import useServer from "../hooks/useServer";
 import RoomView from "../components/RoomView";
-import { RoomProvider } from "../contexts/RoomContext";
+import RoomProvider from "../providers/RoomProvider";
 
 const ServerPage = () => {
     const { serverId, roomId } = useParams();

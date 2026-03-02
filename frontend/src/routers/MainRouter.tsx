@@ -8,7 +8,7 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import FriendsLayout from "../layouts/FriendsLayout";
 
 import { serverRoutes } from "./serverRoutes";
-import { UserProvider } from "../contexts/UserContext";
+import UserProvider from "../providers/UserProvider";
 
 const MainRouter = () => {
     return (
