@@ -1,6 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import api from "../services/api";
 import { type ServerType } from "./ServerContext";
+import useGateway from "../hooks/useGateway";
+import { ReadyState } from "react-use-websocket";
 
 interface UserType {
     id: string;
@@ -19,6 +21,33 @@ export const UserContext = createContext<ProviderProps | null>(null);
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, _setUser] = useState<UserType | null>(null);
     const [servers, _setServers] = useState<ServerType[] | null>(null);
+
+    const { readyState, sendJsonMessage } = useGateway();
+
+    useEffect(() => {
+        if (ReadyState[readyState] !== "OPEN") return;
+
+        sendJsonMessage({
+            opcode: 0,
+            data: {
+                token: localStorage.getItem("access"),
+            },
+        });
+
+        sendJsonMessage({
+            opcode: 1,
+            data: {
+                server_id: "019c06bd-2c7e-7392-8421-5baf091d0a43",
+                rooms: [
+                    {
+                        id: "019c06c0-40cb-7604-8dca-5d447756cb80",
+                    },
+                ],
+            },
+        });
+
+        console.log("[GATEWAY]: Authenticated");
+    }, [readyState]);
 
     const _getServers = async () => {
         const res = await api.get<ServerType[]>("users/@me/servers");
