@@ -34,18 +34,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             },
         });
 
-        sendJsonMessage({
-            opcode: 1,
-            data: {
-                server_id: "019c06bd-2c7e-7392-8421-5baf091d0a43",
-                rooms: [
-                    {
-                        id: "019c06c0-40cb-7604-8dca-5d447756cb80",
-                    },
-                ],
-            },
-        });
-
         console.log("[GATEWAY]: Authenticated");
     }, [readyState]);
 
