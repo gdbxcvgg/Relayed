@@ -9,6 +9,7 @@ import FriendsLayout from "../layouts/FriendsLayout";
 
 import { serverRoutes } from "./serverRoutes";
 import UserProvider from "../providers/UserProvider";
+import InvitePage from "../pages/InvitePage";
 
 const MainRouter = () => {
     return (
@@ -33,6 +34,8 @@ const MainRouter = () => {
                     </Route>
 
                     {serverRoutes}
+
+                    <Route path="invite/:inviteCode" element={<InvitePage />} />
                 </Route>
             </Routes>
         </BrowserRouter>

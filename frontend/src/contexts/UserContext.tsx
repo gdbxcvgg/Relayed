@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { type ServerType } from "./ServerContext";
 
-interface UserType {
+export interface UserType {
     id: string;
     username: string;
     display_name: string | null;
