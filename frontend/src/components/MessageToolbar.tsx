@@ -8,13 +8,16 @@ interface MenuItemProps {
 
 const MenuItem = ({ img, onClick }: MenuItemProps) => {
     return (
-        <div className="w-6 h-6 p-0.5 hover:bg-[#202020]" onClick={onClick}>
+        <div
+            className="w-6 h-6 p-0.5 hover:p-0.25 hover:bg-[#202020] hover:cursor-pointer active:bg-[#323232] rounded-md"
+            onClick={onClick}
+        >
             <img src={img} />
         </div>
     );
 };
 
-const MessageMenu = ({ message }: { message: MessageType }) => {
+const MessageToolbar = ({ message }: { message: MessageType }) => {
     const copyMessageId = async () => {
         await navigator.clipboard.writeText(message.id);
     };
@@ -43,4 +46,4 @@ const MessageMenu = ({ message }: { message: MessageType }) => {
     );
 };
 
-export default MessageMenu;
+export default MessageToolbar;

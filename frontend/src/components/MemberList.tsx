@@ -34,7 +34,7 @@ const MemberList = () => {
             {members.map((member) => (
                 <div
                     key={member.user.id}
-                    className="flex gap-2 items-center py-1 rounded-lg hover:bg-[#121212]"
+                    className="flex gap-2 items-center py-1 rounded-lg hover:bg-[#121212] active:bg-[#161616]"
                 >
                     <div className="bg-[#272727] w-9 h-9 rounded-4xl flex justify-center items-center">
                         {member.user.username.slice(0, 1)}

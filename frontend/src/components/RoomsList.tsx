@@ -52,7 +52,7 @@ const RoomsList = () => {
                             key={root.id}
                             to={`/channels/${server.id}/${root.id}`}
                         >
-                            <div className="hover:bg-[#121212]">
+                            <div className="hover:bg-[#121212] active:bg-[#181818] rounded-md">
                                 # {root.name}
                             </div>
                         </Link>
@@ -67,7 +67,7 @@ const RoomsList = () => {
                                         to={`/channels/${server.id}/${room.id}`}
                                         key={room.id}
                                     >
-                                        <div className="hover:bg-[#121212]">
+                                        <div className="hover:bg-[#121212] active:bg-[#181818] rounded-md">
                                             # {room.name}
                                         </div>
                                     </Link>
