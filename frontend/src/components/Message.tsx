@@ -1,3 +1,5 @@
+import MessageMenu from "./MessageToolbar";
+
 interface MessageAuthorType {
     id: string;
     username: string;
@@ -5,7 +7,7 @@ interface MessageAuthorType {
     avatar: string | null;
 }
 
-interface MessageType {
+export interface MessageType {
     id: string;
     content: string;
     author: MessageAuthorType;
@@ -39,30 +41,37 @@ const Message = ({ message, small }: MessagePropsType) => {
 
     if (small)
         return (
-            <div className="flex group hover:bg-[#121212] items-center">
-                <div className="w-12 min-w-12 invisible group-hover:visible text-[#676767] text-xs">
-                    {formatDate(message.created_at, true)}
+            <div className="group/message relative">
+                <MessageMenu message={message} />
+                <div className="flex group/inner group-hover/message:bg-[#121212] items-center p-0.5">
+                    <div className="w-12 min-w-12 invisible group-hover/inner:visible text-[#676767] text-xs">
+                        {formatDate(message.created_at, true)}
+                    </div>
+                    <div>{message.content}</div>
                 </div>
-                <div>{message.content}</div>
             </div>
         );
     return (
-        <div className="flex mt-8 hover:bg-[#121212]">
-            <div className="w-12 min-w-12">
-                <div className="bg-[#272727] w-9 h-9 rounded-4xl flex justify-center items-center">
-                    {message.author.username.slice(0, 1)}
-                </div>
-            </div>
-            <div>
-                <div className="flex gap-3 items-center">
-                    <div>
-                        {message.author.display_name ?? message.author.username}
-                    </div>
-                    <div className="text-[#676767] text-sm">
-                        {formatDate(message.created_at)}
+        <div className="group/message relative">
+            <MessageMenu message={message} />
+            <div className="flex mt-8 group-hover/message:bg-[#121212] p-0.5">
+                <div className="w-12 min-w-12">
+                    <div className="bg-[#272727] w-9 h-9 rounded-4xl flex justify-center items-center">
+                        {message.author.username.slice(0, 1)}
                     </div>
                 </div>
-                <div>{message.content}</div>
+                <div>
+                    <div className="flex gap-3 items-center">
+                        <div>
+                            {message.author.display_name ??
+                                message.author.username}
+                        </div>
+                        <div className="text-[#676767] text-sm">
+                            {formatDate(message.created_at)}
+                        </div>
+                    </div>
+                    <div>{message.content}</div>
+                </div>
             </div>
         </div>
     );
