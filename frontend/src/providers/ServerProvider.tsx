@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../services/api";
 import ServerContext from "../contexts/ServerContext";
+import useGateway from "../hooks/useGateway";
 
 interface RoomType {
     id: string;
@@ -21,6 +22,8 @@ export interface ServerType {
 const ServerProvider = ({ children }: { children: React.ReactNode }) => {
     const [server, _setServer] = useState<ServerType | null>(null);
 
+    const { sendJsonMessage } = useGateway();
+
     const setServer = async (serverId: string): Promise<boolean> => {
         const getRooms = async (serverId: string) => {
             const res = await api.get<RoomType[]>(`servers/${serverId}/rooms`);
@@ -40,6 +43,16 @@ const ServerProvider = ({ children }: { children: React.ReactNode }) => {
 
         return true;
     };
+
+    useEffect(() => {
+        if (!server) return;
+        sendJsonMessage({
+            opcode: 1,
+            data: {
+                server_id: server.id,
+            },
+        });
+    }, [server]);
 
     return (
         <ServerContext value={{ server, setServer }}>{children}</ServerContext>
