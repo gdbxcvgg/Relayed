@@ -1,42 +1,10 @@
-import { useEffect, useState } from "react";
-import useRoom from "../hooks/useRoom";
-import api from "../services/api";
+import useMessages from "../hooks/useMessages";
 import Message from "./Message";
 
-interface MessageAuthorType {
-    id: string;
-    username: string;
-    display_name: string | null;
-    avatar: string | null;
-}
-
-interface MessageType {
-    id: string;
-    content: string;
-    author: MessageAuthorType;
-    room_id: string;
-    created_at: string;
-    edited_at: string;
-}
-
 const MessagesList = () => {
-    const [messages, setMessages] = useState<MessageType[]>([]);
+    const { messages } = useMessages();
 
-    const { room } = useRoom();
-
-    useEffect(() => {
-        const getMessages = async () => {
-            if (!room) return;
-            const res = await api.get<MessageType[]>(
-                `rooms/${room.id}/messages`,
-            );
-            if (res.status !== 200) return;
-
-            setMessages(res.data);
-        };
-
-        getMessages();
-    }, [room]);
+    if (!messages) return null;
 
     return (
         <>

@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import useRoom from "../hooks/useRoom";
 import useServer from "../hooks/useServer";
 import MessagesList from "./MessagesList";
 import MemberList from "./MemberList";
-import api from "../services/api";
+import MessagesProvider from "../providers/MessagesProvider";
+import MessageInput from "./MessageInput";
 
 const RoomView = () => {
     const { server } = useServer();
@@ -23,52 +24,27 @@ const RoomView = () => {
         loadRoom();
     }, [roomId, server]);
 
-    const [message, setMessage] = useState<string>("");
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        if (!room) return;
-        e.preventDefault();
-        try {
-            const res = await api.post(`rooms/${room.id}/messages`, {
-                content: message,
-            });
-            if (res.status !== 201) return;
-
-            setMessage("");
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     if (!room) return null;
 
     return (
-        <div className="flex flex-col h-full">
-            <div className="h-[50px] min-h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
-                # {room.name}
-            </div>
-            <div className="flex flex-row grow min-h-0">
-                <div className="w-full border-r border-r-(--border-color) flex flex-col">
-                    <div className="grow overflow-y-auto p-3 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
-                        <MessagesList />
+        <MessagesProvider>
+            <div className="flex flex-col h-full">
+                <div className="h-[50px] min-h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
+                    # {room.name}
+                </div>
+                <div className="flex flex-row grow min-h-0">
+                    <div className="w-full border-r border-r-(--border-color) flex flex-col">
+                        <div className="grow overflow-y-auto p-3 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
+                            <MessagesList />
+                        </div>
+                        <MessageInput />
                     </div>
-                    <div className="p-3 ">
-                        <form onSubmit={handleSubmit}>
-                            <input
-                                className="w-full h-[50px] bg-[#141414] outline-0 p-3 rounded-lg"
-                                type="text"
-                                onChange={(e) => setMessage(e.target.value)}
-                                value={message}
-                                placeholder={`Message in #${room.name}`}
-                            />
-                        </form>
+                    <div className="w-[300px] p-3 hidden md:block">
+                        <MemberList />
                     </div>
                 </div>
-                <div className="w-[300px] p-3 hidden md:block">
-                    <MemberList />
-                </div>
             </div>
-        </div>
+        </MessagesProvider>
     );
 };
 

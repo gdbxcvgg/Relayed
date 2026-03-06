@@ -1,4 +1,4 @@
-import api from "../services/api";
+import useMessages from "../hooks/useMessages";
 import type { MessageType } from "./Message";
 
 interface MenuItemProps {
@@ -18,21 +18,14 @@ const MenuItem = ({ img, onClick }: MenuItemProps) => {
 };
 
 const MessageToolbar = ({ message }: { message: MessageType }) => {
+    const { deleteMessage } = useMessages();
+
     const copyMessageId = async () => {
         await navigator.clipboard.writeText(message.id);
     };
 
-    const handleDelete = async () => {
-        try {
-            const res = await api.delete(
-                `rooms/${message.room_id}/messages/${message.id}`,
-            );
-            if (res.status !== 204) return;
-
-            console.log(`[MESSAGE]: Deleted message ${message.id}`);
-        } catch {
-            console.log(`[MESSAGE]: Can't delete message ${message.id}`);
-        }
+    const handleDelete = () => {
+        deleteMessage(message.id);
     };
 
     const openContextMenu = () => {};
