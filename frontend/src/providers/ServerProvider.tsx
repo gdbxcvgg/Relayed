@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import ServerContext from "../contexts/ServerContext";
 import useGateway from "../hooks/useGateway";
+import type { UserType } from "../contexts/UserContext";
 
 interface RoomType {
     id: string;
@@ -16,6 +17,7 @@ export interface ServerType {
     id: string;
     name: string;
     icon: string | null;
+    owner: UserType;
     rooms?: RoomType[];
 }
 

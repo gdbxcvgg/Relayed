@@ -39,7 +39,14 @@ const MemberList = () => {
                     <div className="bg-[#272727] w-9 h-9 rounded-4xl flex justify-center items-center">
                         {member.user.username.slice(0, 1)}
                     </div>
-                    {member.user.display_name ?? member.user.username}
+                    <div className="flex flex-row items-center gap-1">
+                        {member.user.display_name ?? member.user.username}
+                        {server?.owner.id === member.user.id && (
+                            <div className="w-5 h-5">
+                                <img src="/crown.png" />
+                            </div>
+                        )}
+                    </div>
                 </div>
             ))}
         </div>

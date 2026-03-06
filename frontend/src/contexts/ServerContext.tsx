@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import type { UserType } from "./UserContext";
 
 interface RoomType {
     id: string;
@@ -13,6 +14,7 @@ export interface ServerType {
     id: string;
     name: string;
     icon: string | null;
+    owner: UserType;
     rooms?: RoomType[];
 }
 
