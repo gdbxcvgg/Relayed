@@ -3,6 +3,8 @@ import MessagesContext from "../contexts/MessagesContext";
 import { type MessageType } from "../components/Message";
 import api from "../services/api";
 import useRoom from "../hooks/useRoom";
+import useGateway from "../hooks/useGateway";
+import useUser from "../hooks/useUser";
 
 interface MessageCreateType {
     content: string;
@@ -11,6 +13,9 @@ interface MessageCreateType {
 const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
     const [messages, setMessages] = useState<MessageType[]>([]);
     const { room } = useRoom();
+
+    const { lastJsonMessage } = useGateway();
+    const { user } = useUser();
 
     const sendMessage = async (content: MessageCreateType) => {
         if (!room) return false;
@@ -49,6 +54,26 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
             setMessages(res.data);
         });
     }, [room]);
+
+    useEffect(() => {
+        const newMessage = () => {
+            if (lastJsonMessage.data.author.id === user?.id) return;
+            setMessages((m) => [lastJsonMessage.data, ...m]);
+        };
+
+        const deletedMessage = () => {
+            setMessages((m) =>
+                m.filter((msg) => msg.id !== lastJsonMessage.data.id),
+            );
+        };
+
+        if (!lastJsonMessage) return;
+        if (lastJsonMessage.type === "MESSAGE_SEND") {
+            newMessage();
+        } else if (lastJsonMessage.type === "MESSAGE_DELETED") {
+            deletedMessage();
+        }
+    }, [lastJsonMessage]);
 
     if (!room) return null;
 

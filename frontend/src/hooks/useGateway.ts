@@ -15,7 +15,7 @@ const onMessage = (e: MessageEvent) => {
 }
 
 const useGateway = () => {
-    const gateway = useWebSocket(
+    const gateway = useWebSocket<GatewayEvent>(
         import.meta.env.VITE_GATEWAY_URL, 
         { 
             share: true,
