@@ -18,7 +18,7 @@ const BaseSidebar = ({ children }: { children: React.ReactNode }) => {
 
                     <ServersList />
                 </div>
-                <div className="w-full">{children}</div>
+                <div className="w-58">{children}</div>
             </div>
 
             <UserBadge />
