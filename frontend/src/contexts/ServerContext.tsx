@@ -15,6 +15,7 @@ export interface ServerType {
     name: string;
     icon: string | null;
     owner: UserType;
+    created_at: string;
     rooms?: RoomType[];
 }
 

@@ -14,9 +14,9 @@ interface UserType {
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, _setUser] = useState<UserType | null>(null);
-    const [servers, _setServers] = useState<ServerType[] | null>(null);
+    const [servers, _setServers] = useState<ServerType[]>([]);
 
-    const { readyState, sendJsonMessage } = useGateway();
+    const { readyState, sendJsonMessage, lastJsonMessage } = useGateway();
 
     useEffect(() => {
         if (ReadyState[readyState] !== "OPEN") return;
@@ -52,6 +52,37 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const joinedServer = async () => {
+            const serverId = lastJsonMessage.data.id;
+
+            const res = await api.get<ServerType>(`servers/${serverId}`);
+            if (res.status !== 200) return false;
+
+            _setServers((servers) =>
+                [...servers, res.data].sort(
+                    (a: ServerType, b: ServerType) =>
+                        Number(new Date(a.created_at)) -
+                        Number(new Date(b.created_at)),
+                ),
+            );
+        };
+
+        const leftServer = () => {
+            const serverId = lastJsonMessage.data.id;
+            _setServers((servers) =>
+                servers.filter((sv) => sv.id !== serverId),
+            );
+        };
+
+        if (!lastJsonMessage) return;
+        if (lastJsonMessage.type === "SERVER_JOINED") {
+            joinedServer();
+        } else if (lastJsonMessage.type === "SERVER_LEFT") {
+            leftServer();
+        }
+    }, [lastJsonMessage]);
 
     return <UserContext value={{ user, servers }}>{children}</UserContext>;
 };
