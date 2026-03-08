@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router";
 
 import FormInput from "../components/FormInput";
-
 import AuthContext from "../contexts/AuthContext";
 
 const LoginPage = () => {

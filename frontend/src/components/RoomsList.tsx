@@ -41,8 +41,6 @@ const RoomsList = () => {
         constructRoomTree();
     }, [server]);
 
-    if (!server) return null;
-
     return (
         <>
             {Object.values(roomTree).map((root) => (
@@ -50,7 +48,7 @@ const RoomsList = () => {
                     {root.room_type === 1 && (
                         <Link
                             key={root.id}
-                            to={`/channels/${server.id}/${root.id}`}
+                            to={`/channels/${server?.id}/${root.id}`}
                         >
                             <div className="hover:bg-[#121212] active:bg-[#181818] rounded-md">
                                 # {root.name}
@@ -64,7 +62,7 @@ const RoomsList = () => {
                             <div className="flex flex-col gap-1">
                                 {root.children.map((room) => (
                                     <Link
-                                        to={`/channels/${server.id}/${room.id}`}
+                                        to={`/channels/${server?.id}/${room.id}`}
                                         key={room.id}
                                     >
                                         <div className="hover:bg-[#121212] active:bg-[#181818] rounded-md">

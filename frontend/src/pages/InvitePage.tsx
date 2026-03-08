@@ -54,7 +54,6 @@ const InvitePage = () => {
         });
     }, [inviteCode]);
 
-    if (!user) return null;
     if (loading) return null;
 
     if (!invite) return <>Bad Invite</>;
@@ -80,7 +79,7 @@ const InvitePage = () => {
                         className="bg-[#785D94] hover:bg-[#634c7c] active:hover:bg-[#473659] hover:cursor-pointer rounded-lg p-3 w-3/4 mt-4"
                         onClick={handleAccept}
                     >
-                        Accept as {user.display_name ?? user?.username}
+                        Accept as {user?.display_name ?? user?.username}
                     </button>
 
                     <button

@@ -7,8 +7,6 @@ const MessageInput = () => {
     const { room } = useRoom();
     const { sendMessage } = useMessages();
 
-    if (!room) return null;
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         if (!room) return;
         e.preventDefault();
@@ -23,7 +21,7 @@ const MessageInput = () => {
                     type="text"
                     onChange={(e) => setMessage(e.target.value)}
                     value={message}
-                    placeholder={`Message in #${room.name}`}
+                    placeholder={`Message in #${room?.name}`}
                 />
             </form>
         </div>

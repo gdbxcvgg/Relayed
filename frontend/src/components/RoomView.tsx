@@ -24,13 +24,11 @@ const RoomView = () => {
         loadRoom();
     }, [roomId, server]);
 
-    if (!room) return null;
-
     return (
         <MessagesProvider>
             <div className="flex flex-col h-full">
                 <div className="h-[50px] min-h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
-                    # {room.name}
+                    # {room?.name}
                 </div>
                 <div className="flex flex-row grow min-h-0">
                     <div className="w-full border-r border-r-(--border-color) flex flex-col">

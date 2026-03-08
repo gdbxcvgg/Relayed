@@ -4,8 +4,6 @@ import Message from "./Message";
 const MessagesList = () => {
     const { messages } = useMessages();
 
-    if (!messages) return null;
-
     return (
         <>
             <div>

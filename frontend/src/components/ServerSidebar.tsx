@@ -36,8 +36,6 @@ const ServerSidebar = () => {
         };
     }, []);
 
-    if (!server) return;
-
     return (
         <BaseSidebar>
             <div
@@ -45,7 +43,7 @@ const ServerSidebar = () => {
                 onContextMenu={handleContextMenu}
             >
                 <div className="flex items-center w-full justify-between">
-                    <div className="truncate">{server.name}</div>
+                    <div className="truncate">{server?.name}</div>
                     <div ref={arrowDownRef}>
                         <img
                             src="/arrow-down.png"
@@ -55,11 +53,13 @@ const ServerSidebar = () => {
                     </div>
                 </div>
                 <div ref={contextMenuRef}>
-                    <ServerContextMenu
-                        server={server}
-                        show={showContextMenu}
-                        hideContextMenu={hideContextMenu}
-                    />
+                    {server && (
+                        <ServerContextMenu
+                            server={server}
+                            show={showContextMenu}
+                            hideContextMenu={hideContextMenu}
+                        />
+                    )}
                 </div>
             </div>
             <div className="p-3">
