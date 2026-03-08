@@ -39,7 +39,7 @@ const RoomView = () => {
                         </div>
                         <MessageInput />
                     </div>
-                    <div className="w-[300px] p-3 hidden md:block">
+                    <div className="max-w-60 w-full p-3 hidden md:block">
                         <MemberList />
                     </div>
                 </div>
