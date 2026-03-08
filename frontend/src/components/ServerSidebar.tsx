@@ -34,7 +34,7 @@ const ServerSidebar = () => {
         return () => {
             document.removeEventListener("click", handleClick);
         };
-    });
+    }, []);
 
     if (!server) return;
 

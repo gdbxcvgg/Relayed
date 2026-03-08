@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import ServersList from "./ServersList";
 import UserBadge from "./UserBadge";
+import AddServerButton from "./AddServerButton";
 
 const BaseSidebar = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -17,6 +18,8 @@ const BaseSidebar = ({ children }: { children: React.ReactNode }) => {
                     <div className="w-[50px] h-0.25 min-h-0.25 bg-[#323232]"></div>
 
                     <ServersList />
+
+                    <AddServerButton />
                 </div>
                 <div className="w-58">{children}</div>
             </div>
