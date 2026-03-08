@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import type { ServerType } from "../contexts/ServerContext";
 import api from "../services/api";
+import useUser from "../hooks/useUser";
 
 interface ServerContextMenuProps {
     server: ServerType;
@@ -8,17 +9,18 @@ interface ServerContextMenuProps {
     hideContextMenu: () => void;
 }
 
-const MenuItem = ({
-    text,
-    onClick,
-    className,
-    disabled,
-}: {
+interface MenuItemProps {
     text: string;
     onClick: () => void;
     className?: string;
     disabled?: boolean;
-}) => {
+}
+
+const MenuDivisor = () => {
+    return <div className="w-full h-0.25 min-h-0.25 bg-[#323232]"></div>;
+};
+
+const MenuItem = ({ text, onClick, className, disabled }: MenuItemProps) => {
     return (
         <button
             onClick={onClick}
@@ -36,6 +38,12 @@ const ServerContextMenu = ({
     hideContextMenu,
 }: ServerContextMenuProps) => {
     const navigate = useNavigate();
+    const { user } = useUser();
+
+    const copyServerId = async () => {
+        await navigator.clipboard.writeText(server.id);
+        hideContextMenu();
+    };
 
     const handleLeave = async () => {
         const res = await api.delete(`users/@me/servers/${server.id}/member`);
@@ -46,21 +54,26 @@ const ServerContextMenu = ({
     return (
         show && (
             <div className="flex flex-col absolute -right-28 top-6 z-100 bg-(--bg-main) border-(--border-color) border rounded-lg px-2 py-3 items-center min-w-8 justify-center gap-2">
-                <MenuItem
-                    text="Copy Server ID"
-                    onClick={hideContextMenu}
-                    disabled
-                />
+                <MenuItem text="Copy Server ID" onClick={copyServerId} />
+
+                <MenuDivisor />
+
                 <MenuItem
                     text="Invite to Server"
                     onClick={hideContextMenu}
                     disabled
                 />
-                <MenuItem
-                    text="Leave Server"
-                    onClick={handleLeave}
-                    className="text-red-500 hover:text-red-600"
-                />
+
+                {server.owner.id !== user?.id && (
+                    <>
+                        <MenuDivisor />
+                        <MenuItem
+                            text="Leave Server"
+                            onClick={handleLeave}
+                            className="text-red-500 hover:text-red-600"
+                        />
+                    </>
+                )}
             </div>
         )
     );
