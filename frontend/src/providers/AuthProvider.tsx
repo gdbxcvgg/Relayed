@@ -38,9 +38,18 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return res;
     };
 
+    const logout = () => {
+        localStorage.clear();
+        setIsAuthenticated(false);
+    };
+
     return !loading ? (
         <AuthContext
-            value={{ login: _login, isAuthenticated: isAuthenticated }}
+            value={{
+                login: _login,
+                logout: logout,
+                isAuthenticated: isAuthenticated,
+            }}
         >
             {children}
         </AuthContext>
