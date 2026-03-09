@@ -45,7 +45,7 @@ const SettingsPage = () => {
 
     return (
         <div className="flex ">
-            <aside className="w-78 border-r border-r-(--border-color) bg-(--bg-secondary) flex flex-col p-4 gap-3">
+            <aside className="w-78 border-r border-r-(--border-color) bg-(--bg-secondary) flex flex-col p-4 gap-3 grow overflow-y-auto p-3 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
                 <MenuItem
                     onClick={() => navigate("/app")}
                     currentMenu={currentMenu}
