@@ -24,7 +24,7 @@ const LoginPage = () => {
     if (isAuthenticated) return <Navigate to="/app" replace />;
 
     return (
-        <div className="flex flex-row justify-center items-center min-h-dvh sm:bg-[url(./background.png)] bg-fixed bg-cover bg-center">
+        <div className="flex flex-row justify-center items-center min-h-dvh sm:bg-[url(/background.png)] bg-fixed bg-cover bg-center">
             <main className="flex flex-col bg-[#0C0C0C] text-white w-dvh h-dvh sm:w-xl sm:h-150 py-20 px-8 sm:p-15 gap-4 sm:rounded-2xl">
                 <header className="text-center pb-10">
                     <h1 className="text-3xl font-extrabold">Welcome Back</h1>
