@@ -31,7 +31,7 @@ export interface ServerType {
 const ServerProvider = ({ children }: { children: React.ReactNode }) => {
     const [server, _setServer] = useState<ServerType | null>(null);
 
-    const { sendJsonMessage } = useGateway();
+    const { sendJsonMessage, lastJsonMessage } = useGateway();
 
     const setServer = async (serverId: string): Promise<boolean> => {
         const getRooms = async (serverId: string) => {
@@ -73,6 +73,46 @@ const ServerProvider = ({ children }: { children: React.ReactNode }) => {
             },
         });
     }, [server, sendJsonMessage]);
+
+    useEffect(() => {
+        const memberJoined = () => {
+            _setServer((s) => {
+                if (!s) return null;
+                return { ...s, members: [...s.members, lastJsonMessage.data] };
+            });
+        };
+
+        const memberLeft = () => {
+            _setServer((s) => {
+                if (!s) return null;
+                return {
+                    ...s,
+                    members: [
+                        ...s.members
+                            .filter(
+                                (mem) =>
+                                    mem.user.id !==
+                                    lastJsonMessage.data.user.id,
+                            )
+                            .sort(
+                                (a: MemberType, b: MemberType) =>
+                                    Number(new Date(a.joined_at)) -
+                                    Number(new Date(b.joined_at)),
+                            ),
+                    ],
+                };
+            });
+        };
+
+        if (!lastJsonMessage) return;
+
+        if (lastJsonMessage.type === "MEMBER_JOINED") {
+            memberJoined();
+        }
+        if (lastJsonMessage.type === "MEMBER_LEFT") {
+            memberLeft();
+        }
+    }, [lastJsonMessage]);
 
     return (
         <ServerContext value={{ server, setServer }}>{children}</ServerContext>
