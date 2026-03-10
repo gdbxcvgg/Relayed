@@ -13,12 +13,19 @@ interface RoomType {
     created_at: string;
 }
 
+interface MemberType {
+    joined_at: string;
+    user: UserType;
+}
+
 export interface ServerType {
     id: string;
     name: string;
     icon: string | null;
     owner: UserType;
+    created_at: string;
     rooms?: RoomType[];
+    members: MemberType[];
 }
 
 const ServerProvider = ({ children }: { children: React.ReactNode }) => {
@@ -32,12 +39,23 @@ const ServerProvider = ({ children }: { children: React.ReactNode }) => {
             if (res.status !== 200) return [];
             return res.data;
         };
+
+        const getMembers = async (serverId: string) => {
+            const res = await api.get<MemberType[]>(
+                `servers/${serverId}/members`,
+            );
+            if (res.status !== 200) return [];
+            return res.data;
+        };
+
         try {
             const res = await api.get<ServerType>(`servers/${serverId}`);
             if (res.status !== 200) return false;
 
             const rooms = await getRooms(serverId);
-            _setServer({ ...res.data, rooms: rooms });
+            const members = await getMembers(serverId);
+
+            _setServer({ ...res.data, rooms: rooms, members: members });
         } catch {
             _setServer(null);
             return false;
@@ -54,7 +72,7 @@ const ServerProvider = ({ children }: { children: React.ReactNode }) => {
                 server_id: server.id,
             },
         });
-    }, [server]);
+    }, [server, sendJsonMessage]);
 
     return (
         <ServerContext value={{ server, setServer }}>{children}</ServerContext>

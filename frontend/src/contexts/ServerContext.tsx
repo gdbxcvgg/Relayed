@@ -10,6 +10,11 @@ interface RoomType {
     created_at: string;
 }
 
+interface MemberType {
+    joined_at: string;
+    user: UserType;
+}
+
 export interface ServerType {
     id: string;
     name: string;
@@ -17,6 +22,7 @@ export interface ServerType {
     owner: UserType;
     created_at: string;
     rooms?: RoomType[];
+    members: MemberType[];
 }
 
 interface ServerProps {

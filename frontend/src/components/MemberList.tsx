@@ -1,37 +1,11 @@
-import { useEffect, useState } from "react";
 import useServer from "../hooks/useServer";
-import api from "../services/api";
-
-interface UserType {
-    id: string;
-    username: string;
-    display_name: string | null;
-    avatar: string | null;
-}
-
-interface ServerMemberType {
-    user: UserType;
-    joined_at: string;
-}
 
 const MemberList = () => {
     const { server } = useServer();
-    const [members, setMembers] = useState<ServerMemberType[]>([]);
 
-    useEffect(() => {
-        const getMembers = async () => {
-            if (!server) return;
-            const res = await api.get(`servers/${server.id}/members`);
-            if (res.status !== 200) return;
-
-            setMembers(res.data);
-        };
-
-        getMembers();
-    }, [server]);
     return (
         <div className="flex flex-col gap-1">
-            {members.map((member) => (
+            {server?.members.map((member) => (
                 <div
                     key={member.user.id}
                     className="flex gap-2 items-center py-1 rounded-lg hover:bg-[#121212] active:bg-[#161616]"
