@@ -1,8 +1,9 @@
 import { use, useState } from "react";
 import { useNavigate } from "react-router";
 import AuthContext from "../contexts/AuthContext";
+import AccountSettings from "../components/AccountSettings";
 
-type CurrentMenuType = "my_account" | "other";
+type CurrentMenuType = "my_account" | "security";
 
 const MenuItem = ({
     children,
@@ -44,8 +45,8 @@ const SettingsPage = () => {
     const { logout } = use(AuthContext);
 
     return (
-        <div className="flex ">
-            <aside className="w-78 border-r border-r-(--border-color) bg-(--bg-secondary) flex flex-col p-4 gap-3 grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
+        <div className="flex w-full">
+            <aside className="w-78 min-w-78 border-r border-r-(--border-color) bg-(--bg-secondary) flex flex-col p-4 gap-3 grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
                 <MenuItem
                     onClick={() => navigate("/app")}
                     currentMenu={currentMenu}
@@ -70,13 +71,13 @@ const SettingsPage = () => {
 
                     <MenuItem
                         onClick={() => {
-                            setCurrentMenu("other");
+                            setCurrentMenu("security");
                         }}
                         currentMenu={currentMenu}
-                        id="other"
+                        id="security"
                     >
                         <img src="/gear.png" className="w-5 h-5" />
-                        Other
+                        Password and Security
                     </MenuItem>
                 </div>
 
@@ -87,6 +88,9 @@ const SettingsPage = () => {
                     <span className="text-[#ca2828]">Log Out</span>
                 </MenuItem>
             </aside>
+            <main className="w-full grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
+                {currentMenu === "my_account" && <AccountSettings />}
+            </main>
         </div>
     );
 };
