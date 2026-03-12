@@ -1,15 +1,15 @@
-import type { User } from "./user";
+import type { UserType } from "./user";
 
-export type Message = {
+export type MessageType = {
     id: string;
     content: string;
-    author: User;
+    author: UserType;
     room_id: string;
     created_at: string;
     edited_at: string;
 }
 
-export type DeletedMessage = {
+export type DeletedMessageType = {
     id: string;
     room_id: string;
 }

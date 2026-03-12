@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import MessagesContext from "../contexts/MessagesContext";
-import { type MessageType } from "../components/Message";
 import api from "../services/api";
 import useRoom from "../hooks/useRoom";
 import useGateway from "../hooks/useGateway";
 import useUser from "../hooks/useUser";
+import type { MessageType } from "../types/message";
 
 interface MessageCreateType {
     content: string;

@@ -1,18 +1,10 @@
 import { Link } from "react-router";
 import useServer from "../hooks/useServer";
 import { useEffect, useState } from "react";
+import type { RoomType } from "../types/room";
 
-interface Room {
-    id: string;
-    name: string;
-    description: string | null;
-    room_type: number;
-    parent: string | null;
-    created_at: string;
-}
-
-interface RoomNode extends Room {
-    children: Room[];
+interface RoomNode extends RoomType {
+    children: RoomType[];
 }
 
 const RoomsList = () => {

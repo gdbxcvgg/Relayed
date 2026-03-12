@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { MessageType } from "../components/Message";
+import type { MessageType } from "../types/message";
 
 interface MessageCreateType {
     content: string;

@@ -1,13 +1,5 @@
 import { createContext } from "react";
-
-interface RoomType {
-    id: string;
-    name: string;
-    description: string | null;
-    room_type: number;
-    parent: string | null;
-    created_at: string;
-}
+import type { RoomType } from "../types/room";
 
 interface RoomProps {
     room: RoomType | null;

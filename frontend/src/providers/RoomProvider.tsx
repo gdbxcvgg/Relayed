@@ -3,15 +3,7 @@ import api from "../services/api";
 import RoomContext from "../contexts/RoomContext";
 import useGateway from "../hooks/useGateway";
 import useServer from "../hooks/useServer";
-
-interface RoomType {
-    id: string;
-    name: string;
-    description: string | null;
-    room_type: number;
-    parent: string | null;
-    created_at: string;
-}
+import type { RoomType } from "../types/room";
 
 const RoomProvider = ({ children }: { children: React.ReactNode }) => {
     const [room, _setRoom] = useState<RoomType | null>(null);

@@ -1,4 +1,4 @@
-export type Room = {
+export type RoomType = {
     id: string;
     name: string;
     description: string | null;
@@ -8,7 +8,7 @@ export type Room = {
 }
 
 
-export type DeletedRoom = {
+export type DeletedRoomType = {
     id: string;
     server_id: string;
 }

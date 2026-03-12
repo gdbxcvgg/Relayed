@@ -1,20 +1,5 @@
+import type { MessageType } from "../types/message";
 import MessageMenu from "./MessageToolbar";
-
-interface MessageAuthorType {
-    id: string;
-    username: string;
-    display_name: string | null;
-    avatar: string | null;
-}
-
-export interface MessageType {
-    id: string;
-    content: string;
-    author: MessageAuthorType;
-    room_id: string;
-    created_at: string;
-    edited_at: string;
-}
 
 interface MessagePropsType {
     message: MessageType;

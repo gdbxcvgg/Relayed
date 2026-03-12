@@ -1,5 +1,5 @@
 import useMessages from "../hooks/useMessages";
-import type { MessageType } from "./Message";
+import type { MessageType } from "../types/message";
 
 interface MenuItemProps {
     img: string;
