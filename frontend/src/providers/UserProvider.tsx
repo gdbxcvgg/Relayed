@@ -55,6 +55,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const joinedServer = async () => {
+            if (lastJsonMessage.type !== "SERVER_JOINED") return;
             const serverId = lastJsonMessage.data.id;
 
             const res = await api.get<ServerType>(`servers/${serverId}`);
@@ -70,6 +71,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         };
 
         const leftServer = () => {
+            if (lastJsonMessage.type !== "SERVER_LEFT") return;
             const serverId = lastJsonMessage.data.id;
             _setServers((servers) =>
                 servers.filter((sv) => sv.id !== serverId),

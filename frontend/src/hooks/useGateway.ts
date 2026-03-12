@@ -1,9 +1,6 @@
 import useWebSocket from "react-use-websocket"
+import type { GatewayEvent } from "../types/gateway"
 
-type GatewayEvent = {
-    opcode: number;
-    type: string;
-}
 
 const onOpen = () => {
     console.log("[GATEWAY]: Connection open")

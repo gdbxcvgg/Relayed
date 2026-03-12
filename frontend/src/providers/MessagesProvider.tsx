@@ -57,11 +57,13 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const newMessage = () => {
+            if (lastJsonMessage.type !== "MESSAGE_SEND") return;
             if (lastJsonMessage.data.author.id === user?.id) return;
             setMessages((m) => [lastJsonMessage.data, ...m]);
         };
 
         const deletedMessage = () => {
+            if (lastJsonMessage.type !== "MESSAGE_DELETED") return;
             setMessages((m) =>
                 m.filter((msg) => msg.id !== lastJsonMessage.data.id),
             );
