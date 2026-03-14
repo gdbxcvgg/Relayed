@@ -9,7 +9,7 @@ from rooms.models import Room
 from . import models, serializers
 
 
-class ServerRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
+class ServerRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.ServerSerializer
     queryset = models.Server.objects
     
