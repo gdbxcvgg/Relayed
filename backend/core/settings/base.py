@@ -11,6 +11,7 @@ env = environ.Env(
     DJANGO_DEBUG=(bool, False),
     DJANGO_ALLOWED_HOSTS=(list, []),
     DJANGO_DB_ENGINE=(str, 'sqlite3'),
+    CORS_ALLOWED_ORIGINS=(list, []),
 )
 
 env.read_env(BASE_DIR / '../env/.env.local')
