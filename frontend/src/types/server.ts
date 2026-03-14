@@ -15,3 +15,13 @@ export type ServerType = {
     rooms?: RoomType[];
     members?: ServerMemberType[];
 }
+
+
+export type ServerInviteType = {
+    id: string;
+    code: string;
+    created_at: string;
+    expires_at: string;
+    inviter: UserType;
+    server: ServerType;
+}

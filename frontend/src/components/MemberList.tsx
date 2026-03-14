@@ -5,7 +5,7 @@ const MemberList = () => {
 
     return (
         <div className="flex flex-col gap-1">
-            {server?.members.map((member) => (
+            {server?.members?.map((member) => (
                 <div
                     key={member.user.id}
                     className="flex gap-2 items-center py-1 rounded-lg hover:bg-[#121212] active:bg-[#161616]"
