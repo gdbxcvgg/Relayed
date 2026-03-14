@@ -51,6 +51,11 @@ const ServerContextMenu = ({
         hideContextMenu();
         navigate("/app", { replace: true });
     };
+
+    const handleServerSettings = () => {
+        navigate(`server/${server.id}/settings`);
+    };
+
     return (
         show && (
             <div className="flex flex-col absolute -right-28 top-6 z-100 bg-(--bg-main) border-(--border-color) border rounded-lg px-2 py-3 items-center min-w-8 justify-center gap-2">
@@ -63,6 +68,16 @@ const ServerContextMenu = ({
                     onClick={hideContextMenu}
                     disabled
                 />
+
+                {server.owner.id === user?.id && (
+                    <>
+                        <MenuDivisor />
+                        <MenuItem
+                            text="Server Settings"
+                            onClick={handleServerSettings}
+                        />
+                    </>
+                )}
 
                 {server.owner.id !== user?.id && (
                     <>
