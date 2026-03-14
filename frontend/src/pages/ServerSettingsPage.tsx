@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
 import api from "../services/api";
 import ServerProfileSettings from "../components/server/ServerProfileSettings";
+import ServerMembersSettings from "../components/server/ServerMembersSettings";
 
 type CurrentMenuType = "profile" | "members" | "roles" | "invites" | "bans";
 
@@ -92,7 +93,7 @@ const ServerSettingsPage = () => {
                         currentMenu={currentMenu}
                         id="profile"
                     >
-                        <img src="/person.png" className="w-5 h-5" />
+                        <img src="/detail.png" className="w-5 h-5" />
                         Server Profile
                     </MenuItem>
 
@@ -103,7 +104,7 @@ const ServerSettingsPage = () => {
                         currentMenu={currentMenu}
                         id="members"
                     >
-                        <img src="/person.png" className="w-5 h-5" />
+                        <img src="/member.png" className="w-5 h-5" />
                         Members
                     </MenuItem>
                 </div>
@@ -117,7 +118,7 @@ const ServerSettingsPage = () => {
             </aside>
             <main className="w-full grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
                 {currentMenu === "profile" && <ServerProfileSettings />}
-                {currentMenu === "members" && <div>server members</div>}
+                {currentMenu === "members" && <ServerMembersSettings />}
             </main>
         </div>
     );
