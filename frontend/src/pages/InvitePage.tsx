@@ -1,22 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import api from "../services/api";
-import type { ServerType } from "../contexts/ServerContext";
-import type { UserType } from "../contexts/UserContext";
 import useUser from "../hooks/useUser";
 
-interface InviteType {
-    id: string;
-    code: string;
-    created_at: string;
-    expires_at: string;
-    inviter: UserType;
-    server: ServerType;
-}
+import type { ServerInviteType } from "../types/server";
 
 const InvitePage = () => {
     const { inviteCode } = useParams();
-    const [invite, setInvite] = useState<InviteType | null>(null);
+    const [invite, setInvite] = useState<ServerInviteType | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     const { user, servers } = useUser();
@@ -40,7 +31,9 @@ const InvitePage = () => {
     useEffect(() => {
         const getInvite = async () => {
             try {
-                const res = await api.get<InviteType>(`invites/${inviteCode}`);
+                const res = await api.get<ServerInviteType>(
+                    `invites/${inviteCode}`,
+                );
                 if (res.status !== 200) return;
 
                 setInvite(res.data);

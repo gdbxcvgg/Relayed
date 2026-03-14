@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { type ServerType } from "../contexts/ServerContext";
+import type { ServerType } from "../types/server";
 
 interface NavIconProps {
     server: ServerType;

@@ -1,9 +1,9 @@
 import UserContext from "../contexts/UserContext";
 import { useEffect, useState } from "react";
 import api from "../services/api";
-import { type ServerType } from "../contexts/ServerContext";
 import useGateway from "../hooks/useGateway";
 import { ReadyState } from "react-use-websocket";
+import type { ServerType } from "../types/server";
 
 interface UserType {
     id: string;
