@@ -1,6 +1,6 @@
 import { useState } from "react";
-import FormInput from "./FormInput";
-import api from "../services/api";
+import FormInput from "../FormInput";
+import api from "../../services/api";
 
 const AddServerMenu = ({
     ref,

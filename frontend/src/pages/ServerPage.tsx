@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import useServer from "../hooks/useServer";
-import RoomView from "../components/RoomView";
+import RoomView from "../components/server/RoomView";
 import RoomProvider from "../providers/RoomProvider";
 
 const ServerPage = () => {

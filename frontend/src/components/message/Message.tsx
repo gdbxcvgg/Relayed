@@ -1,4 +1,4 @@
-import type { MessageType } from "../types/message";
+import type { MessageType } from "../../types/message";
 import MessageMenu from "./MessageToolbar";
 
 interface MessagePropsType {

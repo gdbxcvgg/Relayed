@@ -1,7 +1,7 @@
 import { use, useState } from "react";
 import { useNavigate } from "react-router";
 import AuthContext from "../contexts/AuthContext";
-import AccountSettings from "../components/AccountSettings";
+import AccountSettings from "../components/user/AccountSettings";
 
 type CurrentMenuType = "my_account" | "security";
 

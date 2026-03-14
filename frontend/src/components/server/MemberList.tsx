@@ -1,4 +1,4 @@
-import useServer from "../hooks/useServer";
+import useServer from "../../hooks/useServer";
 
 const MemberList = () => {
     const { server } = useServer();

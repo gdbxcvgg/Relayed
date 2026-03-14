@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import ServersList from "./ServersList";
-import UserBadge from "./UserBadge";
-import AddServerButton from "./AddServerButton";
+import AddServerButton from "./server/AddServerButton";
+import UserBadge from "./user/UserBadge";
 
 const BaseSidebar = ({ children }: { children: React.ReactNode }) => {
     return (

@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import useUser from "../hooks/useUser";
+import useUser from "../../hooks/useUser";
 
 const UserBadge = () => {
     const { user } = useUser();

@@ -1,7 +1,7 @@
 import useServer from "../hooks/useServer";
-import RoomsList from "./RoomsList";
+import RoomsList from "./server/RoomsList";
 import BaseSidebar from "./BaseSidebar";
-import ServerContextMenu from "./ServerContextMenu";
+import ServerContextMenu from "./server/ServerContextMenu";
 import { useEffect, useRef, useState } from "react";
 
 const ServerSidebar = () => {

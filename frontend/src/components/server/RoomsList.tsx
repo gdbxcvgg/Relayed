@@ -1,7 +1,7 @@
 import { Link } from "react-router";
-import useServer from "../hooks/useServer";
+import useServer from "../../hooks/useServer";
 import { useEffect, useState } from "react";
-import type { RoomType } from "../types/room";
+import type { RoomType } from "../../types/room";
 
 interface RoomNode extends RoomType {
     children: RoomType[];

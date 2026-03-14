@@ -1,6 +1,6 @@
 import { useState } from "react";
-import useRoom from "../hooks/useRoom";
-import useMessages from "../hooks/useMessages";
+import useRoom from "../../hooks/useRoom";
+import useMessages from "../../hooks/useMessages";
 
 const MessageInput = () => {
     const [message, setMessage] = useState<string>("");

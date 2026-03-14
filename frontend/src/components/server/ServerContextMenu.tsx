@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
-import api from "../services/api";
-import useUser from "../hooks/useUser";
-import type { ServerType } from "../types/server";
+import api from "../../services/api";
+import useUser from "../../hooks/useUser";
+import type { ServerType } from "../../types/server";
 
 interface ServerContextMenuProps {
     server: ServerType;

@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
-import useRoom from "../hooks/useRoom";
-import useServer from "../hooks/useServer";
-import MessagesList from "./MessagesList";
+import useRoom from "../../hooks/useRoom";
+import useServer from "../../hooks/useServer";
+
 import MemberList from "./MemberList";
-import MessagesProvider from "../providers/MessagesProvider";
-import MessageInput from "./MessageInput";
+import MessagesProvider from "../../providers/MessagesProvider";
+import MessagesList from "../message/MessagesList";
+import MessageInput from "../message/MessageInput";
 
 const RoomView = () => {
     const { server } = useServer();
