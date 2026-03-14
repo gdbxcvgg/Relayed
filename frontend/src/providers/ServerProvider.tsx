@@ -93,6 +93,42 @@ const ServerProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [lastJsonMessage]);
 
+    useEffect(() => {
+        const roomCreated = () => {
+            if (lastJsonMessage.type !== "ROOM_CREATED") return;
+            _setServer((s) => {
+                if (!s) return null;
+                return {
+                    ...s,
+                    rooms: [...(s.rooms ?? []), lastJsonMessage.data],
+                };
+            });
+        };
+
+        const roomDeleted = () => {
+            if (lastJsonMessage.type !== "ROOM_DELETED") return;
+            _setServer((s) => {
+                if (!s) return null;
+                return {
+                    ...s,
+                    rooms: s.rooms?.filter(
+                        (room) => room.id !== lastJsonMessage.data.id,
+                    ),
+                };
+            });
+        };
+
+        if (!lastJsonMessage) return;
+
+        if (lastJsonMessage.type === "ROOM_CREATED") {
+            roomCreated();
+        }
+
+        if (lastJsonMessage.type === "ROOM_DELETED") {
+            roomDeleted();
+        }
+    }, [lastJsonMessage]);
+
     return (
         <ServerContext value={{ server, setServer }}>{children}</ServerContext>
     );
