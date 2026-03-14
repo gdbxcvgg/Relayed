@@ -3,7 +3,6 @@ import ServerLayout from "../layouts/ServerLayout";
 import ServerPage from "../pages/ServerPage";
 import ServerProvider from "../providers/ServerProvider";
 import ServerSettingsPage from "../pages/ServerSettingsPage";
-import DefaultLayout from "../layouts/DefaultLayout";
 
 export const serverRoutes = (
     <>
@@ -21,16 +20,12 @@ export const serverRoutes = (
         </Route>
 
         <Route
+            path="server/:serverId/settings"
             element={
                 <ServerProvider>
-                    <DefaultLayout />
+                    <ServerSettingsPage />
                 </ServerProvider>
             }
-        >
-            <Route
-                path="server/:serverId/settings"
-                element={<ServerSettingsPage />}
-            />
-        </Route>
+        />
     </>
 );

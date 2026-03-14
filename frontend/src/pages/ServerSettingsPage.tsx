@@ -3,6 +3,7 @@ import useServer from "../hooks/useServer";
 import { useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
 import api from "../services/api";
+import ServerProfileSettings from "../components/server/ServerProfileSettings";
 
 type CurrentMenuType = "profile" | "members" | "roles" | "invites" | "bans";
 
@@ -110,12 +111,12 @@ const ServerSettingsPage = () => {
                 <MenuDivisor />
 
                 <MenuItem onClick={deleteServer} currentMenu={currentMenu}>
-                    <img src="/logout.png" className="w-5 h-5" />
+                    <img src="/trash.png" className="w-5 h-5" />
                     <span className="text-[#ca2828]">Delete Server</span>
                 </MenuItem>
             </aside>
             <main className="w-full grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
-                {currentMenu === "profile" && <div>server profile</div>}
+                {currentMenu === "profile" && <ServerProfileSettings />}
                 {currentMenu === "members" && <div>server members</div>}
             </main>
         </div>

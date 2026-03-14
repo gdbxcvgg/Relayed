@@ -5,6 +5,7 @@ interface FormInputProps {
     onChange?(e: React.ChangeEvent<HTMLInputElement>): void;
     label_text?: string;
     type: string;
+    value?: string;
 }
 
 const FormInput = (props: FormInputProps) => {
@@ -24,6 +25,7 @@ const FormInput = (props: FormInputProps) => {
                         ? props.className
                         : "bg-[#0A0A0A] border-2 border-[#1C1C1C] h-12 rounded-lg px-3"
                 }
+                value={props.value}
             />
         </div>
     );
