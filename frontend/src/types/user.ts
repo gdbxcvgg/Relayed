@@ -3,4 +3,5 @@ export type UserType = {
     username: string;
     display_name: string | null;
     avatar: string | null;
+    email?: string;
 }

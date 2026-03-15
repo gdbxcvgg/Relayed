@@ -11,7 +11,7 @@ auth_urlpatterns = [
 
 
 users_urlpatterns = [
-    path('@me', views.UserRetrieveAPIView.as_view()),
+    path('@me', views.UserRetrieveUpdateAPIView.as_view()),
     path('@me/servers', views.UserServerListAPIView.as_view()),
     path('@me/servers/<uuid:pk>/member', views.UserServerMemberRetrieveDeleteAPIView.as_view()),
 ]

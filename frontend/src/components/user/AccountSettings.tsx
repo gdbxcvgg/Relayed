@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useUser from "../../hooks/useUser";
 
 const Button = ({
@@ -28,6 +29,9 @@ const InfoCard = ({ children }: { children: React.ReactNode }) => {
 
 const AccountSettings = () => {
     const { user } = useUser();
+    const [showEmail, setShowEmail] = useState(false);
+
+    if (!user) return null;
 
     return (
         <div className="flex flex-col h-dvh">
@@ -70,7 +74,23 @@ const AccountSettings = () => {
 
                 <InfoCard>
                     <h2>Email</h2>
-                    <p className="text-sm">...</p>
+                    <div className="text-sm flex gap-3">
+                        <div>
+                            {showEmail
+                                ? user?.email
+                                : "*".repeat(
+                                      user?.email?.split("@")[0].length ?? 0,
+                                  ) +
+                                  "@" +
+                                  user?.email?.split("@")[1]}
+                        </div>
+                        <div
+                            className="hover:cursor-pointer underline"
+                            onClick={() => setShowEmail((e) => !e)}
+                        >
+                            {showEmail ? "Hide" : "Reveal"}
+                        </div>
+                    </div>
                 </InfoCard>
             </div>
         </div>

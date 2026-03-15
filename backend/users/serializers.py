@@ -47,6 +47,16 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'display_name', 'avatar']
 
 
+
+class SelfUserSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+    username = serializers.CharField(required=False)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'display_name', 'avatar', 'email']
+
+
     def validate_username(self, username):
         user = self.context['request'].user
         if User.objects.filter(username=username).exclude(pk=user.id).exists():

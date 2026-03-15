@@ -14,8 +14,8 @@ class RegisterAPIView(generics.CreateAPIView):
     queryset = User.objects.none()
     
 
-class UserRetrieveAPIView(generics.RetrieveUpdateAPIView):
-    serializer_class = serializers.UserSerializer
+class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = serializers.SelfUserSerializer
 
     def get_object(self):
         return self.request.user
