@@ -1,5 +1,8 @@
 import { useState } from "react";
 import useUser from "../../hooks/useUser";
+import PopUpModal from "../PopUpModal";
+import ChangeUsername from "./ChangeUsername";
+import ChangeDisplayName from "./ChangeDisplayName";
 
 const Button = ({
     children,
@@ -18,12 +21,25 @@ const Button = ({
     );
 };
 
-const InfoCard = ({ children }: { children: React.ReactNode }) => {
+type CardProps = {
+    children: React.ReactNode;
+    modal: React.ReactNode;
+};
+
+const InfoCard = ({ children, modal }: CardProps) => {
+    const [open, setOpen] = useState(false);
+
     return (
-        <div className="flex items-center gap-20 justify-between">
-            <div>{children}</div>
-            <Button>Edit</Button>
-        </div>
+        <>
+            <div className="flex items-center gap-20 justify-between">
+                <div>{children}</div>
+                <Button onClick={() => setOpen(true)}>Edit</Button>
+            </div>
+
+            <PopUpModal open={open} onClose={() => setOpen(false)}>
+                {modal}
+            </PopUpModal>
+        </>
     );
 };
 
@@ -59,7 +75,7 @@ const AccountSettings = () => {
                         </div>
                     </div>
                 </div>
-                <InfoCard>
+                <InfoCard modal={<ChangeDisplayName />}>
                     <h2>Display Name</h2>
                     <p className="text-sm">
                         {user?.display_name ??
@@ -67,12 +83,12 @@ const AccountSettings = () => {
                     </p>
                 </InfoCard>
 
-                <InfoCard>
+                <InfoCard modal={<ChangeUsername />}>
                     <h2>Username</h2>
                     <p className="text-sm">@ {user?.username}</p>
                 </InfoCard>
 
-                <InfoCard>
+                <InfoCard modal={<div>-------------------</div>}>
                     <h2>Email</h2>
                     <div className="text-sm flex gap-3">
                         <div>

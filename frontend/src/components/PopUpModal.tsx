@@ -7,10 +7,12 @@ type PopUpProps = {
 };
 
 const PopUpModal = ({ open, onClose, children }: PopUpProps) => {
+    if (!open) return null;
+
     return createPortal(
         <div
             onClick={onClose}
-            className={`text-white fixed inset-0 z-100 flex justify-center items-center ${open ? "visible bg-black/80" : "invisible"}`}
+            className="text-white fixed inset-0 z-100 flex justify-center items-center visible bg-black/80"
         >
             <div
                 className="relative bg-(--bg-main) rounded-xl shadow px-10 py-12 h-dvh w-dvw sm:h-auto sm:w-auto"
