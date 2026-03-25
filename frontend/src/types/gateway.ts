@@ -1,6 +1,7 @@
 import type { DeletedMessageType, MessageType } from "./message"
 import type { DeletedRoomType, RoomType } from "./room";
 import type { ServerType, ServerMemberType } from "./server";
+import type { UserType } from "./user";
 
 
 type GatewayEventGeneric<T, K> = {
@@ -20,13 +21,15 @@ type ROOM_DELETED = GatewayEventGeneric<"ROOM_DELETED", DeletedRoomType>
 type USER_SERVER_JOINED = GatewayEventGeneric<"SERVER_JOINED", ServerType>
 type USER_SERVER_LEFT = GatewayEventGeneric<"SERVER_LEFT", ServerType>
 
+type USER_UPDATED = GatewayEventGeneric<"USER_UPDATED", UserType>
+
 type SERVER_MEMBER_JOINED = GatewayEventGeneric<"MEMBER_JOINED", ServerMemberType>
 type SERVER_MEMBER_LEFT = GatewayEventGeneric<"MEMBER_LEFT", ServerMemberType>
 
 
 type MESSAGE_EVENT = ROOM_MESSAGE_SEND | ROOM_MESSAGE_UPDATED | ROOM_MESSAGE_DELETED;
 type ROOM_EVENT = ROOM_CREATED | ROOM_UPDATED | ROOM_DELETED;
-type USER_EVENT = USER_SERVER_JOINED | USER_SERVER_LEFT;
+type USER_EVENT = USER_SERVER_JOINED | USER_SERVER_LEFT | USER_UPDATED;
 type MEMBER_EVENT = SERVER_MEMBER_JOINED | SERVER_MEMBER_LEFT;
 
 export type GatewayEventType = MESSAGE_EVENT | ROOM_EVENT | USER_EVENT | MEMBER_EVENT;

@@ -86,6 +86,20 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [lastJsonMessage]);
 
+    useEffect(() => {
+        const userUpdated = () => {
+            if (!lastJsonMessage || lastJsonMessage.type !== "USER_UPDATED")
+                return;
+            _setUser(lastJsonMessage.data);
+        };
+
+        if (!lastJsonMessage) return;
+
+        if (lastJsonMessage.type == "USER_UPDATED") {
+            userUpdated();
+        }
+    }, [lastJsonMessage]);
+
     return <UserContext value={{ user, servers }}>{children}</UserContext>;
 };
 
