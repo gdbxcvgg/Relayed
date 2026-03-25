@@ -59,6 +59,7 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
         const newMessage = () => {
             if (lastJsonMessage.type !== "MESSAGE_SEND") return;
             if (lastJsonMessage.data.author.id === user?.id) return;
+            if (lastJsonMessage.data.room_id !== room?.id) return;
             setMessages((m) => [lastJsonMessage.data, ...m]);
         };
 
