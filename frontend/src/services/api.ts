@@ -22,6 +22,8 @@ api.interceptors.request.use(async (config) => {
         config.headers.Authorization = `Bearer ${access}`
     }
 
+    config.validateStatus = () => true
+
     return config
 })
 

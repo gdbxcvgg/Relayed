@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { cloneElement, useState } from "react";
 import useUser from "../../hooks/useUser";
 import PopUpModal from "../PopUpModal";
 import ChangeUsername from "./ChangeUsername";
@@ -21,24 +21,33 @@ const Button = ({
     );
 };
 
-type CardProps = {
-    children: React.ReactNode;
-    modal: React.ReactNode;
+type ModalProps = {
+    onClose: () => void;
 };
 
-const InfoCard = ({ children, modal }: CardProps) => {
+type CardProps = {
+    children: React.ReactNode;
+    modal?: React.ReactElement<ModalProps>;
+    editable?: boolean;
+};
+
+const InfoCard = ({ children, modal, editable = true }: CardProps) => {
     const [open, setOpen] = useState(false);
 
     return (
         <>
             <div className="flex items-center gap-20 justify-between">
                 <div>{children}</div>
-                <Button onClick={() => setOpen(true)}>Edit</Button>
+                {editable && (
+                    <Button onClick={() => setOpen(true)}>Edit</Button>
+                )}
             </div>
 
-            <PopUpModal open={open} onClose={() => setOpen(false)}>
-                {modal}
-            </PopUpModal>
+            {editable && modal && (
+                <PopUpModal open={open} onClose={() => setOpen(false)}>
+                    {cloneElement(modal, { onClose: () => setOpen(false) })}
+                </PopUpModal>
+            )}
         </>
     );
 };
@@ -88,7 +97,7 @@ const AccountSettings = () => {
                     <p className="text-sm">@ {user?.username}</p>
                 </InfoCard>
 
-                <InfoCard modal={<div>-------------------</div>}>
+                <InfoCard editable={false}>
                     <h2>Email</h2>
                     <div className="text-sm flex gap-3">
                         <div>

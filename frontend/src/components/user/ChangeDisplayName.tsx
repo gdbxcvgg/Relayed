@@ -3,7 +3,7 @@ import useUser from "../../hooks/useUser";
 import api from "../../services/api";
 import FormInput from "../FormInput";
 
-const ChangeDisplayName = () => {
+const ChangeDisplayName = ({ onClose }: { onClose?: () => void }) => {
     const { user } = useUser();
 
     const [displayName, setDisplayName] = useState<string | null>(null);
@@ -16,20 +16,21 @@ const ChangeDisplayName = () => {
 
     const handleSubmit = async () => {
         const dN = displayName !== "" ? displayName : null;
-        await api.patch("users/@me", { display_name: dN });
+        const res = await api.patch("users/@me", { display_name: dN });
+
+        if (res.status !== 200) return;
+        if (onClose) onClose();
     };
 
     return (
-        <div className="flex flex-col gap-8 w-90">
+        <div className="flex flex-col gap-8 grow w-100">
             <div className="flex items-center">
-                <h1 className="text-2xl text-center w-full">
-                    Change Display Name
-                </h1>
+                <h1 className="text-2xl text-center w-full">Display Name</h1>
             </div>
 
             <div className="grow flex flex-col gap-8">
                 <FormInput
-                    id="name"
+                    id="displayName"
                     type="text"
                     className="bg-[#0e0e0e] border outline-0 border-[#2b2b2b] h-12 rounded-lg px-3"
                     onChange={(e) => {
