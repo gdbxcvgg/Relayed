@@ -1,8 +1,26 @@
+import { useEffect, useRef } from "react";
 import useMessages from "../../hooks/useMessages";
 import Message from "./Message";
 
-const MessagesList = () => {
+const MessagesList = ({
+    scroll,
+    scrollAtBottom,
+}: {
+    scroll: () => void;
+    scrollAtBottom: () => void;
+}) => {
     const { messages } = useMessages();
+
+    const scrolled = useRef(false);
+
+    useEffect(() => {
+        if (messages.length > 0 && !scrolled.current) {
+            scrolled.current = true;
+            scroll();
+        } else {
+            scrollAtBottom();
+        }
+    }, [messages]);
 
     return (
         <>

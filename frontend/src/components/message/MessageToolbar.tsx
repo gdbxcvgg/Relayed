@@ -1,4 +1,6 @@
 import useMessages from "../../hooks/useMessages";
+import useServer from "../../hooks/useServer";
+import useUser from "../../hooks/useUser";
 import type { MessageType } from "../../types/message";
 
 interface MenuItemProps {
@@ -20,6 +22,9 @@ const MenuItem = ({ img, onClick }: MenuItemProps) => {
 const MessageToolbar = ({ message }: { message: MessageType }) => {
     const { deleteMessage } = useMessages();
 
+    const { server } = useServer();
+    const { user } = useUser();
+
     const copyMessageId = async () => {
         await navigator.clipboard.writeText(message.id);
     };
@@ -33,7 +38,11 @@ const MessageToolbar = ({ message }: { message: MessageType }) => {
     return (
         <div className="absolute bg-(--bg-main) border-(--border-color) border rounded-lg p-1 right-4 -top-4 items-center min-w-8 justify-center gap-1 hidden group-hover/message:flex">
             <MenuItem img="/id.png" onClick={copyMessageId} />
-            <MenuItem img="/trash.png" onClick={handleDelete} />
+            {(message.author.id === user?.id ||
+                server?.owner.id === user?.id) && (
+                <MenuItem img="/trash.png" onClick={handleDelete} />
+            )}
+
             <MenuItem img="/more.png" onClick={openContextMenu} />
         </div>
     );

@@ -17,7 +17,7 @@ const AddServerMenu = ({ onClose }: { onClose: () => void }) => {
     };
 
     return (
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-12 grow w-100">
             <div className="flex items-center">
                 <h1 className="text-2xl text-center w-full">Create Server</h1>
             </div>

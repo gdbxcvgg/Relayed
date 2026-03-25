@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
 import useRoom from "../../hooks/useRoom";
 import useServer from "../../hooks/useServer";
@@ -25,6 +25,26 @@ const RoomView = () => {
         loadRoom();
     }, [roomId, server]);
 
+    const chatRef = useRef<HTMLDivElement>(null);
+
+    const scroll = () => {
+        chatRef.current?.scrollTo({
+            top: chatRef.current.scrollHeight,
+            behavior: "smooth",
+        });
+    };
+
+    const scrollIfAtBottom = () => {
+        const el = chatRef.current;
+        if (!el) return;
+
+        const threshold = 100;
+        const atBottom =
+            el.scrollHeight - el.scrollTop - el.clientHeight < threshold;
+
+        if (atBottom) scroll();
+    };
+
     return (
         <MessagesProvider>
             <div className="flex flex-col h-full">
@@ -33,10 +53,16 @@ const RoomView = () => {
                 </div>
                 <div className="flex flex-row grow min-h-0">
                     <div className="w-full border-r border-r-(--border-color) flex flex-col">
-                        <div className="grow overflow-y-auto p-3 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
-                            <MessagesList />
+                        <div
+                            ref={chatRef}
+                            className="grow overflow-y-auto p-3 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]"
+                        >
+                            <MessagesList
+                                scroll={scroll}
+                                scrollAtBottom={scrollIfAtBottom}
+                            />
                         </div>
-                        <MessageInput />
+                        <MessageInput scroll={scroll} />
                     </div>
                     <div className="max-w-60 w-full p-3 hidden md:block">
                         <MemberList />

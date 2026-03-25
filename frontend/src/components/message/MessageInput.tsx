@@ -2,7 +2,7 @@ import { useState } from "react";
 import useRoom from "../../hooks/useRoom";
 import useMessages from "../../hooks/useMessages";
 
-const MessageInput = () => {
+const MessageInput = ({ scroll }: { scroll: () => void }) => {
     const [message, setMessage] = useState<string>("");
     const { room } = useRoom();
     const { sendMessage } = useMessages();
@@ -11,7 +11,10 @@ const MessageInput = () => {
         if (!room) return;
         e.preventDefault();
         const success = await sendMessage({ content: message });
-        if (success) setMessage("");
+        if (success) {
+            setMessage("");
+            requestAnimationFrame(() => scroll());
+        }
     };
     return (
         <div className="p-3">

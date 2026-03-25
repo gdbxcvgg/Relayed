@@ -27,7 +27,7 @@ const ServerPage = () => {
         </RoomProvider>
     ) : (
         <div className="h-full w-full flex flex-col items-center justify-center pb-50">
-            <div className="w-lg h-fit">
+            <div className="max-w-md h-fit">
                 {`Welcome to ${server?.name}! Select room from the sidebar and start chatting.`}
             </div>
         </div>
