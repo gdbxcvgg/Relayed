@@ -4,4 +4,5 @@ export type UserType = {
     display_name: string | null;
     avatar: string | null;
     email?: string;
+    presence?: "online" | "offline" | "dnd" | null;
 }

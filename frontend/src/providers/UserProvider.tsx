@@ -4,13 +4,7 @@ import api from "../services/api";
 import useGateway from "../hooks/useGateway";
 import { ReadyState } from "react-use-websocket";
 import type { ServerType } from "../types/server";
-
-interface UserType {
-    id: string;
-    username: string;
-    display_name: string | null;
-    avatar: string | null;
-}
+import type { UserType } from "../types/user";
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, _setUser] = useState<UserType | null>(null);
@@ -40,7 +34,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const _getUser = async () => {
         const res = await api.get<UserType>("users/@me");
         if (res.status !== 200) return false;
-        _setUser(res.data);
+        _setUser({ ...res.data, presence: "online" });
         return true;
     };
 

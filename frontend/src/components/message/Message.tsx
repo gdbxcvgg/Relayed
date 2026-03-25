@@ -1,4 +1,5 @@
 import type { MessageType } from "../../types/message";
+import UserAvatar from "../user/UserAvatar";
 import MessageMenu from "./MessageToolbar";
 
 interface MessagePropsType {
@@ -41,9 +42,7 @@ const Message = ({ message, small }: MessagePropsType) => {
             <MessageMenu message={message} />
             <div className="flex mt-8 group-hover/message:bg-[#121212] p-0.5">
                 <div className="w-12 min-w-12">
-                    <div className="bg-[#272727] w-9 h-9 rounded-4xl flex justify-center items-center">
-                        {message.author.username.slice(0, 1)}
-                    </div>
+                    <UserAvatar user={message.author} />
                 </div>
                 <div>
                     <div className="flex gap-3 items-center">

@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import useUser from "../../hooks/useUser";
+import UserAvatar from "./UserAvatar";
 
 const UserBadge = () => {
     const { user } = useUser();
@@ -7,9 +8,7 @@ const UserBadge = () => {
     return (
         <>
             <div className="bg-(--bg-main) h-16 mb-3 mx-3 flex gap-2 px-3 items-center justify-between rounded-lg">
-                <div className="bg-[#272727] w-9 h-9 rounded-4xl flex justify-center items-center">
-                    {user?.username.slice(0, 1)}
-                </div>
+                <UserAvatar user={user} presence />
                 <div className="grow max-w-46">
                     <div className="text-sm truncate">
                         {user?.display_name ?? user?.username}
