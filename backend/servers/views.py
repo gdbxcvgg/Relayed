@@ -36,7 +36,7 @@ class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
-        return Room.objects.filter(server=server)
+        return Room.objects.filter(server=server, is_deleted=False)
 
     def perform_create(self, serializer):
         server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
