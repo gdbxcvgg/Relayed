@@ -23,5 +23,6 @@ export type ServerInviteType = {
     created_at: string;
     expires_at: string;
     inviter: UserType;
-    server: ServerType;
+    uses: number;
+    max_uses: number;
 }

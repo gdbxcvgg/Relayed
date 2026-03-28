@@ -5,6 +5,7 @@ import useUser from "../hooks/useUser";
 import api from "../services/api";
 import ServerProfileSettings from "../components/server/ServerProfileSettings";
 import ServerMembersSettings from "../components/server/ServerMembersSettings";
+import ServerInviteSettings from "../components/server/ServerInvitesSettings";
 
 type CurrentMenuType = "profile" | "members" | "roles" | "invites" | "bans";
 
@@ -107,6 +108,17 @@ const ServerSettingsPage = () => {
                         <img src="/member.png" className="w-5 h-5" />
                         Members
                     </MenuItem>
+
+                    <MenuItem
+                        onClick={() => {
+                            setCurrentMenu("invites");
+                        }}
+                        currentMenu={currentMenu}
+                        id="invites"
+                    >
+                        <img src="/invite.png" className="w-5 h-5" />
+                        Invites
+                    </MenuItem>
                 </div>
 
                 <MenuDivisor />
@@ -119,6 +131,7 @@ const ServerSettingsPage = () => {
             <main className="w-full grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
                 {currentMenu === "profile" && <ServerProfileSettings />}
                 {currentMenu === "members" && <ServerMembersSettings />}
+                {currentMenu === "invites" && <ServerInviteSettings />}
             </main>
         </div>
     );
