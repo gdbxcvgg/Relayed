@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework import status
 from . import serializers
 
 
@@ -38,3 +40,14 @@ class UserServerMemberRetrieveDeleteAPIView(generics.RetrieveDestroyAPIView):
         from servers.models import ServerMember
         member = get_object_or_404(ServerMember, server__id=self.kwargs['pk'], user=self.request.user)
         return member
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        server = instance.server
+
+        if server.owner == instance.user:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
