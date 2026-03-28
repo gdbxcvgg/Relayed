@@ -16,6 +16,16 @@ class ServerRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     perm_server_path = 'self'
     permission_classes = [IsAuthenticated, IsServerOwner | IsServerMember & ReadOnly]
 
+    def perform_destroy(self, instance):
+        instance.is_deleted = True
+
+        members = models.ServerMember.objects.filter(server=instance)
+
+        for member in members:
+            member.delete()
+
+        instance.save()
+
 
 class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = RoomSerializer
@@ -29,7 +39,7 @@ class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
         return Room.objects.filter(server=server)
 
     def perform_create(self, serializer):
-        server = get_object_or_404(models.Server, pk=self.kwargs['pk'])
+        server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
         if server.owner != self.request.user:
             raise PermissionDenied
         
@@ -81,5 +91,5 @@ class ListServerMembersAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsServerMember & ReadOnly]
 
     def get_queryset(self):
-        server = get_object_or_404(models.Server, pk=self.kwargs['pk'])
+        server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
         return models.ServerMember.objects.filter(server=server)

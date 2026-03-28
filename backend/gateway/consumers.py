@@ -61,7 +61,8 @@ class GatewayConsumer(websocket.JsonWebsocketConsumer):
             return self.close()
         
         server_id = serializer.validated_data['server_id']
-        server = get_object_or_404(Server, pk=server_id)
+        server = self.get_object(Server, pk=server_id)
+        if not server: return self.close()
 
         member = ServerMember.objects.filter(user=self.user, server=server)
 
@@ -72,7 +73,8 @@ class GatewayConsumer(websocket.JsonWebsocketConsumer):
 
         for room in rooms:
             room_id = room['id']
-            room = get_object_or_404(Room, pk=room_id)
+            room = self.get_object(Room, pk=room_id)
+            if not room: return self.close()
 
             if room.server != server:
                 return self.close()
@@ -119,7 +121,8 @@ class GatewayConsumer(websocket.JsonWebsocketConsumer):
             return self.close()
 
         if e_type == EVENTS.USER_SERVER_LEFT:
-            server = Server.objects.get(pk=data['id'])
+            server = self.get_object(Server, pk=data['id'])
+            if not server: return self.close()
             self.unsubscribe(f'server_{server.id}')
 
         self.send_json(serializer.validated_data)
@@ -132,3 +135,10 @@ class GatewayConsumer(websocket.JsonWebsocketConsumer):
             group_name, self.channel_name
         )
         self.subscriptions.remove(group_name)
+
+    def get_object(self, model, **kwargs):
+        obj = model.objects.filter(**kwargs)
+        if not obj.exists():
+            return self.close()
+        
+        return obj.first()
