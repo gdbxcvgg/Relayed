@@ -30,10 +30,22 @@ class ServerMembershipSerializer(serializers.ModelSerializer):
 class ServerInviteSerializer(serializers.ModelSerializer):
     server = PartialServerSerializer(read_only=True)
     inviter = UserSerializer(read_only=True)
+    code = serializers.CharField(read_only=True)
+    expires_at = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = models.ServerInvite
         fields = ['id', 'inviter', 'server', 'code', 'created_at', 'expires_at']
+
+
+class ServerInvitePartialSerializer(serializers.ModelSerializer):
+    inviter = UserSerializer(read_only=True)
+    code = serializers.CharField(read_only=True)
+    uses = serializers.IntegerField(read_only=True)
+    
+    class Meta:
+        model = models.ServerInvite
+        fields = ['id', 'inviter', 'code', 'created_at', 'expires_at', 'max_uses', 'uses']
 
 
 class ServerLeftSerializer(serializers.ModelSerializer):

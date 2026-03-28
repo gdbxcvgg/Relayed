@@ -2,6 +2,7 @@ from rest_framework import generics, response, views, status, mixins
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from django.http import Http404
 from .permissions import IsServerOwner, IsServerMember
 from core.permissions import ReadOnly
 from rooms.serializers import RoomSerializer
@@ -52,6 +53,10 @@ class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveAPIView, mixins.Cre
     def get_object(self):
         invite_code = self.kwargs['invite_code']
         invite = get_object_or_404(models.ServerInvite, code=invite_code, is_deleted=False)
+
+        if invite.is_expired:
+            raise Http404
+
         return invite
 
     # Join Server
@@ -74,6 +79,25 @@ class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveAPIView, mixins.Cre
             invite.save()
 
         return response.Response(status=status.HTTP_200_OK)
+
+
+class ServerInviteListCreateAPIView(generics.ListCreateAPIView):
+    serializer_class = serializers.ServerInvitePartialSerializer
+
+    def get_queryset(self):
+        server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
+
+        if server.owner != self.request.user:
+            raise PermissionDenied()
+
+        return models.ServerInvite.objects.filter(server=server)
+
+
+    def perform_create(self, serializer):
+        server = get_object_or_404(models.Server, pk=self.kwargs['pk'])
+
+        serializer.save(server=server, inviter=self.request.user)
+
 
 
 class CreateServerAPIView(generics.CreateAPIView):

@@ -7,6 +7,7 @@ servers_urlpatterns = [
     path('<uuid:pk>', views.ServerRetrieveUpdateDeleteAPIView.as_view()),
     path('<uuid:pk>/rooms', views.ServerRoomsListCreateAPIView.as_view()),
     path('<uuid:pk>/members', views.ListServerMembersAPIView.as_view()),
+    path('<uuid:pk>/invites', views.ServerInviteListCreateAPIView.as_view()),
 ]
 
 
