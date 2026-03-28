@@ -22,6 +22,8 @@ class MessageRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
         room = get_object_or_404(Room, pk=self.kwargs['room_pk'], is_deleted=False)
         message = get_object_or_404(models.Message, room=room, pk=self.kwargs['msg_pk'], is_deleted=False)
 
+        self.check_object_permissions(self.request, message)
+
         return message
 
     def perform_update(self, serializer):
