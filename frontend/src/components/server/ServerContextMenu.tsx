@@ -2,6 +2,9 @@ import { useNavigate } from "react-router";
 import api from "../../services/api";
 import useUser from "../../hooks/useUser";
 import type { ServerType } from "../../types/server";
+import PopUpModal from "../PopUpModal";
+import ServerInvitePopup from "../ServerInvitePopup";
+import { useState } from "react";
 
 interface ServerContextMenuProps {
     server: ServerType;
@@ -40,6 +43,8 @@ const ServerContextMenu = ({
     const navigate = useNavigate();
     const { user } = useUser();
 
+    const [showInvite, setShowInvite] = useState(false);
+
     const copyServerId = async () => {
         await navigator.clipboard.writeText(server.id);
         hideContextMenu();
@@ -56,41 +61,51 @@ const ServerContextMenu = ({
         navigate(`server/${server.id}/settings`);
     };
 
+    const handleServerInvite = () => {
+        setShowInvite(true);
+        hideContextMenu();
+    };
+
     return (
-        show && (
-            <div className="flex flex-col absolute -right-28 top-6 z-100 bg-(--bg-main) border-(--border-color) border rounded-lg px-2 py-3 items-center min-w-8 justify-center gap-2">
-                <MenuItem text="Copy Server ID" onClick={copyServerId} />
+        <>
+            {show && (
+                <div className="flex flex-col absolute -right-28 top-6 z-100 bg-(--bg-main) border-(--border-color) border rounded-lg px-2 py-3 items-center min-w-8 justify-center gap-2">
+                    <MenuItem text="Copy Server ID" onClick={copyServerId} />
 
-                <MenuDivisor />
+                    <MenuDivisor />
 
-                <MenuItem
-                    text="Invite to Server"
-                    onClick={hideContextMenu}
-                    disabled
-                />
+                    <MenuItem
+                        text="Invite to Server"
+                        onClick={handleServerInvite}
+                    />
 
-                {server.owner.id === user?.id && (
-                    <>
-                        <MenuDivisor />
-                        <MenuItem
-                            text="Server Settings"
-                            onClick={handleServerSettings}
-                        />
-                    </>
-                )}
+                    {server.owner.id === user?.id && (
+                        <>
+                            <MenuDivisor />
+                            <MenuItem
+                                text="Server Settings"
+                                onClick={handleServerSettings}
+                            />
+                        </>
+                    )}
 
-                {server.owner.id !== user?.id && (
-                    <>
-                        <MenuDivisor />
-                        <MenuItem
-                            text="Leave Server"
-                            onClick={handleLeave}
-                            className="text-red-500 hover:text-red-600"
-                        />
-                    </>
-                )}
-            </div>
-        )
+                    {server.owner.id !== user?.id && (
+                        <>
+                            <MenuDivisor />
+                            <MenuItem
+                                text="Leave Server"
+                                onClick={handleLeave}
+                                className="text-red-500 hover:text-red-600"
+                            />
+                        </>
+                    )}
+                </div>
+            )}
+
+            <PopUpModal open={showInvite} onClose={() => setShowInvite(false)}>
+                <ServerInvitePopup />
+            </PopUpModal>
+        </>
     );
 };
 

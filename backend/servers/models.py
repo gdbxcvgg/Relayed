@@ -79,9 +79,9 @@ class ServerInvite(models.Model):
     
     @property
     def is_expired(self):
-        if not self.expires_at: return False
+        if not self.expires_at and not self.max_uses: return False
         
-        if timezone.now() > self.expires_at:
+        if self.expires_at and (timezone.now() > self.expires_at):
             return True
         if self.max_uses and self.uses >= self.max_uses:
             return True
