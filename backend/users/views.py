@@ -51,3 +51,8 @@ class UserServerMemberRetrieveDeleteAPIView(generics.RetrieveDestroyAPIView):
 
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserRetrieveAPIView(generics.RetrieveAPIView):
+    serializer_class = serializers.UserSerializer
+    queryset = User.objects.all()

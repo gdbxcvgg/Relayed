@@ -14,6 +14,8 @@ users_urlpatterns = [
     path('@me', views.UserRetrieveUpdateAPIView.as_view()),
     path('@me/servers', views.UserServerListAPIView.as_view()),
     path('@me/servers/<uuid:pk>/member', views.UserServerMemberRetrieveDeleteAPIView.as_view()),
+
+    path('<uuid:pk>', views.UserRetrieveAPIView.as_view()),
 ]
 
 
