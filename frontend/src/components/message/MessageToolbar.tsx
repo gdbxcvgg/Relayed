@@ -19,7 +19,13 @@ const MenuItem = ({ img, onClick }: MenuItemProps) => {
     );
 };
 
-const MessageToolbar = ({ message }: { message: MessageType }) => {
+const MessageToolbar = ({
+    message,
+    onEdit,
+}: {
+    message: MessageType;
+    onEdit: () => void;
+}) => {
     const { deleteMessage } = useMessages();
 
     const { server } = useServer();
@@ -38,6 +44,11 @@ const MessageToolbar = ({ message }: { message: MessageType }) => {
     return (
         <div className="absolute bg-(--bg-main) border-(--border-color) border rounded-lg p-1 right-4 -top-4 items-center min-w-8 justify-center gap-1 hidden group-hover/message:flex">
             <MenuItem img="/id.png" onClick={copyMessageId} />
+
+            {message.author.id === user?.id && (
+                <MenuItem img="/edit.png" onClick={onEdit} />
+            )}
+
             {(message.author.id === user?.id ||
                 server?.owner.id === user?.id) && (
                 <MenuItem img="/trash.png" onClick={handleDelete} />
