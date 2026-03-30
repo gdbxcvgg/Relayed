@@ -39,7 +39,7 @@ const ServerSidebar = () => {
     return (
         <BaseSidebar>
             <div
-                className="h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color) relative"
+                className="h-[50px] min-h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color) relative"
                 onContextMenu={handleContextMenu}
             >
                 <div className="flex items-center w-full justify-between">
