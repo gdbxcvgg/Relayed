@@ -3,9 +3,11 @@ import MainRouter from "./routers/MainRouter";
 
 function App() {
     return (
-        <AuthProvider>
-            <MainRouter />
-        </AuthProvider>
+        <div onContextMenu={(e) => e.preventDefault()}>
+            <AuthProvider>
+                <MainRouter />
+            </AuthProvider>
+        </div>
     );
 }
 
