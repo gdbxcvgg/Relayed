@@ -2,8 +2,15 @@ import { useState } from "react";
 import FormInput from "../FormInput";
 import api from "../../services/api";
 import useServer from "../../hooks/useServer";
+import type { RoomType } from "../../types/room";
 
-const CreateRoomPopup = ({ onClose }: { onClose: () => void }) => {
+const CreateRoomPopup = ({
+    onClose,
+    category,
+}: {
+    onClose: () => void;
+    category: RoomType | null;
+}) => {
     const { server } = useServer();
 
     const [roomType, setRoomType] = useState("1");
@@ -16,6 +23,7 @@ const CreateRoomPopup = ({ onClose }: { onClose: () => void }) => {
         const res = await api.post(`servers/${server.id}/rooms`, {
             name: roomName,
             room_type: roomType,
+            parent: category?.id,
         });
 
         if (res.status !== 201) return;
@@ -25,7 +33,10 @@ const CreateRoomPopup = ({ onClose }: { onClose: () => void }) => {
     return (
         <div className="flex flex-col gap-12 grow w-100">
             <form className="flex flex-col gap-5" onSubmit={handleCreate}>
-                <h1 className="text-2xl w-full">Create channel</h1>
+                <div>
+                    <h1 className="text-2xl w-full">Create channel</h1>
+                    {category && <p className="text-sm">In #{category.name}</p>}
+                </div>
 
                 <p>Channel Type</p>
 

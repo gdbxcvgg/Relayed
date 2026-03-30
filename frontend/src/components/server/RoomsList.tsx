@@ -8,6 +8,7 @@ import CreateRoomPopup from "./CreateRoomPopup";
 
 interface RoomNode extends RoomType {
     children: RoomType[];
+    hidden: boolean;
 }
 
 const RoomsList = () => {
@@ -16,6 +17,7 @@ const RoomsList = () => {
     const [roomTree, setRoomTree] = useState<Record<string, RoomNode>>({});
 
     const [showCreateRoomMenu, setShowCreateRoomMenu] = useState(false);
+    const [parentCategory, setParentCategory] = useState<RoomType | null>(null);
 
     useEffect(() => {
         const constructRoomTree = () => {
@@ -24,7 +26,7 @@ const RoomsList = () => {
             const roomMap: Record<string, RoomNode> = {};
 
             server.rooms?.forEach((room) => {
-                roomMap[room.id] = { ...room, children: [] };
+                roomMap[room.id] = { ...room, children: [], hidden: false };
             });
 
             server.rooms?.forEach((room) => {
@@ -38,6 +40,26 @@ const RoomsList = () => {
         };
         constructRoomTree();
     }, [server]);
+
+    const toggleCategoryHidden = (roomId: string) => {
+        setRoomTree((prev) => {
+            const updated = { ...prev };
+
+            if (updated[roomId]) {
+                updated[roomId] = {
+                    ...updated[roomId],
+                    hidden: !updated[roomId].hidden,
+                };
+            }
+
+            return updated;
+        });
+    };
+
+    const handleRoomCreate = (category: RoomType | null) => {
+        setParentCategory(category);
+        setShowCreateRoomMenu(true);
+    };
 
     return (
         <>
@@ -56,18 +78,40 @@ const RoomsList = () => {
 
                     {root.room_type === 2 && (
                         <>
-                            <div>{root.name}</div>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1">
+                                    {root.name}
+                                    <img
+                                        src="/arrow-down.png"
+                                        className={
+                                            root.hidden
+                                                ? "w-4 h-4 -rotate-90"
+                                                : "w-4 h-4"
+                                        }
+                                        onClick={() =>
+                                            toggleCategoryHidden(root.id)
+                                        }
+                                    />
+                                </div>
+                                <div
+                                    className="text-xl hover:cursor-pointer"
+                                    onClick={() => handleRoomCreate(root)}
+                                >
+                                    +
+                                </div>
+                            </div>
                             <div className="flex flex-col gap-1">
-                                {root.children.map((room) => (
-                                    <Link
-                                        to={`/channels/${server?.id}/${room.id}`}
-                                        key={room.id}
-                                    >
-                                        <div className="hover:bg-[#121212] active:bg-[#181818] rounded-md">
-                                            # {room.name}
-                                        </div>
-                                    </Link>
-                                ))}
+                                {!root.hidden &&
+                                    root.children.map((room) => (
+                                        <Link
+                                            to={`/channels/${server?.id}/${room.id}`}
+                                            key={room.id}
+                                        >
+                                            <div className="hover:bg-[#121212] active:bg-[#181818] rounded-md">
+                                                # {room.name}
+                                            </div>
+                                        </Link>
+                                    ))}
                             </div>
                         </>
                     )}
@@ -77,7 +121,7 @@ const RoomsList = () => {
             {server?.owner.id === user?.id && (
                 <button
                     className="text-xs hover:font-bold hover:cursor-pointer"
-                    onClick={() => setShowCreateRoomMenu(true)}
+                    onClick={() => handleRoomCreate(null)}
                 >
                     + Create Channel
                 </button>
@@ -87,7 +131,10 @@ const RoomsList = () => {
                 open={showCreateRoomMenu}
                 onClose={() => setShowCreateRoomMenu(false)}
             >
-                <CreateRoomPopup onClose={() => setShowCreateRoomMenu(false)} />
+                <CreateRoomPopup
+                    onClose={() => setShowCreateRoomMenu(false)}
+                    category={parentCategory}
+                />
             </PopUpModal>
         </>
     );
