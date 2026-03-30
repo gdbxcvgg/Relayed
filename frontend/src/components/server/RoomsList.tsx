@@ -2,6 +2,9 @@ import { Link } from "react-router";
 import useServer from "../../hooks/useServer";
 import { useEffect, useState } from "react";
 import type { RoomType } from "../../types/room";
+import useUser from "../../hooks/useUser";
+import PopUpModal from "../PopUpModal";
+import CreateRoomPopup from "./CreateRoomPopup";
 
 interface RoomNode extends RoomType {
     children: RoomType[];
@@ -9,7 +12,10 @@ interface RoomNode extends RoomType {
 
 const RoomsList = () => {
     const { server } = useServer();
+    const { user } = useUser();
     const [roomTree, setRoomTree] = useState<Record<string, RoomNode>>({});
+
+    const [showCreateRoomMenu, setShowCreateRoomMenu] = useState(false);
 
     useEffect(() => {
         const constructRoomTree = () => {
@@ -67,6 +73,22 @@ const RoomsList = () => {
                     )}
                 </div>
             ))}
+
+            {server?.owner.id === user?.id && (
+                <button
+                    className="text-xs hover:font-bold hover:cursor-pointer"
+                    onClick={() => setShowCreateRoomMenu(true)}
+                >
+                    + Create Channel
+                </button>
+            )}
+
+            <PopUpModal
+                open={showCreateRoomMenu}
+                onClose={() => setShowCreateRoomMenu(false)}
+            >
+                <CreateRoomPopup onClose={() => setShowCreateRoomMenu(false)} />
+            </PopUpModal>
         </>
     );
 };
