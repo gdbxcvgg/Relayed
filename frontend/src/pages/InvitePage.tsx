@@ -22,10 +22,10 @@ const InvitePage = () => {
     useEffect(() => {
         if (!servers || !invite) return;
         const already_member = servers.some(
-            (server) => server.id === invite.server.id,
+            (server) => server.id === invite.server?.id,
         );
         if (already_member)
-            navigate(`/channels/${invite.server.id}`, { replace: true });
+            navigate(`/channels/${invite.server?.id}`, { replace: true });
     }, [servers, invite, navigate]);
 
     useEffect(() => {
@@ -55,18 +55,18 @@ const InvitePage = () => {
         <div className="flex flex-row items-center justify-center w-full">
             <div className="flex bg-[#141414] h-80 w-160 rounded-lg">
                 <div className="flex flex-col items-center w-full mt-5 gap-4">
-                    {invite.server.icon ? (
+                    {invite.server?.icon ? (
                         <img
                             src={invite.server.icon}
                             className="rounded-xl w-16 h-16"
                         />
                     ) : (
                         <div className="bg-[#272727] w-16 h-16 rounded-xl flex justify-center items-center">
-                            {invite.server.name.slice(0, 3)}
+                            {invite.server?.name.slice(0, 3)}
                         </div>
                     )}
                     <p className="text-sm">You have been invited to join</p>
-                    <h1 className="text-2xl">{invite.server.name}</h1>
+                    <h1 className="text-2xl">{invite.server?.name}</h1>
 
                     <button
                         className="bg-[#785D94] hover:bg-[#634c7c] active:hover:bg-[#473659] hover:cursor-pointer rounded-lg p-3 w-3/4 mt-4"

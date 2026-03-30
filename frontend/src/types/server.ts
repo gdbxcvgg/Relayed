@@ -25,4 +25,5 @@ export type ServerInviteType = {
     inviter: UserType;
     uses: number;
     max_uses: number;
+    server?: ServerType;
 }
