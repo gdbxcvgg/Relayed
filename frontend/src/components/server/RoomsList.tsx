@@ -93,12 +93,14 @@ const RoomsList = () => {
                                         }
                                     />
                                 </div>
-                                <div
-                                    className="text-xl hover:cursor-pointer"
-                                    onClick={() => handleRoomCreate(root)}
-                                >
-                                    +
-                                </div>
+                                {server?.owner.id === user?.id && (
+                                    <div
+                                        className="text-xl hover:cursor-pointer"
+                                        onClick={() => handleRoomCreate(root)}
+                                    >
+                                        +
+                                    </div>
+                                )}
                             </div>
                             <div className="flex flex-col gap-1">
                                 {!root.hidden &&
