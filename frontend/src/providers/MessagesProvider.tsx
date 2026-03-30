@@ -70,11 +70,24 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
             );
         };
 
+        const updatedMessage = () => {
+            if (lastJsonMessage.type !== "MESSAGE_UPDATED") return;
+            setMessages((prev) =>
+                prev.map((msg) =>
+                    msg.id === lastJsonMessage.data.id
+                        ? { ...msg, ...lastJsonMessage.data }
+                        : msg,
+                ),
+            );
+        };
+
         if (!lastJsonMessage) return;
         if (lastJsonMessage.type === "MESSAGE_SEND") {
             newMessage();
         } else if (lastJsonMessage.type === "MESSAGE_DELETED") {
             deletedMessage();
+        } else if (lastJsonMessage.type === "MESSAGE_UPDATED") {
+            updatedMessage();
         }
     }, [lastJsonMessage]);
 
