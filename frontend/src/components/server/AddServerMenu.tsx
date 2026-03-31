@@ -2,7 +2,12 @@ import { useState } from "react";
 import FormInput from "../FormInput";
 import api from "../../services/api";
 
-const AddServerMenu = ({ onClose }: { onClose: () => void }) => {
+type MenuProps = {
+    onClose: () => void;
+    switchMenu: () => void;
+};
+
+const AddServerMenu = ({ onClose, switchMenu }: MenuProps) => {
     const [serverName, setServerName] = useState("");
 
     const handleServerCreate = async (
@@ -44,7 +49,10 @@ const AddServerMenu = ({ onClose }: { onClose: () => void }) => {
             <h1 className="text-md text-center w-full flex justify-around">
                 <div className="flex gap-1">
                     Already have an invite?
-                    <span className="font-extrabold text-[#785D94] hover:cursor-pointer hover:underline">
+                    <span
+                        className="font-extrabold text-[#785D94] hover:cursor-pointer hover:underline"
+                        onClick={switchMenu}
+                    >
                         Join Server
                     </span>
                 </div>

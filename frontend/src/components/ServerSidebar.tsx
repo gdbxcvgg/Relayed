@@ -35,8 +35,6 @@ const ServerSidebar = () => {
 
     const hideContextMenu = () => setMenu((p) => ({ ...p, visible: false }));
 
-    if (!server) return null;
-
     return (
         <BaseSidebar>
             <div
@@ -58,21 +56,23 @@ const ServerSidebar = () => {
                 <RoomsList />
             </div>
 
-            <ContextMenu
-                open={menu.visible}
-                x={menu.x}
-                y={menu.y}
-                onClose={hideContextMenu}
-            >
-                <ServerContextMenu
-                    server={server}
+            {server && (
+                <ContextMenu
+                    open={menu.visible}
+                    x={menu.x}
+                    y={menu.y}
                     onClose={hideContextMenu}
-                    handleServerInvite={() => {
-                        setShowInvite(true);
-                        hideContextMenu();
-                    }}
-                />
-            </ContextMenu>
+                >
+                    <ServerContextMenu
+                        server={server}
+                        onClose={hideContextMenu}
+                        handleServerInvite={() => {
+                            setShowInvite(true);
+                            hideContextMenu();
+                        }}
+                    />
+                </ContextMenu>
+            )}
 
             <PopUpModal open={showInvite} onClose={() => setShowInvite(false)}>
                 <ServerInvitePopup />
