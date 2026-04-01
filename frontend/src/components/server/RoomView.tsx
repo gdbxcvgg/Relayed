@@ -7,8 +7,10 @@ import MemberList from "./MemberList";
 import MessagesProvider from "../../providers/MessagesProvider";
 import MessagesList from "../message/MessagesList";
 import MessageInput from "../message/MessageInput";
+import useView from "../../hooks/useView";
 
 const RoomView = () => {
+    const { openMenu } = useView();
     const { server } = useServer();
     const { room, setRoom } = useRoom();
     const { roomId } = useParams();
@@ -48,8 +50,13 @@ const RoomView = () => {
     return (
         <MessagesProvider>
             <div className="flex flex-col h-full">
-                <div className="h-[50px] min-h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
-                    # {room?.name}
+                <div className="h-[50px] min-h-[50px] w-full flex items-center gap-4 px-3 border-b border-b-(--border-color)">
+                    <img
+                        src="/arrow-left.png"
+                        className="md:hidden w-6 h-7"
+                        onClick={openMenu}
+                    />
+                    <div># {room?.name}</div>
                 </div>
                 <div className="flex flex-row grow min-h-0">
                     <div className="w-full border-r border-r-(--border-color) flex flex-col">

@@ -5,6 +5,7 @@ import type { RoomType } from "../../types/room";
 import useUser from "../../hooks/useUser";
 import PopUpModal from "../PopUpModal";
 import CreateRoomPopup from "./CreateRoomPopup";
+import useView from "../../hooks/useView";
 
 interface RoomNode extends RoomType {
     children: RoomType[];
@@ -12,6 +13,8 @@ interface RoomNode extends RoomType {
 }
 
 const RoomsList = () => {
+    const { openChat } = useView();
+
     const { server } = useServer();
     const { user } = useUser();
     const [roomTree, setRoomTree] = useState<Record<string, RoomNode>>({});
@@ -69,6 +72,7 @@ const RoomsList = () => {
                         <Link
                             key={root.id}
                             to={`/channels/${server?.id}/${root.id}`}
+                            onClick={openChat}
                         >
                             <div className="hover:bg-[#121212] active:bg-[#181818] rounded-md">
                                 # {root.name}
@@ -108,6 +112,7 @@ const RoomsList = () => {
                                         <Link
                                             to={`/channels/${server?.id}/${room.id}`}
                                             key={room.id}
+                                            onClick={openChat}
                                         >
                                             <div className="hover:bg-[#121212] active:bg-[#181818] rounded-md">
                                                 # {room.name}

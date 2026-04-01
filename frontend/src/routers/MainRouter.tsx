@@ -11,6 +11,7 @@ import { serverRoutes } from "./serverRoutes";
 import UserProvider from "../providers/UserProvider";
 import InvitePage from "../pages/InvitePage";
 import SettingsPage from "../pages/SettingsPage";
+import ViewProvider from "../providers/ViewProvider";
 
 const MainRouter = () => {
     return (
@@ -21,11 +22,13 @@ const MainRouter = () => {
                 <Route path="register" element={<RegisterPage />} />
                 <Route
                     element={
-                        <UserProvider>
-                            <ProtectedRoute>
-                                <DefaultLayout />
-                            </ProtectedRoute>
-                        </UserProvider>
+                        <ViewProvider>
+                            <UserProvider>
+                                <ProtectedRoute>
+                                    <DefaultLayout />
+                                </ProtectedRoute>
+                            </UserProvider>
+                        </ViewProvider>
                     }
                 >
                     <Route path="app" element={<AppPage />} />
