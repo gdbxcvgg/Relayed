@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError, models, transaction
 from django.utils import timezone
+from django.db.models import Q, F
 from . import utils
 import uuid
 
@@ -32,9 +33,15 @@ class Server(models.Model):
         return self.name
 
 
+
 class ServerInviteFilteredManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(is_deleted=False)
+        now = timezone.now()
+        return super().get_queryset().filter(
+            Q(max_uses__isnull=True) | Q(uses__lt=F('max_uses')),
+            Q(expires_at__isnull=True) | Q(expires_at__gt=now),
+            is_deleted=False
+        )
 
 
 class ServerInvite(models.Model):
@@ -80,11 +87,12 @@ class ServerInvite(models.Model):
     @property
     def is_expired(self):
         if not self.expires_at and not self.max_uses: return False
-        
+
+        if self.max_uses and self.uses >= self.max_uses: return True
+
         if self.expires_at and (timezone.now() > self.expires_at):
             return True
-        if self.max_uses and self.uses >= self.max_uses:
-            return True
+
         return False
 
 

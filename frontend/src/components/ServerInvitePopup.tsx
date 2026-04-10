@@ -27,9 +27,9 @@ const ServerInvitePopup = () => {
 
     const handleGenerate = async () => {
         const now = new Date();
-        const expiresAt = new Date(
-            now.getTime() + (expireAfter ?? 0) * 60 * 60 * 1000,
-        );
+        const expiresAt = expireAfter
+            ? new Date(now.getTime() + expireAfter * 60 * 60 * 1000)
+            : null;
 
         const res = await api.post<ServerInviteType>(
             `/servers/${server.id}/invites`,

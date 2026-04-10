@@ -90,7 +90,7 @@ class ServerInviteListCreateAPIView(generics.ListCreateAPIView):
         if server.owner != self.request.user:
             raise PermissionDenied()
 
-        return models.ServerInvite.objects.filter(server=server)
+        return models.ServerInvite.valid_objects.filter(server=server)
 
 
     def perform_create(self, serializer):
