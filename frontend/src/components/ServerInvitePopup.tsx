@@ -43,6 +43,12 @@ const ServerInvitePopup = () => {
         setInvite(res.data);
     };
 
+    const handleCopy = async () => {
+        await navigator.clipboard.writeText(
+            `${import.meta.env.VITE_APP_ROOT}/invite/${invite?.code}`,
+        );
+    };
+
     return (
         <div className="flex flex-col gap-12 grow w-100">
             <div className="flex flex-col gap-5">
@@ -89,16 +95,22 @@ const ServerInvitePopup = () => {
                     Generate new Invite
                 </button>
 
-                <p>
+                <div>
                     {invite && (
-                        <a
-                            href={`${import.meta.env.VITE_APP_ROOT}/invite/${invite.code}`}
-                        >
-                            {import.meta.env.VITE_APP_ROOT}/invite/
-                            {invite.code}
-                        </a>
+                        <div className="flex items-center justify-between text-sm border border-(--border-color)">
+                            <div className="p-3">
+                                {import.meta.env.VITE_APP_ROOT}/invite/
+                                {invite.code}
+                            </div>
+                            <button
+                                className="hover:cursor-pointer bg-[#162738] hover:bg-[#294969] p-3"
+                                onClick={handleCopy}
+                            >
+                                Copy
+                            </button>
+                        </div>
                     )}
-                </p>
+                </div>
             </div>
         </div>
     );
