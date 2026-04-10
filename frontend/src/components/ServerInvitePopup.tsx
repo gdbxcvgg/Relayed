@@ -91,8 +91,11 @@ const ServerInvitePopup = () => {
 
                 <p>
                     {invite && (
-                        <a href={`http://localhost:3000/invite/${invite.code}`}>
-                            http://localhost:3000/invite/{invite.code}
+                        <a
+                            href={`${import.meta.env.VITE_APP_ROOT}/invite/${invite.code}`}
+                        >
+                            {import.meta.env.VITE_APP_ROOT}/invite/
+                            {invite.code}
                         </a>
                     )}
                 </p>
