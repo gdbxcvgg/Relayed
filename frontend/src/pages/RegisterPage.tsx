@@ -5,12 +5,22 @@ import FormInput from "../components/FormInput";
 import { register } from "../services/auth";
 import AuthContext from "../contexts/AuthContext";
 
+type ErrorType = {
+    email?: string;
+    username?: string;
+    password?: string;
+    display_name?: string;
+    date_of_birth?: string;
+};
+
 const RegisterPage = () => {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [displayName, setDisplayName] = useState<string | null>(null);
     const [dateOfBirth, setDateOfBirth] = useState<string>("");
+
+    const [error, setError] = useState<ErrorType | null | undefined>(null);
 
     const navigate = useNavigate();
 
@@ -19,7 +29,7 @@ const RegisterPage = () => {
 
         const dN = displayName !== "" ? displayName : undefined;
 
-        const registered = await register({
+        const [registered, error] = await register({
             email,
             username,
             password,
@@ -29,6 +39,8 @@ const RegisterPage = () => {
 
         if (registered) {
             navigate("/login");
+        } else {
+            setError(error);
         }
     };
 
@@ -52,6 +64,7 @@ const RegisterPage = () => {
                             required
                             onChange={(e) => setEmail(e.target.value)}
                             label_text="Email"
+                            error={error?.email}
                         />
 
                         <FormInput
@@ -60,6 +73,7 @@ const RegisterPage = () => {
                             required
                             onChange={(e) => setUsername(e.target.value)}
                             label_text="Username"
+                            error={error?.username}
                         />
 
                         <FormInput
@@ -67,6 +81,7 @@ const RegisterPage = () => {
                             type="text"
                             onChange={(e) => setDisplayName(e.target.value)}
                             label_text="Display Name"
+                            error={error?.display_name}
                         />
 
                         <FormInput
@@ -75,6 +90,7 @@ const RegisterPage = () => {
                             required
                             onChange={(e) => setPassword(e.target.value)}
                             label_text="Password"
+                            error={error?.password}
                         />
 
                         <FormInput
@@ -83,6 +99,7 @@ const RegisterPage = () => {
                             required
                             onChange={(e) => setDateOfBirth(e.target.value)}
                             label_text="Date of Birth"
+                            error={error?.date_of_birth}
                         />
                     </div>
 

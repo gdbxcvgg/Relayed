@@ -6,6 +6,7 @@ interface FormInputProps {
     label_text?: string;
     type: string;
     value?: string;
+    error?: string;
 }
 
 const FormInput = (props: FormInputProps) => {
@@ -27,6 +28,9 @@ const FormInput = (props: FormInputProps) => {
                 }
                 value={props.value}
             />
+            {props.error && (
+                <div className="text-red-500 text-xs">{props.error}</div>
+            )}
         </div>
     );
 };

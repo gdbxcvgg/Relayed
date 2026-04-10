@@ -2,6 +2,14 @@ import { useEffect, useState } from "react";
 import { isTokenExpired, login, refresh } from "../services/auth";
 import AuthContext from "../contexts/AuthContext";
 
+type ErrorType = {
+    email?: string;
+    username?: string;
+    password?: string;
+    display_name?: string;
+    date_of_birth?: string;
+};
+
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -32,10 +40,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const _login = async (
         email: string,
         password: string,
-    ): Promise<boolean> => {
-        const res = await login(email, password);
-        setIsAuthenticated(res);
-        return res;
+    ): Promise<[boolean, ErrorType?]> => {
+        const [isAuthenticated, error] = await login(email, password);
+        setIsAuthenticated(isAuthenticated);
+        return [isAuthenticated, error];
     };
 
     const logout = () => {

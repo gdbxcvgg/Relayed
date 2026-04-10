@@ -4,9 +4,18 @@ import { Link, Navigate, useNavigate } from "react-router";
 import FormInput from "../components/FormInput";
 import AuthContext from "../contexts/AuthContext";
 
+type ErrorType = {
+    email?: string;
+    username?: string;
+    password?: string;
+    display_name?: string;
+    date_of_birth?: string;
+};
+
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState<ErrorType | null | undefined>(null);
 
     const { isAuthenticated, login } = useContext(AuthContext);
 
@@ -14,10 +23,12 @@ const LoginPage = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const loggedIn = await login(email, password);
+        const [loggedIn, error] = await login(email, password);
 
         if (loggedIn) {
             navigate("/app");
+        } else {
+            setError(error);
         }
     };
 
@@ -39,6 +50,7 @@ const LoginPage = () => {
                             required
                             onChange={(e) => setEmail(e.target.value)}
                             label_text="Email"
+                            error={error?.email}
                         />
 
                         <FormInput
@@ -47,6 +59,7 @@ const LoginPage = () => {
                             required
                             onChange={(e) => setPassword(e.target.value)}
                             label_text="Password"
+                            error={error?.password}
                         />
                     </div>
 

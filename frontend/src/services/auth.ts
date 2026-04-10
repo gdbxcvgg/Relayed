@@ -11,14 +11,17 @@ interface RegisterData {
     date_of_birth: string;
 }
 
-export const register = async (data: RegisterData): Promise<boolean> => {
-    try{
-        const res = await api.post('auth/register', data)
-        return res.status === 201
-    } catch (error) {
-        console.error(error)
-        return false
-    }
+type ErrorType = {
+    email?: string;
+    username?: string;
+    password?: string;
+    display_name?: string;
+    date_of_birth?: string;
+};
+
+export const register = async (data: RegisterData): Promise<[boolean, ErrorType?]> => {
+    const res = await api.post('auth/register', data)
+    return [res.status === 201, res.data]
 }
 
 
@@ -27,20 +30,19 @@ interface LoginResponse {
     access?: string;
 }
 
-export const login = async (email:string, password:string): Promise<boolean> => {
-    try {
-        const res = await api.post<LoginResponse>('auth/token', {email, password})
+export const login = async (email:string, password:string): Promise<[boolean, ErrorType?]> => {
+    const ERROR = "Email or password is invalid.";
 
-        if (!res.data.access || !res.data.refresh) return false
-        
-        localStorage.setItem('access', res.data.access)
-        localStorage.setItem('refresh', res.data.refresh)
+    const res = await api.post<LoginResponse>('auth/token', {email, password})
 
-        return true
-    } catch (error) {
-        console.error(error)
-        return false
-    }
+
+    if (!res.data.access || !res.data.refresh) return [false, {email: ERROR, password: ERROR}]
+    
+    localStorage.setItem('access', res.data.access)
+    localStorage.setItem('refresh', res.data.refresh)
+
+    return [true]
+    
 }
 
 
