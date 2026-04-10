@@ -5,9 +5,10 @@ import uuid
 
 
 class UsernameCharactersValidator(validators.RegexValidator):
-    "Accept only letters, numbers, underscores(_) and dots(.)"
+    "Accept only letters, numbers, underscores (_) and dots (.)"
     
     regex = r"^[a-zA-Z0-9_.]+$"
+    message = "Username may only include letters, numbers, underscores (_) and dots (.)."
 
 
 class User(AbstractUser):

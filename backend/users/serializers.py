@@ -7,8 +7,6 @@ User = get_user_model()
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True)
-    username = serializers.CharField(required=True)
     date_of_birth = serializers.DateField(write_only=True, required=True)
     password = serializers.CharField(write_only=True, required=True)
     
@@ -17,14 +15,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['email', 'username', 'date_of_birth', 'display_name', 'password']
 
     
-    def validate_email(self, email):
-        if User.objects.filter(email=email).exists():
+    def validate_email(self, email: str):
+        if User.objects.filter(email=email.lower()).exists():
             raise ValidationError("User with this email already exists.")
         return email
 
 
-    def validate_username(self, username):
-        if User.objects.filter(username=username).exists():
+    def validate_username(self, username: str):
+        if User.objects.filter(username=username.lower()).exists():
             raise ValidationError("User with this username already exists.")
         return username
 
@@ -49,7 +47,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 class SelfUserSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    username = serializers.CharField(required=False)
 
     class Meta:
         model = User
