@@ -9,18 +9,21 @@ const RegisterPage = () => {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [displayName, setDisplayName] = useState("");
+    const [displayName, setDisplayName] = useState<string | null>(null);
     const [dateOfBirth, setDateOfBirth] = useState<string>("");
 
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        const dN = displayName !== "" ? displayName : undefined;
+
         const registered = await register({
             email,
             username,
             password,
-            display_name: displayName,
+            display_name: dN,
             date_of_birth: dateOfBirth.toString(),
         });
 

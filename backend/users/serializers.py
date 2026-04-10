@@ -10,7 +10,6 @@ class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     username = serializers.CharField(required=True)
     date_of_birth = serializers.DateField(write_only=True, required=True)
-    display_name = serializers.CharField(required=False)
     password = serializers.CharField(write_only=True, required=True)
     
     class Meta:

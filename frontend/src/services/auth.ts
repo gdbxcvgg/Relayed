@@ -7,7 +7,7 @@ interface RegisterData {
     email: string;
     username: string;
     password: string;
-    display_name?: string;
+    display_name?: string | null;
     date_of_birth: string;
 }
 
