@@ -1,15 +1,16 @@
 from rest_framework import serializers
-from servers.serializers import PartialServerSerializer
+from servers.serializers import PartialServerSerializer, ServerSerializer
 from . import models
 
 
 class RoomSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
+    server = ServerSerializer()
 
     class Meta:
         model = models.Room
-        fields = ['id', 'name', 'description', 'room_type', 'parent', 'created_at']
+        fields = ['id', 'name', 'description', 'room_type', 'parent', 'created_at', 'server']
 
 
 class ParialRoomSerializer(serializers.ModelSerializer):
