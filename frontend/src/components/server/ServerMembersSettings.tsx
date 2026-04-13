@@ -1,7 +1,10 @@
 import useServer from "../../hooks/useServer";
+import useView from "../../hooks/useView";
 
 const ServerMembersSettings = () => {
     const { server } = useServer();
+
+    const { openMenu } = useView();
 
     if (!server) return;
 
@@ -17,9 +20,16 @@ const ServerMembersSettings = () => {
     return (
         <div className="flex flex-col h-dvh items-center">
             <div className="h-[50px] min-h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
-                <h1 className="text-lg font-bold">Server Members</h1>
+                <h1 className="flex text-lg font-bold items-center gap-4">
+                    <img
+                        src="/arrow-left.png"
+                        className="md:hidden w-6 h-7"
+                        onClick={openMenu}
+                    />
+                    Server Members
+                </h1>
             </div>
-            <div className="grow p-10 flex flex-col gap-10 w-3/4">
+            <div className="grow p-10 flex flex-col gap-10 w-full md:w-3/4">
                 <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg">
                     <h1 className="border-b border-b-(--border-color) p-3 text-lg font-extrabold">
                         Recent Members [{server.members?.length} Total]

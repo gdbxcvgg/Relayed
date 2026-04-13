@@ -26,7 +26,7 @@ const BaseSidebar = ({ children }: { children: React.ReactNode }) => {
                 </div>
             </div>
 
-            <div className="hidden md:block">
+            <div className="">
                 <UserBadge />
             </div>
         </div>

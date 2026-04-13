@@ -3,6 +3,7 @@ import useUser from "../../hooks/useUser";
 import PopUpModal from "../PopUpModal";
 import ChangeUsername from "./ChangeUsername";
 import ChangeDisplayName from "./ChangeDisplayName";
+import useView from "../../hooks/useView";
 
 const Button = ({
     children,
@@ -56,12 +57,21 @@ const AccountSettings = () => {
     const { user } = useUser();
     const [showEmail, setShowEmail] = useState(false);
 
+    const { openMenu } = useView();
+
     if (!user) return null;
 
     return (
         <div className="flex flex-col h-dvh">
             <div className="h-[50px] min-h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
-                <h1 className="text-lg font-bold">My Account</h1>
+                <h1 className="flex text-lg font-bold items-center gap-4">
+                    <img
+                        src="/arrow-left.png"
+                        className="md:hidden w-6 h-7"
+                        onClick={openMenu}
+                    />
+                    My Account
+                </h1>
             </div>
             <div className="grow p-10 flex flex-col gap-10 max-w-160">
                 <div className="border border-(--border-color) rounded-lg">

@@ -6,6 +6,7 @@ import api from "../services/api";
 import ServerProfileSettings from "../components/server/ServerProfileSettings";
 import ServerMembersSettings from "../components/server/ServerMembersSettings";
 import ServerInviteSettings from "../components/server/ServerInvitesSettings";
+import useView from "../hooks/useView";
 
 type CurrentMenuType = "profile" | "members" | "roles" | "invites" | "bans";
 
@@ -46,6 +47,7 @@ const ServerSettingsPage = () => {
     const { user } = useUser();
 
     const navigate = useNavigate();
+    const { view, openChat } = useView();
 
     const [currentMenu, setCurrentMenu] = useState<CurrentMenuType>("profile");
 
@@ -75,7 +77,9 @@ const ServerSettingsPage = () => {
 
     return (
         <div className="flex w-full">
-            <aside className="w-78 min-w-78 border-r border-r-(--border-color) bg-(--bg-secondary) flex flex-col p-4 gap-3 grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
+            <aside
+                className={`${view === "menu" ? "flex" : "hidden"} md:flex w-dvw md:w-78 min-w-78 border-r border-r-(--border-color) bg-(--bg-secondary) flex flex-col p-4 gap-3 grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]`}
+            >
                 <MenuItem
                     onClick={() => navigate("/app")}
                     currentMenu={currentMenu}
@@ -90,6 +94,7 @@ const ServerSettingsPage = () => {
                     <MenuItem
                         onClick={() => {
                             setCurrentMenu("profile");
+                            openChat();
                         }}
                         currentMenu={currentMenu}
                         id="profile"
@@ -101,6 +106,7 @@ const ServerSettingsPage = () => {
                     <MenuItem
                         onClick={() => {
                             setCurrentMenu("members");
+                            openChat();
                         }}
                         currentMenu={currentMenu}
                         id="members"
@@ -112,6 +118,7 @@ const ServerSettingsPage = () => {
                     <MenuItem
                         onClick={() => {
                             setCurrentMenu("invites");
+                            openChat();
                         }}
                         currentMenu={currentMenu}
                         id="invites"
@@ -128,7 +135,9 @@ const ServerSettingsPage = () => {
                     <span className="text-[#ca2828]">Delete Server</span>
                 </MenuItem>
             </aside>
-            <main className="w-full grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
+            <main
+                className={`${view === "chat" ? "block" : "hidden"} md:block md:w-full grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]`}
+            >
                 {currentMenu === "profile" && <ServerProfileSettings />}
                 {currentMenu === "members" && <ServerMembersSettings />}
                 {currentMenu === "invites" && <ServerInviteSettings />}

@@ -3,11 +3,13 @@ import type { ServerInviteType } from "../../types/server";
 import api from "../../services/api";
 import useServer from "../../hooks/useServer";
 import UserAvatar from "../user/UserAvatar";
+import useView from "../../hooks/useView";
 
 const ServerInviteSettings = () => {
     const [invites, setInvites] = useState<ServerInviteType[] | null>(null);
 
     const { server } = useServer();
+    const { openMenu } = useView();
 
     useEffect(() => {
         const fetchInvites = async () => {
@@ -23,9 +25,16 @@ const ServerInviteSettings = () => {
     return (
         <div className="flex flex-col h-dvh items-center">
             <div className="h-[50px] min-h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
-                <h1 className="text-lg font-bold">Server Invites</h1>
+                <h1 className="flex text-lg font-bold items-center gap-4">
+                    <img
+                        src="/arrow-left.png"
+                        className="md:hidden w-6 h-7"
+                        onClick={openMenu}
+                    />
+                    Server Invites
+                </h1>
             </div>
-            <div className="grow p-10 flex flex-col gap-10 w-3/4">
+            <div className="grow p-10 flex flex-col gap-10 w-full md:w-3/4">
                 <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg">
                     <h1 className="border-b border-b-(--border-color) p-3 text-lg font-extrabold">
                         Recent Invites [{invites?.length} Total]

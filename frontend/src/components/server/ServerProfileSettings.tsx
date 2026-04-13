@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import useServer from "../../hooks/useServer";
 import FormInput from "../FormInput";
 import api from "../../services/api";
+import useView from "../../hooks/useView";
 
 const ServerProfileSettings = () => {
     const { server } = useServer();
+    const { openMenu } = useView();
 
     const [serverName, setServerName] = useState("");
 
@@ -30,7 +32,14 @@ const ServerProfileSettings = () => {
     return (
         <div className="flex flex-col h-dvh">
             <div className="h-[50px] min-h-[50px] w-full flex items-center px-3 border-b border-b-(--border-color)">
-                <h1 className="text-lg font-bold">Server Profile</h1>
+                <h1 className="flex text-lg font-bold items-center gap-4">
+                    <img
+                        src="/arrow-left.png"
+                        className="md:hidden w-6 h-7"
+                        onClick={openMenu}
+                    />
+                    Server Profile
+                </h1>
             </div>
             <div className="grow p-10 flex flex-col gap-10 max-w-160">
                 <div className="border border-(--border-color) rounded-lg">

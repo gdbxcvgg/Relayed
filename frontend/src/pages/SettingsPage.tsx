@@ -2,6 +2,7 @@ import { use, useState } from "react";
 import { useNavigate } from "react-router";
 import AuthContext from "../contexts/AuthContext";
 import AccountSettings from "../components/user/AccountSettings";
+import useView from "../hooks/useView";
 
 type CurrentMenuType = "my_account" | "security";
 
@@ -39,6 +40,8 @@ const MenuDivisor = () => {
 const SettingsPage = () => {
     const navigate = useNavigate();
 
+    const { view, openChat } = useView();
+
     const [currentMenu, setCurrentMenu] =
         useState<CurrentMenuType>("my_account");
 
@@ -46,7 +49,9 @@ const SettingsPage = () => {
 
     return (
         <div className="flex w-full">
-            <aside className="w-78 min-w-78 border-r border-r-(--border-color) bg-(--bg-secondary) flex flex-col p-4 gap-3 grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
+            <aside
+                className={`${view === "menu" ? "flex" : "hidden"} md:flex w-dvw md:w-78 min-w-78 border-r border-r-(--border-color) bg-(--bg-secondary) flex flex-col p-4 gap-3 grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]`}
+            >
                 <MenuItem
                     onClick={() => navigate("/app")}
                     currentMenu={currentMenu}
@@ -61,6 +66,7 @@ const SettingsPage = () => {
                     <MenuItem
                         onClick={() => {
                             setCurrentMenu("my_account");
+                            openChat();
                         }}
                         currentMenu={currentMenu}
                         id="my_account"
@@ -72,6 +78,7 @@ const SettingsPage = () => {
                     <MenuItem
                         onClick={() => {
                             setCurrentMenu("security");
+                            openChat();
                         }}
                         currentMenu={currentMenu}
                         id="security"
@@ -88,7 +95,9 @@ const SettingsPage = () => {
                     <span className="text-[#ca2828]">Log Out</span>
                 </MenuItem>
             </aside>
-            <main className="w-full grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]">
+            <main
+                className={`${view === "chat" ? "block" : "hidden"} md:block md:w-full grow overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]`}
+            >
                 {currentMenu === "my_account" && <AccountSettings />}
             </main>
         </div>
