@@ -9,6 +9,7 @@ from servers.permissions import IsServerOwner, IsServerMember
 from core.permissions import ReadOnly
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsMessageAuthor
+from .pagination import BeforeLimitPagination
 
 
 class MessageRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -37,6 +38,7 @@ class MessageRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class MessageListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = serializers.MessageSerializer
+    pagination_class = BeforeLimitPagination
 
     def get_queryset(self):
         room = get_object_or_404(Room, pk=self.kwargs['room_pk'], is_deleted=False)
