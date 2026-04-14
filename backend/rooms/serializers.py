@@ -6,7 +6,7 @@ from . import models
 class RoomSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
-    server = ServerSerializer()
+    server = ServerSerializer(read_only=True)
 
     class Meta:
         model = models.Room
