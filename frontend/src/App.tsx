@@ -3,7 +3,10 @@ import MainRouter from "./routers/MainRouter";
 
 function App() {
     return (
-        <div onContextMenu={(e) => e.preventDefault()}>
+        <div
+            onContextMenu={(e) => e.preventDefault()}
+            className="flex max-w-dvw"
+        >
             <AuthProvider>
                 <MainRouter />
             </AuthProvider>

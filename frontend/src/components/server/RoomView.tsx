@@ -65,11 +65,11 @@ const RoomView = () => {
                     />
                     <div># {room?.name}</div>
                 </div>
-                <div className="flex flex-row grow min-h-0">
-                    <div className="w-full border-r border-r-(--border-color) flex flex-col">
+                <div className="flex flex-1 min-h-0 w-full">
+                    <div className="border-r border-r-(--border-color) flex flex-col flex-1 min-w-0">
                         <div
                             ref={chatRef}
-                            className="grow overflow-y-auto p-3 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]"
+                            className="flex-1 overflow-y-auto p-3 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-[3px]"
                         >
                             <MessagesList
                                 scroll={scroll}
@@ -78,7 +78,7 @@ const RoomView = () => {
                         </div>
                         <MessageInput scroll={scroll} />
                     </div>
-                    <div className="max-w-60 w-full p-3 hidden md:block">
+                    <div className="w-55 p-3 hidden md:block">
                         <MemberList />
                     </div>
                 </div>

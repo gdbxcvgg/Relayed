@@ -35,7 +35,7 @@ const MessagesList = ({
     }, [messages, scroll, scrollAtBottom]);
 
     return (
-        <div>
+        <div className="flex flex-col justify-end min-h-full wrap-break-word">
             <div ref={inViewRef}></div>
             {messages
                 .slice(0)

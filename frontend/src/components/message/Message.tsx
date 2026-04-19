@@ -66,7 +66,7 @@ const Message = ({ message, small }: MessagePropsType) => {
                     <div className="w-12 min-w-12 invisible group-hover/inner:visible text-[#676767] text-xs">
                         {formatDate(message.created_at, true)}
                     </div>
-                    <div className="w-full">
+                    <div className="flex-1 min-w-0">
                         {edit ? (
                             <form onSubmit={handleEdit}>
                                 <input
@@ -115,8 +115,8 @@ const Message = ({ message, small }: MessagePropsType) => {
                 <div className="w-12 min-w-12">
                     <UserAvatar user={message.author} />
                 </div>
-                <div className="w-full">
-                    <div className="flex gap-3 items-center">
+                <div className="flex-1 min-w-0">
+                    <div className="flex gap-x-3 items-center flex-wrap">
                         <div>
                             {message.author.display_name ??
                                 message.author.username}

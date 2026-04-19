@@ -13,7 +13,7 @@ const ServerLayout = () => {
                 <ServerSidebar />
             </aside>
             <main
-                className={`${view === "chat" ? "block" : "hidden"} md:block w-dvw`}
+                className={`${view === "chat" ? "block" : "hidden"} md:block w-full md:flex-1 min-w-0`}
             >
                 <Outlet />
             </main>
