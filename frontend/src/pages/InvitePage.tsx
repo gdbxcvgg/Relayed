@@ -30,16 +30,12 @@ const InvitePage = () => {
 
     useEffect(() => {
         const getInvite = async () => {
-            try {
-                const res = await api.get<ServerInviteType>(
-                    `invites/${inviteCode}`,
-                );
-                if (res.status !== 200) return;
+            const res = await api.get<ServerInviteType>(
+                `invites/${inviteCode}`,
+            );
+            if (res.status !== 200) return;
 
-                setInvite(res.data);
-            } catch {
-                console.log("[INVITE]: Bad Invite");
-            }
+            setInvite(res.data);
         };
 
         getInvite().then(() => {

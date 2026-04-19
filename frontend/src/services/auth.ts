@@ -74,8 +74,7 @@ export const isTokenExpired = (token:string): boolean => {
         const currentTime = Date.now() / 1000
         if (!decodedToken.exp) return true
         return decodedToken.exp < currentTime
-    } catch (error) {
-        console.log('Error decoding token: ', error)
+    } catch {
         return true
     }
 }

@@ -8,6 +8,11 @@ interface MenuItemProps {
     onClick(): void;
 }
 
+type MessageToolbarProps = {
+    message: MessageType;
+    onEdit: () => void;
+};
+
 const MenuItem = ({ img, onClick }: MenuItemProps) => {
     return (
         <div
@@ -19,13 +24,7 @@ const MenuItem = ({ img, onClick }: MenuItemProps) => {
     );
 };
 
-const MessageToolbar = ({
-    message,
-    onEdit,
-}: {
-    message: MessageType;
-    onEdit: () => void;
-}) => {
+const MessageToolbar = ({ message, onEdit }: MessageToolbarProps) => {
     const { deleteMessage } = useMessages();
 
     const { server } = useServer();

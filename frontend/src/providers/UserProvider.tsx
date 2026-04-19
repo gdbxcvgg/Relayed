@@ -21,8 +21,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
                 token: localStorage.getItem("access"),
             },
         });
-
-        console.log("[GATEWAY]: Authenticated");
     }, [readyState]);
 
     const _getServers = async () => {

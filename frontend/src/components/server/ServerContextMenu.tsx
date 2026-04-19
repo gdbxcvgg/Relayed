@@ -57,39 +57,34 @@ const ServerContextMenu = ({
     };
 
     return (
-        <>
-            <div className="flex flex-col z-100 items-center min-w-8 justify-center gap-2">
-                <MenuItem text="Copy Server ID" onClick={copyServerId} />
+        <div className="flex flex-col z-100 items-center min-w-8 justify-center gap-2">
+            <MenuItem text="Copy Server ID" onClick={copyServerId} />
 
-                <MenuDivisor />
+            <MenuDivisor />
 
-                <MenuItem
-                    text="Invite to Server"
-                    onClick={handleServerInvite}
-                />
+            <MenuItem text="Invite to Server" onClick={handleServerInvite} />
 
-                {server.owner.id === user?.id && (
-                    <>
-                        <MenuDivisor />
-                        <MenuItem
-                            text="Server Settings"
-                            onClick={handleServerSettings}
-                        />
-                    </>
-                )}
+            {server.owner.id === user?.id && (
+                <>
+                    <MenuDivisor />
+                    <MenuItem
+                        text="Server Settings"
+                        onClick={handleServerSettings}
+                    />
+                </>
+            )}
 
-                {server.owner.id !== user?.id && (
-                    <>
-                        <MenuDivisor />
-                        <MenuItem
-                            text="Leave Server"
-                            onClick={handleLeave}
-                            className="text-red-500 hover:text-red-600"
-                        />
-                    </>
-                )}
-            </div>
-        </>
+            {server.owner.id !== user?.id && (
+                <>
+                    <MenuDivisor />
+                    <MenuItem
+                        text="Leave Server"
+                        onClick={handleLeave}
+                        className="text-red-500 hover:text-red-600"
+                    />
+                </>
+            )}
+        </div>
     );
 };
 
