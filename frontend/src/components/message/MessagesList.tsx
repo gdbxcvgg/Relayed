@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
+import { useOnInView } from "react-intersection-observer";
 import useMessages from "../../hooks/useMessages";
 import Message from "./Message";
+import useRoom from "../../hooks/useRoom";
 
 const MessagesList = ({
     scroll,
@@ -9,9 +11,19 @@ const MessagesList = ({
     scroll: () => void;
     scrollAtBottom: () => void;
 }) => {
-    const { messages } = useMessages();
+    const { messages, fetchBeforeMessages } = useMessages();
+    const { room } = useRoom();
 
     const scrolled = useRef(false);
+
+    const inViewRef = useOnInView((inView) => {
+        if (!inView || messages.length === 0) return;
+        fetchBeforeMessages(messages.slice(0).reverse()[0].id);
+    });
+
+    useEffect(() => {
+        scrolled.current = false;
+    }, [room]);
 
     useEffect(() => {
         if (messages.length > 0 && !scrolled.current) {
@@ -20,16 +32,18 @@ const MessagesList = ({
         } else {
             scrollAtBottom();
         }
-    }, [messages]);
+    }, [messages, scroll, scrollAtBottom]);
 
     return (
         <>
+            <div ref={inViewRef}></div>
             <div>
                 {messages
                     .slice(0)
                     .reverse()
                     .map((message, index) => {
                         let small = false;
+
                         if (index > 0) {
                             const prevMsg = messages.slice(0).reverse()[
                                 index - 1

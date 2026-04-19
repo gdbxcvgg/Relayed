@@ -6,6 +6,8 @@ import useGateway from "../hooks/useGateway";
 import useUser from "../hooks/useUser";
 import type { MessageType } from "../types/message";
 
+const MESSAGE_LIMIT = 50;
+
 interface MessageCreateType {
     content: string;
 }
@@ -47,9 +49,22 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
         return true;
     };
 
+    const fetchBeforeMessages = async (beforeId: string) => {
+        if (!room) return;
+
+        const res = await api.get(
+            `rooms/${room.id}/messages?limit=${MESSAGE_LIMIT}&before=${beforeId}`,
+        );
+
+        if (res.status !== 200) return;
+        setMessages((m) => [...m, ...res.data]);
+    };
+
     useEffect(() => {
         if (!room) return;
-        api.get<MessageType[]>(`rooms/${room.id}/messages`).then((res) => {
+        api.get<MessageType[]>(
+            `rooms/${room.id}/messages?limit=${MESSAGE_LIMIT}`,
+        ).then((res) => {
             if (res.status !== 200) return;
             setMessages(res.data);
         });
@@ -99,6 +114,7 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
                 messages,
                 sendMessage,
                 deleteMessage,
+                fetchBeforeMessages,
             }}
         >
             {children}
