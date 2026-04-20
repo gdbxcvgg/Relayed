@@ -6,6 +6,8 @@ import useGateway from "../hooks/useGateway";
 import useUser from "../hooks/useUser";
 import type { MessageType } from "../types/message";
 
+import { v4 as uuidv4 } from "uuid";
+
 const MESSAGE_LIMIT = 50;
 
 interface MessageCreateType {
@@ -19,18 +21,49 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
     const { lastJsonMessage } = useGateway();
     const { user } = useUser();
 
-    const sendMessage = async (content: MessageCreateType) => {
-        if (!room) return false;
-        try {
-            const res = await api.post<MessageType>(
-                `rooms/${room.id}/messages`,
-                content,
+    const _sendMsg = async (message: MessageCreateType, qMsgId: string) => {
+        const res = await api.post<MessageType>(
+            `rooms/${room?.id}/messages`,
+            message,
+        );
+
+        if (res.status !== 201) {
+            setMessages((prev) =>
+                prev.map((m) => {
+                    if (m.id === qMsgId) return { ...m, error: true };
+                    return m;
+                }),
             );
-            if (res.status !== 201) return false;
-            setMessages((m) => [res.data, ...m]);
-        } catch {
             return false;
         }
+        setMessages((prev) =>
+            prev.map((m) => {
+                if (m.id === qMsgId)
+                    return { ...res.data, created_at: m.created_at };
+                return m;
+            }),
+        );
+    };
+
+    const sendMessage = async (message: MessageCreateType) => {
+        if (!room || !user) return false;
+
+        const queuedMsgId = "q_" + uuidv4();
+
+        const queuedMessage: MessageType = {
+            id: queuedMsgId,
+            content: message.content,
+            created_at: new Date().toISOString(),
+            edited_at: null,
+            author: user,
+            room_id: room.id,
+            queued: true,
+        };
+
+        setMessages((m) => [queuedMessage, ...m]);
+
+        _sendMsg(message, queuedMsgId);
+
         return true;
     };
 

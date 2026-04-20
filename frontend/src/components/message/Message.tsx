@@ -95,7 +95,17 @@ const Message = ({ message, small }: MessagePropsType) => {
                             </form>
                         ) : (
                             <>
-                                {message.content}
+                                <div
+                                    className={
+                                        message.queued
+                                            ? "text-[#8f8f8f]"
+                                            : message.error
+                                              ? "text-[#ac4545]"
+                                              : ""
+                                    }
+                                >
+                                    {message.content}
+                                </div>
                                 {message.edited_at && (
                                     <span className="text-xs font-bold text-[#6b6b6b]">
                                         {" "}
@@ -154,7 +164,17 @@ const Message = ({ message, small }: MessagePropsType) => {
                             </form>
                         ) : (
                             <>
-                                {message.content}
+                                <div
+                                    className={
+                                        message.queued
+                                            ? "text-[#8f8f8f]"
+                                            : message.error
+                                              ? "text-[#ac4545]"
+                                              : ""
+                                    }
+                                >
+                                    {message.content}
+                                </div>
                                 {message.edited_at && (
                                     <span className="text-xs font-bold text-[#6b6b6b]">
                                         {" "}

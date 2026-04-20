@@ -6,8 +6,11 @@ export type MessageType = {
     author: UserType;
     room_id: string;
     created_at: string;
-    edited_at: string;
+    edited_at: string | null;
+    queued?: boolean;
+    error?: boolean;
 }
+
 
 export type DeletedMessageType = {
     id: string;
