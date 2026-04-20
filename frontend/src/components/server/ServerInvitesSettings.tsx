@@ -4,6 +4,7 @@ import api from "../../services/api";
 import useServer from "../../hooks/useServer";
 import UserAvatar from "../user/UserAvatar";
 import useView from "../../hooks/useView";
+import Timer from "../Timer";
 
 const ServerInviteSettings = () => {
     const [invites, setInvites] = useState<ServerInviteType[] | null>(null);
@@ -69,7 +70,11 @@ const ServerInviteSettings = () => {
                                             `/${invite.max_uses}`}
                                     </div>
                                     <div className="w-3/12">
-                                        {invite.expires_at ?? "never"}
+                                        {invite.expires_at ? (
+                                            <Timer date={invite.expires_at} />
+                                        ) : (
+                                            "never"
+                                        )}
                                     </div>
                                 </div>
                             ))}
