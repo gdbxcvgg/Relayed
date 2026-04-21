@@ -10,6 +10,25 @@ interface MessagePropsType {
     small?: boolean;
 }
 
+const Linkify = ({ text }: { text: string }) => {
+    const re = /(https?:\/\/\S+)/g;
+
+    return text.split(re).map((element) => {
+        if (!re.test(element)) return element;
+
+        return (
+            <a
+                href={element}
+                className="text-blue-400 hover:underline"
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                {element}
+            </a>
+        );
+    });
+};
+
 const Message = ({ message, small }: MessagePropsType) => {
     const { room } = useRoom();
 
@@ -104,14 +123,14 @@ const Message = ({ message, small }: MessagePropsType) => {
                                               : ""
                                     }
                                 >
-                                    {message.content}
+                                    <Linkify text={message.content} />
+                                    {message.edited_at && (
+                                        <span className="text-xs font-bold text-[#6b6b6b]">
+                                            {" "}
+                                            (edited)
+                                        </span>
+                                    )}
                                 </div>
-                                {message.edited_at && (
-                                    <span className="text-xs font-bold text-[#6b6b6b]">
-                                        {" "}
-                                        (edited)
-                                    </span>
-                                )}
                             </>
                         )}
                     </div>
@@ -119,9 +138,9 @@ const Message = ({ message, small }: MessagePropsType) => {
             </div>
         );
     return (
-        <div className="group/message relative">
+        <div className="group/message relative mt-8">
             <MessageMenu message={message} onEdit={() => setEdit(true)} />
-            <div className="flex mt-8 group-hover/message:bg-[#121212] p-0.5">
+            <div className="flex group-hover/message:bg-[#121212] p-0.5">
                 <div className="w-12 min-w-12">
                     <UserAvatar user={message.author} />
                 </div>
@@ -173,14 +192,14 @@ const Message = ({ message, small }: MessagePropsType) => {
                                               : ""
                                     }
                                 >
-                                    {message.content}
+                                    <Linkify text={message.content} />
+                                    {message.edited_at && (
+                                        <span className="text-xs font-bold text-[#6b6b6b]">
+                                            {" "}
+                                            (edited)
+                                        </span>
+                                    )}
                                 </div>
-                                {message.edited_at && (
-                                    <span className="text-xs font-bold text-[#6b6b6b]">
-                                        {" "}
-                                        (edited)
-                                    </span>
-                                )}
                             </>
                         )}
                     </div>
