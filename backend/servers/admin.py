@@ -103,3 +103,9 @@ class ServerAdmin(admin.ModelAdmin):
             'fields': ['joined_at']
         }],
     ]
+
+
+@admin.register(models.ServerBan)
+class ServerAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'server', 'reason', 'created_at']
+    readonly_fields = ['id', 'created_at']

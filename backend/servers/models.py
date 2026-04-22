@@ -99,7 +99,7 @@ class ServerInvite(models.Model):
 class ServerMember(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid7)
 
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     server = models.ForeignKey(Server, on_delete=models.CASCADE)
 
     joined_at = models.DateTimeField(auto_now_add=True)
@@ -108,3 +108,14 @@ class ServerMember(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['user', 'server'], name='unique_user_per_server')
         ]
+
+
+class ServerBan(models.Model):
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid7)
+
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    server = models.ForeignKey(Server, on_delete=models.CASCADE)
+
+    reason = models.CharField(max_length=200, null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)

@@ -63,6 +63,9 @@ class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveAPIView, mixins.Cre
     def post(self, request, *args, **kwargs):
         invite = self.get_object()
 
+        if models.ServerBan.objects.filter(server=invite.server, user=self.request.user).exists():
+            raise PermissionDenied(detail="You are banned from this server.")
+
         if models.ServerMember.objects.filter(server=invite.server, user=self.request.user):
             return response.Response(
                 data={'message': 'You are already a member of this server'},
@@ -140,3 +143,50 @@ class RetrieveDeleteServerMemberAPIView(generics.RetrieveDestroyAPIView):
             raise PermissionDenied()
         
         super().perform_destroy(instance)
+
+
+class ListServerBansAPIView(generics.ListAPIView):
+    serializer_class = serializers.ServerBanSerializer
+
+    perm_server_path = 'server'
+    perm_server_kwargs = 'pk'
+    permission_classes = [IsAuthenticated, IsServerOwner]
+
+    def get_queryset(self):
+        server_id = self.kwargs['pk']
+        server = get_object_or_404(models.Server, id=server_id)
+        
+        return models.ServerBan.objects.filter(server=server)
+
+
+class CreateServerBansAPIView(generics.CreateAPIView):
+    serializer_class = serializers.ServerBanSerializer
+
+    perm_server_path = 'server'
+    perm_server_kwargs = 'server_pk'
+    permission_classes = [IsAuthenticated, IsServerOwner]
+
+    def get_object(self):
+        server_id = self.kwargs['server_pk']
+        return get_object_or_404(models.Server, id=server_id)
+        
+
+    def get_queryset(self):
+        server_id = self.kwargs['server_pk']
+        server = get_object_or_404(models.Server, id=server_id)
+        
+        return models.ServerBan.objects.filter(server=server)
+
+    
+    def perform_create(self, serializer):
+        server = self.get_object()
+
+        user_id = self.kwargs['pk']
+        member = get_object_or_404(models.ServerMember, user__id=user_id, server=server)
+
+        if member.user == server.owner:
+            raise PermissionDenied()
+
+        serializer.save(server=server, user=member.user)
+
+        member.delete()

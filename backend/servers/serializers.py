@@ -54,3 +54,12 @@ class ServerLeftSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Server 
         fields = ['id']
+
+
+class ServerBanSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
+    
+    class Meta:
+        model = models.ServerBan
+        fields = ['user', 'reason', 'created_at']

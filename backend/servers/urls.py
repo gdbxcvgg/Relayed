@@ -5,10 +5,16 @@ from . import views
 servers_urlpatterns = [
     path('', views.CreateServerAPIView.as_view()),
     path('<uuid:pk>', views.ServerRetrieveUpdateDeleteAPIView.as_view()),
+
     path('<uuid:pk>/rooms', views.ServerRoomsListCreateAPIView.as_view()),
+
     path('<uuid:pk>/members', views.ListServerMembersAPIView.as_view()),
     path('<uuid:server_pk>/members/<uuid:pk>', views.RetrieveDeleteServerMemberAPIView.as_view()),
+
     path('<uuid:pk>/invites', views.ServerInviteListCreateAPIView.as_view()),
+
+    path('<uuid:pk>/bans', views.ListServerBansAPIView.as_view()),
+    path('<uuid:server_pk>/bans/<uuid:pk>', views.CreateServerBansAPIView.as_view()),
 ]
 
 
