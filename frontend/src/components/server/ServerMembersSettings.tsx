@@ -1,5 +1,15 @@
 import useServer from "../../hooks/useServer";
 import useView from "../../hooks/useView";
+import api from "../../services/api";
+
+const relativeTime = (date: string) => {
+    const rtf = new Intl.RelativeTimeFormat(undefined, { style: "short" });
+    const diff =
+        (new Date(date).getTime() - new Date().getTime()) /
+        (1000 * 60 * 60 * 24);
+
+    return rtf.format(Math.floor(diff), "day");
+};
 
 const ServerMembersSettings = () => {
     const { server } = useServer();
@@ -8,13 +18,14 @@ const ServerMembersSettings = () => {
 
     if (!server) return;
 
-    const relativeTime = (date: string) => {
-        const rtf = new Intl.RelativeTimeFormat(undefined, { style: "short" });
-        const diff =
-            (new Date(date).getTime() - new Date().getTime()) /
-            (1000 * 60 * 60 * 24);
+    const kickMember = async (userId: string) => {
+        await api.delete(`/servers/${server.id}/members/${userId}`);
+    };
 
-        return rtf.format(Math.floor(diff), "day");
+    const banMember = async (userId: string) => {
+        await api.post(`/servers/${server.id}/bans/${userId}`, {
+            reason: null,
+        });
     };
 
     return (
@@ -70,6 +81,9 @@ const ServerMembersSettings = () => {
                                     <div className="w-2/12 flex gap-3">
                                         <button
                                             className="text-orange-700 enabled:hover:cursor-pointer disabled:text-[#434343]"
+                                            onClick={() =>
+                                                kickMember(member.user.id)
+                                            }
                                             disabled={
                                                 server.owner.id ===
                                                 member.user.id
@@ -79,6 +93,9 @@ const ServerMembersSettings = () => {
                                         </button>
                                         <button
                                             className="text-red-700 enabled:hover:cursor-pointer disabled:text-[#434343]"
+                                            onClick={() =>
+                                                banMember(member.user.id)
+                                            }
                                             disabled={
                                                 server.owner.id ===
                                                 member.user.id

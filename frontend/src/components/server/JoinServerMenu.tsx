@@ -13,6 +13,7 @@ type MenuProps = {
 
 const JoinServerMenu = ({ onClose, switchMenu }: MenuProps) => {
     const [inviteCode, setInviteCode] = useState("");
+    const [error, setError] = useState<string | null>(null);
 
     const navigate = useNavigate();
     const { servers } = useUser();
@@ -29,6 +30,11 @@ const JoinServerMenu = ({ onClose, switchMenu }: MenuProps) => {
         }
 
         res = await api.post(`/invites/${inviteCode}`);
+
+        if (res.status === 403) {
+            setError(res.data.detail ?? "Something went wrong.");
+        }
+
         if (res.status !== 200) return;
 
         onClose();
@@ -50,6 +56,7 @@ const JoinServerMenu = ({ onClose, switchMenu }: MenuProps) => {
                     label_text="Invite Code"
                     className="bg-[#0e0e0e] border outline-0 border-[#2b2b2b] h-12 rounded-lg px-3"
                     onChange={(e) => setInviteCode(e.target.value)}
+                    error={error ?? ""}
                     required
                 />
 
