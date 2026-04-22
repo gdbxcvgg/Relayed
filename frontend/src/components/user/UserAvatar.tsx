@@ -4,22 +4,26 @@ import PresenceStatus from "./PresenceStatus";
 const UserAvatar = ({
     user,
     presence = false,
+    size,
 }: {
     user?: UserType | null;
     presence?: boolean;
+    size?: string;
 }) => {
     if (!user) return null;
     return (
         <div className="flex">
-            <div className="relative w-9 h-9">
+            <div className={`relative ${size ? size : "size-9"}`}>
                 {user.avatar ? (
                     <img
                         src={user.avatar}
                         alt="avatar"
-                        className="w-9 h-9 rounded-4xl"
+                        className={`rounded-full ${size ? size : "size-9"}`}
                     />
                 ) : (
-                    <div className="bg-[#272727] w-9 h-9 rounded-4xl flex justify-center items-center">
+                    <div
+                        className={`bg-[#272727] rounded-full flex justify-center items-center ${size ? size : "size-9"}`}
+                    >
                         {user.username.slice(0, 1)}
                     </div>
                 )}

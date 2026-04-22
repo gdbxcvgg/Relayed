@@ -4,6 +4,8 @@ import UserAvatar from "../user/UserAvatar";
 import MessageMenu from "./MessageToolbar";
 import api from "../../services/api";
 import useRoom from "../../hooks/useRoom";
+import PopUpModal from "../PopUpModal";
+import UserProfile from "../user/UserProfile";
 
 interface MessagePropsType {
     message: MessageType;
@@ -13,8 +15,8 @@ interface MessagePropsType {
 const Linkify = ({ text }: { text: string }) => {
     const re = /(https?:\/\/\S+)/g;
 
-    return text.split(re).map((element) => {
-        if (!re.test(element)) return element;
+    return text.split(re).map((element, index) => {
+        if (!re.test(element)) return <span key={index}>{element}</span>;
 
         return (
             <a
@@ -22,6 +24,7 @@ const Linkify = ({ text }: { text: string }) => {
                 className="text-blue-400 hover:underline"
                 rel="noopener noreferrer"
                 target="_blank"
+                key={index}
             >
                 {element}
             </a>
@@ -31,6 +34,9 @@ const Linkify = ({ text }: { text: string }) => {
 
 const Message = ({ message, small }: MessagePropsType) => {
     const { room } = useRoom();
+
+    const [showProfile, setShowProfile] = useState(false);
+    const closeProfile = () => setShowProfile(false);
 
     const [edit, setEdit] = useState(false);
     const [newMessage, setNewMessage] = useState<string | null>(
@@ -137,75 +143,91 @@ const Message = ({ message, small }: MessagePropsType) => {
                 </div>
             </div>
         );
+
     return (
-        <div className="group/message relative mt-8">
-            <MessageMenu message={message} onEdit={() => setEdit(true)} />
-            <div className="flex group-hover/message:bg-[#121212] p-0.5">
-                <div className="w-12 min-w-12">
-                    <UserAvatar user={message.author} />
-                </div>
-                <div className="flex-1 min-w-0">
-                    <div className="flex gap-x-3 items-center flex-wrap">
-                        <div>
-                            {message.author.display_name ??
-                                message.author.username}
-                        </div>
-                        <div className="text-[#676767] text-sm">
-                            {formatDate(message.created_at)}
-                        </div>
+        <>
+            <div className="group/message relative mt-8">
+                <MessageMenu message={message} onEdit={() => setEdit(true)} />
+                <div className="flex group-hover/message:bg-[#121212] p-0.5">
+                    <div
+                        className="w-12 min-w-1 hover:cursor-pointer"
+                        onClick={() => setShowProfile(true)}
+                    >
+                        <UserAvatar user={message.author} />
                     </div>
-                    <div className="w-full">
-                        {edit ? (
-                            <form onSubmit={handleEdit}>
-                                <input
-                                    className="w-full h-[50px] bg-[#141414] outline-0 p-3 rounded-lg"
-                                    type="text"
-                                    onChange={(e) =>
-                                        setNewMessage(e.target.value)
-                                    }
-                                    value={newMessage ?? ""}
-                                />
-                                <p className="text-xs pt-2">
-                                    <span
-                                        onClick={() => setEdit(false)}
-                                        className="text-blue-500 hover:underline hover:cursor-pointer"
-                                    >
-                                        Cancel
-                                    </span>{" "}
-                                    | Press Enter to{" "}
-                                    <span
-                                        onClick={handleEdit}
-                                        className="text-blue-500 hover:underline hover:cursor-pointer"
-                                    >
-                                        Save
-                                    </span>
-                                </p>
-                            </form>
-                        ) : (
-                            <>
-                                <div
-                                    className={
-                                        message.queued
-                                            ? "text-[#8f8f8f]"
-                                            : message.error
-                                              ? "text-[#ac4545]"
-                                              : ""
-                                    }
-                                >
-                                    <Linkify text={message.content} />
-                                    {message.edited_at && (
-                                        <span className="text-xs font-bold text-[#6b6b6b]">
-                                            {" "}
-                                            (edited)
+                    <div className="flex-1 min-w-0">
+                        <div className="flex gap-x-3 items-center flex-wrap">
+                            <div
+                                className="hover:cursor-pointer hover:underline"
+                                onClick={() => setShowProfile(true)}
+                            >
+                                {message.author.display_name ??
+                                    message.author.username}
+                            </div>
+                            <div className="text-[#676767] text-sm">
+                                {formatDate(message.created_at)}
+                            </div>
+                        </div>
+                        <div className="w-full">
+                            {edit ? (
+                                <form onSubmit={handleEdit}>
+                                    <input
+                                        className="w-full h-[50px] bg-[#141414] outline-0 p-3 rounded-lg"
+                                        type="text"
+                                        onChange={(e) =>
+                                            setNewMessage(e.target.value)
+                                        }
+                                        value={newMessage ?? ""}
+                                    />
+                                    <p className="text-xs pt-2">
+                                        <span
+                                            onClick={() => setEdit(false)}
+                                            className="text-blue-500 hover:underline hover:cursor-pointer"
+                                        >
+                                            Cancel
+                                        </span>{" "}
+                                        | Press Enter to{" "}
+                                        <span
+                                            onClick={handleEdit}
+                                            className="text-blue-500 hover:underline hover:cursor-pointer"
+                                        >
+                                            Save
                                         </span>
-                                    )}
-                                </div>
-                            </>
-                        )}
+                                    </p>
+                                </form>
+                            ) : (
+                                <>
+                                    <div
+                                        className={
+                                            message.queued
+                                                ? "text-[#8f8f8f]"
+                                                : message.error
+                                                  ? "text-[#ac4545]"
+                                                  : ""
+                                        }
+                                    >
+                                        <Linkify text={message.content} />
+                                        {message.edited_at && (
+                                            <span className="text-xs font-bold text-[#6b6b6b]">
+                                                {" "}
+                                                (edited)
+                                            </span>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <PopUpModal
+                open={showProfile}
+                onClose={closeProfile}
+                padding={false}
+            >
+                <UserProfile userId={message.author.id} />
+            </PopUpModal>
+        </>
     );
 };
 

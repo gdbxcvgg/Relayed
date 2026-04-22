@@ -4,9 +4,15 @@ type PopUpProps = {
     open: boolean;
     onClose: () => void;
     children: React.ReactNode;
+    padding?: boolean;
 };
 
-const PopUpModal = ({ open, onClose, children }: PopUpProps) => {
+const PopUpModal = ({
+    open,
+    onClose,
+    children,
+    padding = true,
+}: PopUpProps) => {
     if (!open) return null;
 
     return createPortal(
@@ -15,7 +21,7 @@ const PopUpModal = ({ open, onClose, children }: PopUpProps) => {
             className="text-white fixed inset-0 z-100 flex justify-center items-center visible bg-black/80"
         >
             <div
-                className="relative bg-(--bg-main) rounded-xl shadow px-10 py-12 h-dvh w-dvw sm:h-auto sm:w-auto flex"
+                className={`relative bg-(--bg-main) rounded-xl shadow ${padding && "px-10 py-12"} h-dvh w-dvw sm:h-auto sm:w-auto flex`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <img
