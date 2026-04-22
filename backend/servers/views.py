@@ -117,3 +117,26 @@ class ListServerMembersAPIView(generics.ListAPIView):
     def get_queryset(self):
         server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
         return models.ServerMember.objects.filter(server=server)
+
+
+class RetrieveDeleteServerMemberAPIView(generics.RetrieveDestroyAPIView):
+    serializer_class = serializers.ServerMembershipSerializer
+
+    perm_server_path = 'server'
+    perm_server_kwargs = 'server_pk'
+    permission_classes = [IsAuthenticated, IsServerOwner]
+
+    def get_object(self):
+        user_id = self.kwargs['pk']
+        server_id = self.kwargs['server_pk']
+
+        member = get_object_or_404(models.ServerMember, user__id=user_id, server__id=server_id)
+
+        return member
+    
+    # DELETE = KICK
+    def perform_destroy(self, instance):
+        if instance.user == instance.server.owner:
+            raise PermissionDenied()
+        
+        super().perform_destroy(instance)
