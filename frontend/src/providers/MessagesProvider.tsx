@@ -16,6 +16,8 @@ interface MessageCreateType {
 
 const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
     const [messages, setMessages] = useState<MessageType[]>([]);
+    const [fetchedAll, setFetchedAll] = useState(false);
+
     const { room } = useRoom();
 
     const { lastJsonMessage } = useGateway();
@@ -36,13 +38,19 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
             );
             return false;
         }
-        setMessages((prev) =>
-            prev.map((m) => {
-                if (m.id === qMsgId)
-                    return { ...res.data, created_at: m.created_at };
-                return m;
-            }),
-        );
+
+        setMessages((prev) => {
+            const queuedMsg = prev.find((m) => m.id === qMsgId);
+            if (!queuedMsg) return prev;
+
+            return prev
+                .filter((m) => m.id !== qMsgId)
+                .map((m) =>
+                    m.id === res.data.id
+                        ? { ...m, created_at: queuedMsg?.created_at }
+                        : m,
+                );
+        });
     };
 
     const sendMessage = async (message: MessageCreateType) => {
@@ -85,20 +93,25 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
     const fetchBeforeMessages = async (beforeId: string) => {
         if (!room) return;
 
-        const res = await api.get(
+        const res = await api.get<MessageType[]>(
             `rooms/${room.id}/messages?limit=${MESSAGE_LIMIT}&before=${beforeId}`,
         );
 
         if (res.status !== 200) return;
+        if (res.data.length < MESSAGE_LIMIT) setFetchedAll(true);
         setMessages((m) => [...m, ...res.data]);
     };
 
     useEffect(() => {
+        const reset = () => setFetchedAll(false);
+        reset();
+
         if (!room) return;
         api.get<MessageType[]>(
             `rooms/${room.id}/messages?limit=${MESSAGE_LIMIT}`,
         ).then((res) => {
             if (res.status !== 200) return;
+            if (res.data.length < MESSAGE_LIMIT) setFetchedAll(true);
             setMessages(res.data);
         });
     }, [room]);
@@ -106,7 +119,6 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const newMessage = () => {
             if (lastJsonMessage.type !== "MESSAGE_SEND") return;
-            if (lastJsonMessage.data.author.id === user?.id) return;
             if (lastJsonMessage.data.room_id !== room?.id) return;
             setMessages((m) => [lastJsonMessage.data, ...m]);
         };
@@ -148,6 +160,7 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
                 sendMessage,
                 deleteMessage,
                 fetchBeforeMessages,
+                fetchedAll,
             }}
         >
             {children}

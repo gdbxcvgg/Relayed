@@ -74,6 +74,7 @@ const RoomView = () => {
                             <MessagesList
                                 scroll={scroll}
                                 scrollAtBottom={scrollIfAtBottom}
+                                containerRef={chatRef}
                             />
                         </div>
                         <MessageInput scroll={scroll} />

@@ -10,6 +10,7 @@ interface MessagesProps {
     sendMessage(content: MessageCreateType): Promise<boolean>;
     deleteMessage(messageId: string): Promise<boolean>;
     fetchBeforeMessages(before: string): void;
+    fetchedAll: boolean;
 }
 
 const MessagesContext = createContext<MessagesProps | null>(null);
