@@ -13,8 +13,11 @@ const VoidMessage = ({ count = 3 }: { count?: number }) => {
             <div className="flex-1 min-w-0 flex flex-col gap-1.5">
                 <div className="bg-[#1a1a1a] w-30 shrink h-4 rounded-md"></div>
                 <div className="flex flex-wrap gap-3">
-                    {[...Array(count)].map(() => (
-                        <div className="bg-[#121212] w-55 max-w-full shrink h-4 rounded-md"></div>
+                    {[...Array(count)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="bg-[#121212] w-55 max-w-full shrink h-4 rounded-md"
+                        ></div>
                     ))}
                 </div>
             </div>

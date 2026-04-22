@@ -15,6 +15,8 @@ interface MessagePropsType {
 const Linkify = ({ text }: { text: string }) => {
     const re = /(https?:\/\/\S+)/g;
 
+    if (!text) return "";
+
     return text.split(re).map((element, index) => {
         if (!re.test(element)) return <span key={index}>{element}</span>;
 
