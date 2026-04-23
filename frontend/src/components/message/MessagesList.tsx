@@ -3,6 +3,8 @@ import { useOnInView } from "react-intersection-observer";
 import useMessages from "../../hooks/useMessages";
 import Message from "./Message";
 import useRoom from "../../hooks/useRoom";
+import useServer from "../../hooks/useServer";
+import useUser from "../../hooks/useUser";
 
 const VoidMessage = ({ count = 3 }: { count?: number }) => {
     return (
@@ -36,6 +38,8 @@ const MessagesList = ({
 }) => {
     const { messages, fetchBeforeMessages, fetchedAll } = useMessages();
     const { room } = useRoom();
+    const { server } = useServer();
+    const { user } = useUser();
 
     const [loading, setLoading] = useState(false);
 
@@ -81,6 +85,30 @@ const MessagesList = ({
     return (
         <div className="flex flex-col justify-end min-h-full wrap-break-word">
             <div ref={inViewRef}>
+                {fetchedAll && (
+                    <div>
+                        <div className="py-6.5 flex flex-col gap-5">
+                            <div>
+                                <div className="text-2xl font-bold">
+                                    Welcome to #{room?.name}!
+                                </div>
+                                <div className="text-sm">
+                                    This is the start of the #{room?.name}{" "}
+                                    channel.
+                                </div>
+                            </div>
+                            {server?.owner.id === user?.id && (
+                                <button className="text-sm p-1.5 px-3 border border-(--border-color) rounded-lg w-fit flex gap-2 items-center hover:cursor-pointer hover:bg-[#121212] active:bg-[#181818]">
+                                    <img src="/edit.png" className="size-3.5" />
+                                    <div>Edit channel</div>
+                                </button>
+                            )}
+                        </div>
+                        {messages.length > 0 && (
+                            <div className="border-b border-b-(--border-color)"></div>
+                        )}
+                    </div>
+                )}
                 {!fetchedAll && messages.length !== 0 && (
                     <>
                         <VoidMessage count={2} />
