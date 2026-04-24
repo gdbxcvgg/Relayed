@@ -11,6 +11,7 @@ class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Room
         fields = ['id', 'name', 'description', 'room_type', 'parent', 'created_at', 'server']
+        read_only_fields = ['room_type']
 
 
 class ParialRoomSerializer(serializers.ModelSerializer):

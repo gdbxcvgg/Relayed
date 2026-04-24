@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { RoomNodeType, RoomType } from "../../types/room";
 import useUser from "../../hooks/useUser";
 import PopUpModal from "../PopUpModal";
-import CreateRoomPopup from "../server/CreateRoomPopup";
+import CreateRoomPopup from "./CreateRoomPopup";
 import CategoryHead from "./CategoryHead";
 import Room from "./Room";
 

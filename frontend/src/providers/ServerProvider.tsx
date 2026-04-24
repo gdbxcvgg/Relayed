@@ -118,6 +118,21 @@ const ServerProvider = ({ children }: { children: React.ReactNode }) => {
             });
         };
 
+        const roomUpdated = () => {
+            if (lastJsonMessage.type !== "ROOM_UPDATED") return;
+            _setServer((s) => {
+                if (!s) return null;
+                return {
+                    ...s,
+                    rooms: s.rooms?.map((room) =>
+                        room.id === lastJsonMessage.data.id
+                            ? lastJsonMessage.data
+                            : room,
+                    ),
+                };
+            });
+        };
+
         if (!lastJsonMessage) return;
 
         if (lastJsonMessage.type === "ROOM_CREATED") {
@@ -126,6 +141,10 @@ const ServerProvider = ({ children }: { children: React.ReactNode }) => {
 
         if (lastJsonMessage.type === "ROOM_DELETED") {
             roomDeleted();
+        }
+
+        if (lastJsonMessage.type === "ROOM_UPDATED") {
+            roomUpdated();
         }
     }, [lastJsonMessage]);
 
