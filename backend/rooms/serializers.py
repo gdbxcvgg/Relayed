@@ -11,8 +11,14 @@ class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Room
         fields = ['id', 'name', 'description', 'room_type', 'parent', 'created_at', 'server']
-        read_only_fields = ['room_type']
 
+    def get_fields(self):
+        fields = super().get_fields()
+
+        if self.instance:
+            fields['room_type'].read_only = True
+
+        return fields
 
 class ParialRoomSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
