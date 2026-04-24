@@ -40,14 +40,39 @@ const CreateRoomPopup = ({
 
                 <p>Channel Type</p>
 
+                {!category && (
+                    <div className="flex gap-3">
+                        <input
+                            type="radio"
+                            name="ch_type"
+                            id="category"
+                            value={2}
+                            className="hover:cursor-pointer"
+                            onChange={(e) => setRoomType(e.target.value)}
+                            checked={roomType === "2"}
+                            required
+                        />
+                        <label
+                            htmlFor="text"
+                            className="flex flex-col hover:cursor-pointer"
+                        >
+                            <p className="font-bold">Category</p>
+                            <p className="text-xs">
+                                Organize channels into groups
+                            </p>
+                        </label>
+                    </div>
+                )}
+
                 <div className="flex gap-3">
                     <input
                         type="radio"
                         name="ch_type"
                         id="text"
+                        value={1}
                         className="hover:cursor-pointer"
                         onChange={(e) => setRoomType(e.target.value)}
-                        checked
+                        checked={roomType === "1"}
                         required
                     />
                     <label
@@ -71,6 +96,7 @@ const CreateRoomPopup = ({
                         disabled
                         className="enabled:hover:cursor-pointer"
                         onChange={(e) => setRoomType(e.target.value)}
+                        checked={roomType === "3"}
                     />
                     <label htmlFor="voice" className="flex flex-col ">
                         <p className="font-bold">Voice</p>
