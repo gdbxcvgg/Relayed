@@ -15,3 +15,9 @@ export type DeletedRoomType = {
     id: string;
     server_id: string;
 }
+
+export type RoomNodeType = {
+    room: RoomType | null;
+    children: RoomType[];
+    hidden: boolean;
+}

@@ -1,5 +1,5 @@
 import useServer from "../hooks/useServer";
-import RoomsList from "./server/RoomsList";
+import RoomsList from "./room/RoomList";
 import BaseSidebar from "./BaseSidebar";
 import ServerContextMenu from "./server/ServerContextMenu";
 import { useState } from "react";
