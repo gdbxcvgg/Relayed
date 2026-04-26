@@ -28,3 +28,10 @@ export type ServerInviteType = {
     server?: ServerType;
     detail?: string;
 }
+
+
+export type ServerBan = {
+    user: UserType;
+    reason: string | null;
+    created_at: string;    
+}

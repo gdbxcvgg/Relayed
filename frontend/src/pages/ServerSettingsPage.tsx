@@ -7,6 +7,7 @@ import ServerProfileSettings from "../components/server/ServerProfileSettings";
 import ServerMembersSettings from "../components/server/ServerMembersSettings";
 import ServerInviteSettings from "../components/server/ServerInvitesSettings";
 import useView from "../hooks/useView";
+import ServerBanSettings from "../components/server/ServerBanSettings";
 
 type CurrentMenuType = "profile" | "members" | "roles" | "invites" | "bans";
 
@@ -60,13 +61,13 @@ const ServerSettingsPage = () => {
         };
 
         loadServer();
-    }, [serverId]);
+    }, [serverId, navigate]);
 
     useEffect(() => {
         if (!server || !user) return;
 
         if (server.owner.id !== user.id) navigate("/channels/@me");
-    }, [server, user]);
+    }, [server, user, navigate]);
 
     const deleteServer = async () => {
         if (!server) return;
@@ -126,6 +127,18 @@ const ServerSettingsPage = () => {
                         <img src="/invite.png" className="w-5 h-5" />
                         Invites
                     </MenuItem>
+
+                    <MenuItem
+                        onClick={() => {
+                            setCurrentMenu("bans");
+                            openChat();
+                        }}
+                        currentMenu={currentMenu}
+                        id="bans"
+                    >
+                        <img src="/ban.png" className="w-5 h-5" />
+                        Bans
+                    </MenuItem>
                 </div>
 
                 <MenuDivisor />
@@ -141,6 +154,7 @@ const ServerSettingsPage = () => {
                 {currentMenu === "profile" && <ServerProfileSettings />}
                 {currentMenu === "members" && <ServerMembersSettings />}
                 {currentMenu === "invites" && <ServerInviteSettings />}
+                {currentMenu === "bans" && <ServerBanSettings />}
             </main>
         </div>
     );

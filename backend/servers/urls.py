@@ -14,7 +14,7 @@ servers_urlpatterns = [
     path('<uuid:pk>/invites', views.ServerInviteListCreateAPIView.as_view()),
 
     path('<uuid:pk>/bans', views.ListServerBansAPIView.as_view()),
-    path('<uuid:server_pk>/bans/<uuid:pk>', views.CreateServerBansAPIView.as_view()),
+    path('<uuid:server_pk>/bans/<uuid:user_pk>', views.RetrieveDeleteCreateServerBanAPIView.as_view()),
 ]
 
 

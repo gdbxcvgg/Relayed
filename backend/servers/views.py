@@ -159,17 +159,12 @@ class ListServerBansAPIView(generics.ListAPIView):
         return models.ServerBan.objects.filter(server=server)
 
 
-class CreateServerBansAPIView(generics.CreateAPIView):
+class RetrieveDeleteCreateServerBanAPIView(generics.RetrieveDestroyAPIView, generics.CreateAPIView):
     serializer_class = serializers.ServerBanSerializer
 
     perm_server_path = 'server'
     perm_server_kwargs = 'server_pk'
     permission_classes = [IsAuthenticated, IsServerOwner]
-
-    def get_object(self):
-        server_id = self.kwargs['server_pk']
-        return get_object_or_404(models.Server, id=server_id)
-        
 
     def get_queryset(self):
         server_id = self.kwargs['server_pk']
@@ -177,11 +172,21 @@ class CreateServerBansAPIView(generics.CreateAPIView):
         
         return models.ServerBan.objects.filter(server=server)
 
-    
-    def perform_create(self, serializer):
-        server = self.get_object()
+    def get_object(self):
+        server_id = self.kwargs['server_pk']
+        server = get_object_or_404(models.Server, id=server_id)
 
-        user_id = self.kwargs['pk']
+        user_id = self.kwargs['user_pk']
+        user = get_object_or_404(models.User, id=user_id)
+
+        return get_object_or_404(models.ServerBan, user=user, server=server)
+
+    def perform_create(self, serializer):
+        server_id = self.kwargs['server_pk']
+        server = get_object_or_404(models.Server, id=server_id)
+
+
+        user_id = self.kwargs['user_pk']
         member = get_object_or_404(models.ServerMember, user__id=user_id, server=server)
 
         if member.user == server.owner:
