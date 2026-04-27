@@ -1,5 +1,3 @@
-import type { ServerType } from "./server";
-
 export type RoomType = {
     id: string;
     name: string;
@@ -7,7 +5,7 @@ export type RoomType = {
     room_type: number;
     parent: string | null;
     created_at: string;
-    server?: ServerType;
+    server_id: string;
 }
 
 

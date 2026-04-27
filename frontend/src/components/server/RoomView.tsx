@@ -31,7 +31,7 @@ const RoomView = () => {
     useEffect(() => {
         if (!room || !server) return;
 
-        if (room.server?.id !== server.id) navigate(`/channels/${server.id}`);
+        if (room.server_id !== server.id) navigate(`/channels/${server.id}`);
     }, [room, server, navigate]);
 
     const chatRef = useRef<HTMLDivElement>(null);
