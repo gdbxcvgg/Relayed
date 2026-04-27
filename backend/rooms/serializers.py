@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from servers.serializers import PartialServerSerializer, ServerSerializer
+from servers.serializers import ServerSerializer
 from . import models
 
 

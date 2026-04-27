@@ -25,7 +25,7 @@ class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
 
 class UserServerListAPIView(generics.ListAPIView):
     from servers import serializers
-    serializer_class = serializers.PartialServerSerializer
+    serializer_class = serializers.ServerSerializer
     
     def get_queryset(self):
         from servers.models import Server

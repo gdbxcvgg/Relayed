@@ -109,7 +109,7 @@ const MessagesList = ({
                         )}
                     </div>
                 )}
-                {!fetchedAll && messages.length !== 0 && (
+                {!fetchedAll && (
                     <>
                         <VoidMessage count={2} />
                         <VoidMessage />

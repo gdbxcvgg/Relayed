@@ -15,7 +15,7 @@ def dispatch_server_joined(sender, instance, created, **kwargs):
     group_name = f'user_{instance.user.id}'
     channel_layer = get_channel_layer()
 
-    serializer_server = serializers.PartialServerSerializer(instance=instance.server)
+    serializer_server = serializers.ServerSerializer(instance=instance.server)
 
     async_to_sync(channel_layer.group_send)(
         group_name, {

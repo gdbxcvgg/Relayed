@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import api from "../services/api";
 import RoomContext from "../contexts/RoomContext";
 import useGateway from "../hooks/useGateway";
 import useServer from "../hooks/useServer";
@@ -11,19 +10,9 @@ const RoomProvider = ({ children }: { children: React.ReactNode }) => {
     const { sendJsonMessage } = useGateway();
     const { server } = useServer();
 
-    const setRoom = async (roomId: string): Promise<boolean> => {
-        try {
-            const res = await api.get<RoomType>(`rooms/${roomId}`);
-
-            if (res.status !== 200) return false;
-
-            _setRoom(res.data);
-        } catch {
-            _setRoom(null);
-            return false;
-        }
-
-        return true;
+    const setRoom = async (roomId: string) => {
+        const room = server?.rooms?.find((room) => room.id === roomId);
+        _setRoom(room ?? null);
     };
 
     useEffect(() => {

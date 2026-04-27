@@ -3,12 +3,6 @@ from users.serializers import UserSerializer
 from . import models
 
 
-class PartialServerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Server
-        fields = ['id', 'name', 'icon', 'created_at']
-
-
 class ServerSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     owner = UserSerializer(read_only=True)
@@ -28,7 +22,7 @@ class ServerMembershipSerializer(serializers.ModelSerializer):
 
 
 class ServerInviteSerializer(serializers.ModelSerializer):
-    server = PartialServerSerializer(read_only=True)
+    server = ServerSerializer(read_only=True)
     inviter = UserSerializer(read_only=True)
     code = serializers.CharField(read_only=True)
     expires_at = serializers.DateTimeField(read_only=True)

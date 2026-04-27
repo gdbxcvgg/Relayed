@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import api from "../services/api";
 import ServerContext from "../contexts/ServerContext";
 import useGateway from "../hooks/useGateway";
 import type { ServerMemberType, ServerType } from "../types/server";
 import type { RoomType } from "../types/room";
+import useUser from "../hooks/useUser";
 
 const ServerProvider = ({ children }: { children: React.ReactNode }) => {
     const [server, _setServer] = useState<ServerType | null>(null);
 
+    const { servers: userServers } = useUser();
     const { sendJsonMessage, lastJsonMessage } = useGateway();
+
+    const serverSeqRef = useRef(0);
 
     const getRooms = async (serverId: string) => {
         const res = await api.get<RoomType[]>(`servers/${serverId}/rooms`);
@@ -25,18 +29,21 @@ const ServerProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const setServer = async (serverId: string): Promise<boolean> => {
-        try {
-            const res = await api.get<ServerType>(`servers/${serverId}`);
-            if (res.status !== 200) return false;
+        const currentSeq = ++serverSeqRef.current;
 
-            const rooms = await getRooms(serverId);
-            const members = await getMembers(serverId);
+        const server = userServers?.find((server) => server.id === serverId);
 
-            _setServer({ ...res.data, rooms: rooms, members: members });
-        } catch {
-            _setServer(null);
-            return false;
-        }
+        if (!server) return false;
+
+        _setServer({ ...server, rooms: [], members: [] });
+
+        const [rooms, members] = await Promise.all([
+            getRooms(serverId),
+            getMembers(serverId),
+        ]);
+
+        if (currentSeq === serverSeqRef.current)
+            _setServer({ ...server, rooms: rooms, members: members });
 
         return true;
     };

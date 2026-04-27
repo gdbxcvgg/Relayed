@@ -21,8 +21,7 @@ const RoomView = () => {
         if (!roomId || !server) return;
 
         const loadRoom = async () => {
-            const res = await setRoom(roomId);
-            if (res === false) navigate(`/channels/${server.id}`);
+            setRoom(roomId);
         };
 
         loadRoom();

@@ -91,7 +91,7 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const fetchBeforeMessages = async (beforeId: string) => {
-        if (!room) return;
+        if (!room || fetchedAll) return;
 
         const res = await api.get<MessageType[]>(
             `rooms/${room.id}/messages?limit=${MESSAGE_LIMIT}&before=${beforeId}`,
@@ -150,6 +150,11 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
             updatedMessage();
         }
     }, [lastJsonMessage]);
+
+    useEffect(() => {
+        const reset = () => setMessages([]);
+        reset();
+    }, [room]);
 
     if (!room) return null;
 
