@@ -21,9 +21,7 @@ const BaseSidebar = ({ children }: { children: React.ReactNode }) => {
 
                     <AddServerButton />
                 </div>
-                <div className="w-full md:w-58 flex flex-col scrollbar-hide overflow-y-scroll">
-                    {children}
-                </div>
+                <div className="w-full md:w-58 flex flex-col">{children}</div>
             </div>
 
             <div className="">

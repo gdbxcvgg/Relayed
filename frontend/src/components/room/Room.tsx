@@ -25,7 +25,7 @@ const Room = ({ room }: { room: RoomType }) => {
         <>
             <Link to={`/channels/${server?.id}/${room.id}`} onClick={openChat}>
                 <div className="group flex justify-between items-center hover:bg-[#121212] active:bg-[#181818] rounded-md">
-                    <div># {room.name}</div>
+                    <div className="min-w-0 truncate"># {room.name}</div>
                     {isServerOwner && (
                         <img
                             src="/gear.png"

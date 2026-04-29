@@ -12,15 +12,17 @@ const CategoryHead = (props: CategoryHeadProps) => {
 
     return (
         <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1">
-                {props.category.room?.name}
+            <div
+                className="flex-1 min-w-0 flex items-center gap-1 cursor-pointer"
+                onClick={() =>
+                    props.toggleHidden(props.category.room?.id ?? "")
+                }
+            >
+                <div className="truncate p-0">{props.category.room?.name}</div>
                 <img
                     src="/arrow-down.png"
                     className={
-                        props.category.hidden ? "w-4 h-4 -rotate-90" : "w-4 h-4"
-                    }
-                    onClick={() =>
-                        props.toggleHidden(props.category.room?.id ?? "")
+                        props.category.hidden ? "size-4 -rotate-90" : "size-4"
                     }
                 />
             </div>

@@ -27,8 +27,8 @@ const ServerSidebar = () => {
     const handleMenu = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
         e.preventDefault();
 
-        const x = Math.min(e.clientX, window.innerWidth - 150);
-        const y = Math.min(e.clientY, window.innerHeight - 100);
+        const x = Math.min(e.clientX, window.innerWidth - 240);
+        const y = Math.min(e.clientY, window.innerHeight - 180);
 
         setMenu({ visible: true, x: x, y: y });
     };
@@ -52,7 +52,7 @@ const ServerSidebar = () => {
                     </div>
                 </div>
             </div>
-            <div className="p-3">
+            <div className="scrollbar-hide overflow-y-scroll p-3">
                 <RoomsList />
             </div>
 
