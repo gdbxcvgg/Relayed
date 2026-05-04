@@ -12,7 +12,7 @@ from . import models, serializers
 
 class ServerRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.ServerSerializer
-    queryset = models.Server.objects
+    queryset = models.Server.objects.select_related('owner')
     
     perm_server_path = 'self'
     permission_classes = [IsAuthenticated, IsServerOwner | IsServerMember & ReadOnly]
@@ -37,7 +37,7 @@ class ServerRoomsListCreateAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
-        return Room.objects.filter(server=server, is_deleted=False)
+        return Room.objects.filter(server=server, is_deleted=False).select_related('server')
 
     def perform_create(self, serializer):
         server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
@@ -52,7 +52,7 @@ class ServerInviteRetrieveJoinServerAPIView(generics.RetrieveAPIView, mixins.Cre
 
     def get_object(self):
         invite_code = self.kwargs['invite_code']
-        invite = get_object_or_404(models.ServerInvite, code=invite_code, is_deleted=False)
+        invite = get_object_or_404(models.ServerInvite.objects.select_related('inviter', 'server'), code=invite_code, is_deleted=False)
 
         if invite.is_expired:
             raise Http404
@@ -93,7 +93,7 @@ class ServerInviteListCreateAPIView(generics.ListCreateAPIView):
         if server.owner != self.request.user:
             raise PermissionDenied()
 
-        return models.ServerInvite.valid_objects.filter(server=server)
+        return models.ServerInvite.valid_objects.filter(server=server).select_related('inviter')
 
 
     def perform_create(self, serializer):
@@ -119,7 +119,7 @@ class ListServerMembersAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         server = get_object_or_404(models.Server, pk=self.kwargs['pk'], is_deleted=False)
-        return models.ServerMember.objects.filter(server=server)
+        return models.ServerMember.objects.filter(server=server).select_related('user')
 
 
 class RetrieveDeleteServerMemberAPIView(generics.RetrieveDestroyAPIView):
@@ -156,7 +156,7 @@ class ListServerBansAPIView(generics.ListAPIView):
         server_id = self.kwargs['pk']
         server = get_object_or_404(models.Server, id=server_id)
         
-        return models.ServerBan.objects.filter(server=server)
+        return models.ServerBan.objects.filter(server=server).select_related('user')
 
 
 class RetrieveDeleteCreateServerBanAPIView(generics.RetrieveDestroyAPIView, generics.CreateAPIView):
@@ -170,7 +170,7 @@ class RetrieveDeleteCreateServerBanAPIView(generics.RetrieveDestroyAPIView, gene
         server_id = self.kwargs['server_pk']
         server = get_object_or_404(models.Server, id=server_id)
         
-        return models.ServerBan.objects.filter(server=server)
+        return models.ServerBan.objects.filter(server=server).select_related('user')
 
     def get_object(self):
         server_id = self.kwargs['server_pk']

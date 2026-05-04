@@ -21,7 +21,7 @@ class MessageRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         room = get_object_or_404(Room, pk=self.kwargs['room_pk'], is_deleted=False)
-        message = get_object_or_404(models.Message, room=room, pk=self.kwargs['msg_pk'], is_deleted=False)
+        message = get_object_or_404(models.Message.objects.select_related('author', 'room'), room=room, pk=self.kwargs['msg_pk'], is_deleted=False)
 
         self.check_object_permissions(self.request, message)
 
@@ -46,7 +46,7 @@ class MessageListCreateAPIView(generics.ListCreateAPIView):
         if room.server and not ServerMember.objects.filter(server=room.server, user=self.request.user):
             raise PermissionDenied
 
-        return models.Message.valid_objects.filter(room=room)
+        return models.Message.valid_objects.filter(room=room).select_related('author', 'room')
 
     def perform_create(self, serializer):
         room = get_object_or_404(Room, pk=self.kwargs['room_pk'])

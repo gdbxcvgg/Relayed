@@ -10,12 +10,14 @@ from core.permissions import ReadOnly
 
 class RoomRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.RoomSerializer
+    queryset = models.Room.objects.select_related('server')
 
     perm_server_path = 'server'
     permission_classes = [IsAuthenticated, IsServerOwner | IsServerMember & ReadOnly]
 
     def get_object(self):
-        obj = get_object_or_404(models.Room, pk=self.kwargs['pk'], is_deleted=False)
+        qs = self.get_queryset()
+        obj = get_object_or_404(qs, pk=self.kwargs['pk'], is_deleted=False)
         self.check_object_permissions(self.request, obj)
         return obj
 

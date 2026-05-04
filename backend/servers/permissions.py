@@ -9,7 +9,7 @@ class IsServerOwner(permissions.BasePermission):
             return True
         
         server_pk = view.kwargs.get(view.perm_server_kwargs)
-        server = get_object_or_404(Server, pk=server_pk)
+        server = get_object_or_404(Server.objects.select_related('owner'), pk=server_pk)
         return server.owner == request.user
 
     def has_object_permission(self, request, view, obj):
