@@ -3,6 +3,11 @@ from .base import *
 
 DEBUG = env('DJANGO_DEBUG')
 
+INSTALLED_APPS += [
+    'debug_toolbar'
+]
+
+MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
 DATABASES = {
     'default': {
@@ -45,3 +50,7 @@ CHANNEL_LAYERS = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
