@@ -26,6 +26,10 @@ class ServerAdmin(admin.ModelAdmin):
         }],
     ]
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request=request)
+        return qs.select_related('owner')
+
     
 
 @admin.register(models.ServerInvite)
@@ -85,6 +89,10 @@ class ServerInviteAdmin(admin.ModelAdmin):
         else:
             return self.fieldsets
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request=request)
+        return qs.select_related('server', 'inviter')
+
 
 @admin.register(models.ServerMember)
 class ServerAdmin(admin.ModelAdmin):
@@ -104,8 +112,16 @@ class ServerAdmin(admin.ModelAdmin):
         }],
     ]
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request=request)
+        return qs.select_related('server', 'user')
+
 
 @admin.register(models.ServerBan)
 class ServerAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'server', 'reason', 'created_at']
     readonly_fields = ['id', 'created_at']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request=request)
+        return qs.select_related('server', 'user')

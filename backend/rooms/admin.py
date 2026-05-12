@@ -29,3 +29,7 @@ class RoomAdmin(admin.ModelAdmin):
             fs.append(DM_FS)
             
         return fs
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request=request)
+        return qs.select_related('server', 'parent')

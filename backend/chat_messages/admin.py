@@ -25,3 +25,7 @@ class MessageAdmin(admin.ModelAdmin):
             'fields': ['is_deleted']
         }]
     ]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request=request)
+        return qs.select_related('author', 'room')
