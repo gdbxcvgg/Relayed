@@ -1,13 +1,9 @@
 import { createContext } from "react";
 import type { MessageType } from "../types/message";
 
-interface MessageCreateType {
-    content: string;
-}
-
 interface MessagesProps {
     messages: MessageType[];
-    sendMessage(content: MessageCreateType): Promise<boolean>;
+    sendMessage(content: string): Promise<boolean>;
     deleteMessage(messageId: string): Promise<boolean>;
     fetchBeforeMessages(before: string): void;
     fetchedAll: boolean;

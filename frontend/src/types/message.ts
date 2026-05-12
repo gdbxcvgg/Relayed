@@ -7,6 +7,7 @@ export type MessageType = {
     room_id: string;
     created_at: string;
     edited_at: string | null;
+    nonce?: string;
     queued?: boolean;
     error?: boolean;
 }

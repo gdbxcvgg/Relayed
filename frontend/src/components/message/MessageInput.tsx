@@ -10,7 +10,7 @@ const MessageInput = ({ scroll }: { scroll: () => void }) => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         if (!room) return;
         e.preventDefault();
-        const success = await sendMessage({ content: message });
+        const success = await sendMessage(message);
         if (success) {
             setMessage("");
             requestAnimationFrame(() => scroll());

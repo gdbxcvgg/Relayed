@@ -10,10 +10,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const MESSAGE_LIMIT = 50;
 
-interface MessageCreateType {
-    content: string;
-}
-
 const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
     const [messages, setMessages] = useState<MessageType[]>([]);
     const [fetchedAll, setFetchedAll] = useState(false);
@@ -23,11 +19,11 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
     const { lastJsonMessage } = useGateway();
     const { user } = useUser();
 
-    const _sendMsg = async (message: MessageCreateType, qMsgId: string) => {
-        const res = await api.post<MessageType>(
-            `rooms/${room?.id}/messages`,
-            message,
-        );
+    const _sendMsg = async (content: string, qMsgId: string) => {
+        const res = await api.post<MessageType>(`rooms/${room?.id}/messages`, {
+            content,
+            nonce: qMsgId,
+        });
 
         if (res.status !== 201) {
             setMessages((prev) =>
@@ -38,29 +34,16 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
             );
             return false;
         }
-
-        setMessages((prev) => {
-            const queuedMsg = prev.find((m) => m.id === qMsgId);
-            if (!queuedMsg) return prev;
-
-            return prev
-                .filter((m) => m.id !== qMsgId)
-                .map((m) =>
-                    m.id === res.data.id
-                        ? { ...m, created_at: queuedMsg?.created_at }
-                        : m,
-                );
-        });
     };
 
-    const sendMessage = async (message: MessageCreateType) => {
+    const sendMessage = async (content: string) => {
         if (!room || !user) return false;
 
         const queuedMsgId = "q_" + uuidv4();
 
         const queuedMessage: MessageType = {
             id: queuedMsgId,
-            content: message.content,
+            content: content,
             created_at: new Date().toISOString(),
             edited_at: null,
             author: user,
@@ -70,7 +53,7 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
 
         setMessages((m) => [queuedMessage, ...m]);
 
-        _sendMsg(message, queuedMsgId);
+        _sendMsg(content, queuedMsgId);
 
         return true;
     };
@@ -120,7 +103,18 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
         const newMessage = () => {
             if (lastJsonMessage.type !== "MESSAGE_SEND") return;
             if (lastJsonMessage.data.room_id !== room?.id) return;
-            setMessages((m) => [lastJsonMessage.data, ...m]);
+            setMessages((prev) => {
+                const queuedMsg = prev.find(
+                    (m) => m.id === lastJsonMessage.data.nonce,
+                );
+                if (!queuedMsg) return [lastJsonMessage.data, ...prev];
+
+                return prev.map((m) =>
+                    m.id === lastJsonMessage.data.nonce
+                        ? { ...lastJsonMessage.data, created_at: m.created_at }
+                        : m,
+                );
+            });
         };
 
         const deletedMessage = () => {
@@ -149,7 +143,7 @@ const MessagesProvider = ({ children }: { children: React.ReactNode }) => {
         } else if (lastJsonMessage.type === "MESSAGE_UPDATED") {
             updatedMessage();
         }
-    }, [lastJsonMessage]);
+    }, [lastJsonMessage, room]);
 
     useEffect(() => {
         const reset = () => setMessages([]);

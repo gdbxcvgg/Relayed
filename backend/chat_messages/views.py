@@ -10,6 +10,10 @@ from core.permissions import ReadOnly
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsMessageAuthor
 from .pagination import BeforeLimitPagination
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from gateway import opcodes as OPCODES
+from gateway import events as EVENTS
 
 
 class MessageRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -54,4 +58,21 @@ class MessageListCreateAPIView(generics.ListCreateAPIView):
         if room.server and not ServerMember.objects.filter(server=room.server, user=self.request.user):
             raise PermissionDenied
         
-        serializer.save(room=room, author=self.request.user)
+        message = serializer.save(room=room, author=self.request.user)
+        
+        nonce = serializer.validated_data.get('nonce')
+
+        event_data = serializers.MessageSerializer(instance=message).data
+        event_data['nonce'] = nonce
+
+        group_name = f'room_{message.room.id}'
+        channel_layer = get_channel_layer()
+
+        async_to_sync(channel_layer.group_send)(
+        group_name, {
+            'type': 'dispatch_event', 
+            'opcode': OPCODES.DISPATCH, 
+            'data': event_data,
+            'e_type': EVENTS.ROOM_MESSAGE_SEND
+        }
+    )

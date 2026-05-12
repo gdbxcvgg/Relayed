@@ -9,11 +9,17 @@ class MessageSerializer(serializers.ModelSerializer):
     room_id = serializers.UUIDField(read_only=True, source='room.id')
     created_at = serializers.DateTimeField(read_only=True)
     edited_at = serializers.DateTimeField(read_only=True)
+    nonce = serializers.CharField(write_only=True)
 
 
     class Meta:
         model = models.Message 
-        fields = ['id', 'content', 'author', 'room_id', 'created_at', 'edited_at']
+        fields = ['id', 'content', 'author', 'room_id', 'created_at', 'edited_at', 'nonce']
+
+    
+    def create(self, validated_data):
+        validated_data.pop('nonce', None)
+        return super().create(validated_data)
 
 
 class MessageDeletedSerializer(serializers.ModelSerializer):
