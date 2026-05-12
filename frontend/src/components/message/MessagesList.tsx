@@ -90,7 +90,9 @@ const MessagesList = ({
                         <div className="py-6.5 flex flex-col gap-5">
                             <div>
                                 <div className="text-2xl font-bold">
-                                    Welcome to #{room?.name}!
+                                    {room?.room_type === 1
+                                        ? `Welcome to #${room?.name}!`
+                                        : ""}
                                 </div>
                                 <div className="text-sm">
                                     This is the start of the #{room?.name}{" "}

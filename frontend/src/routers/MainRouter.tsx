@@ -12,6 +12,7 @@ import UserProvider from "../providers/UserProvider";
 import InvitePage from "../pages/InvitePage";
 import SettingsPage from "../pages/SettingsPage";
 import ViewProvider from "../providers/ViewProvider";
+import DMChatPage from "../pages/DMChatPage";
 
 const MainRouter = () => {
     return (
@@ -34,7 +35,10 @@ const MainRouter = () => {
                     <Route path="app" element={<AppPage />} />
 
                     <Route element={<FriendsLayout />}>
-                        <Route path="channels/@me" element={<AppPage />} />
+                        <Route path="channels/@me">
+                            <Route index element={<AppPage />} />
+                            <Route path=":roomId" element={<DMChatPage />} />
+                        </Route>
                     </Route>
 
                     {serverRoutes}

@@ -3,6 +3,7 @@ import RoomContext from "../contexts/RoomContext";
 import useGateway from "../hooks/useGateway";
 import useServer from "../hooks/useServer";
 import type { RoomType } from "../types/room";
+import api from "../services/api";
 
 const RoomProvider = ({ children }: { children: React.ReactNode }) => {
     const [room, _setRoom] = useState<RoomType | null>(null);
@@ -12,15 +13,18 @@ const RoomProvider = ({ children }: { children: React.ReactNode }) => {
 
     const setRoom = async (roomId: string) => {
         const room = server?.rooms?.find((room) => room.id === roomId);
-        _setRoom(room ?? null);
+        if (!room) {
+            const res = await api.get(`rooms/${roomId}`);
+            _setRoom(res.data);
+        } else _setRoom(room ?? null);
     };
 
     useEffect(() => {
-        if (!room || !server) return;
+        if (!room) return;
         sendJsonMessage({
             opcode: 1,
             data: {
-                server_id: server.id,
+                server_id: server?.id ?? "",
                 rooms: [
                     {
                         id: room.id,

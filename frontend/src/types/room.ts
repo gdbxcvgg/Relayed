@@ -1,3 +1,5 @@
+import type { UserType } from "./user";
+
 export type RoomType = {
     id: string;
     name: string;
@@ -6,6 +8,7 @@ export type RoomType = {
     parent: string | null;
     created_at: string;
     server_id: string;
+    recipients?: UserType[];
 }
 
 
