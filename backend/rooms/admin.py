@@ -1,5 +1,6 @@
 from django.contrib import admin
 from . import models
+from copy import deepcopy
 
 
 @admin.register(models.Room)
@@ -17,5 +18,14 @@ class RoomAdmin(admin.ModelAdmin):
         }],
         ['Other', {
             'fields': ['created_at', 'is_deleted']
-        }]
+        }],
     ]
+
+    def get_fieldsets(self, request, obj=None):
+        fs = deepcopy(self.fieldsets)
+
+        if obj.room_type == models.Room.TypeChoices.DM:
+            DM_FS = ['DM', {'fields': ['recipients']}]
+            fs.append(DM_FS)
+            
+        return fs

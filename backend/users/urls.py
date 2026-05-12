@@ -1,5 +1,6 @@
 from django.urls import path, include
 from rest_framework_simplejwt import views as simplejwt_views
+from rooms import views as room_views
 from . import views
 
 
@@ -14,6 +15,7 @@ users_urlpatterns = [
     path('@me', views.UserRetrieveUpdateAPIView.as_view()),
     path('@me/servers', views.UserServerListAPIView.as_view()),
     path('@me/servers/<uuid:pk>/member', views.UserServerMemberRetrieveDeleteAPIView.as_view()),
+    path('@me/channels', room_views.DMRoomListCreateAPIView.as_view()),
 
     path('<uuid:pk>', views.UserRetrieveAPIView.as_view()),
 ]

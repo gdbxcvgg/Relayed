@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from servers.serializers import ServerSerializer
 from . import models
+from users.serializers import UserSerializer
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -38,3 +42,29 @@ class RoomDeletedSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Room 
         fields = ['id', 'server_id']
+
+
+class DMRoomSerializer(serializers.ModelSerializer):
+    recipients = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        write_only=True,
+        many=True
+    )
+
+    class Meta:
+        model = models.Room
+        fields = ['id', 'recipients', 'room_type']
+
+        read_only_fields = ['id', 'room_type']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        user = self.context['request'].user
+        
+        representation['recipients'] = UserSerializer(
+            instance.recipients.exclude(id=user.id),
+            many=True
+        ).data
+
+        return representation

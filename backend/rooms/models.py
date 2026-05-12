@@ -1,21 +1,22 @@
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 from django.db import models
 from servers.models import Server
 import uuid
 
+User = get_user_model()
 
 class Room(models.Model):
-    ROOM_TYPE_CHOICES = {
-        0: "DM",
-        1: "SERVER_TEXT",
-        2: "SERVER_CATEGORY",
-    }
+    class TypeChoices(models.IntegerChoices):
+        DM = 0, 'DM'
+        SERVER_TEXT = 1, 'SERVER_TEXT'
+        SERVER_CATEGORY = 2, 'SERVER_CATEGORY'
 
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid7)
 
     name = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=200, null=True, blank=True)
-    room_type = models.IntegerField(choices=ROOM_TYPE_CHOICES)
+    room_type = models.IntegerField(choices=TypeChoices)
 
     # last_message = models.ForeignKey(..., null=True)
     server = models.ForeignKey(Server, null=True, blank=True, on_delete=models.SET_NULL)
@@ -23,6 +24,9 @@ class Room(models.Model):
 
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    # used for DM rooms
+    recipients = models.ManyToManyField(User)
 
     def __str__(self):
         return f"{self.name} [{self.get_room_type_display()}]"
