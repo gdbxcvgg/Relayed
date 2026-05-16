@@ -5,10 +5,12 @@ import useGateway from "../hooks/useGateway";
 import { ReadyState } from "react-use-websocket";
 import type { ServerType } from "../types/server";
 import type { UserType } from "../types/user";
+import type { RoomType } from "../types/room";
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, _setUser] = useState<UserType | null>(null);
     const [servers, _setServers] = useState<ServerType[]>([]);
+    const [dmChannels, _setDmChannels] = useState<RoomType[]>([]);
 
     const { readyState, sendJsonMessage, lastJsonMessage } = useGateway();
 
@@ -29,6 +31,13 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         _setServers(res.data);
     };
 
+    const _getDmChannels = async () => {
+        const res = await api.get<RoomType[]>("users/@me/channels");
+        if (res.status !== 200) return;
+
+        _setDmChannels(res.data);
+    };
+
     const _getUser = async () => {
         const res = await api.get<UserType>("users/@me");
         if (res.status !== 200) return false;
@@ -40,6 +49,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         const fetchData = async () => {
             _getUser();
             _getServers();
+            _getDmChannels();
         };
 
         fetchData();
@@ -92,7 +102,11 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [lastJsonMessage]);
 
-    return <UserContext value={{ user, servers }}>{children}</UserContext>;
+    return (
+        <UserContext value={{ user, servers, dmChannels }}>
+            {children}
+        </UserContext>
+    );
 };
 
 export default UserProvider;

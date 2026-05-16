@@ -1,9 +1,10 @@
 import { Link } from "react-router";
 import type { RoomType } from "../types/room";
 import UserAvatar from "./user/UserAvatar";
+import { RoomTypeChoices } from "../shared/constants";
 
 const DM = ({ room }: { room: RoomType }) => {
-    if (room.room_type !== 0) return null;
+    if (room.room_type !== RoomTypeChoices.DM) return null;
 
     return (
         <Link to={`channels/@me/${room.id}`}>

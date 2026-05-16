@@ -5,6 +5,60 @@ import Message from "./Message";
 import useRoom from "../../hooks/useRoom";
 import useServer from "../../hooks/useServer";
 import useUser from "../../hooks/useUser";
+import { RoomTypeChoices } from "../../shared/constants";
+
+const DmStart = () => {
+    const { room } = useRoom();
+
+    return (
+        <div className="py-6.5 flex flex-col gap-5">
+            <div>
+                <div className="text-2xl font-bold pb-5">
+                    <div>
+                        {room?.recipients?.[0].display_name ??
+                            room?.recipients?.[0].username}
+                    </div>
+                    <div className="font-normal text-xl">
+                        {room?.recipients?.[0].username}
+                    </div>
+                </div>
+                <div className="text-sm">
+                    This is the beggining of your direct message history with{" "}
+                    <span className="font-bold">
+                        {room?.recipients?.[0].display_name ??
+                            room?.recipients?.[0].username}
+                    </span>
+                    .
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const ServerTextStart = () => {
+    const { room } = useRoom();
+    const { server } = useServer();
+    const { user } = useUser();
+
+    return (
+        <div className="py-6.5 flex flex-col gap-5">
+            <div>
+                <div className="text-2xl font-bold">
+                    Welcome to # {room?.name}!
+                </div>
+                <div className="text-sm">
+                    This is the start of the #{room?.name} channel.
+                </div>
+            </div>
+            {server?.owner.id === user?.id && (
+                <button className="text-sm p-1.5 px-3 border border-(--border-color) rounded-lg w-fit flex gap-2 items-center hover:cursor-pointer hover:bg-[#121212] active:bg-[#181818]">
+                    <img src="/edit.png" className="size-3.5" />
+                    <div>Edit channel</div>
+                </button>
+            )}
+        </div>
+    );
+};
 
 const VoidMessage = ({ count = 3 }: { count?: number }) => {
     return (
@@ -38,8 +92,6 @@ const MessagesList = ({
 }) => {
     const { messages, fetchBeforeMessages, fetchedAll } = useMessages();
     const { room } = useRoom();
-    const { server } = useServer();
-    const { user } = useUser();
 
     const [loading, setLoading] = useState(false);
 
@@ -87,25 +139,11 @@ const MessagesList = ({
             <div ref={inViewRef}>
                 {fetchedAll && (
                     <div>
-                        <div className="py-6.5 flex flex-col gap-5">
-                            <div>
-                                <div className="text-2xl font-bold">
-                                    {room?.room_type === 1
-                                        ? `Welcome to #${room?.name}!`
-                                        : ""}
-                                </div>
-                                <div className="text-sm">
-                                    This is the start of the #{room?.name}{" "}
-                                    channel.
-                                </div>
-                            </div>
-                            {server?.owner.id === user?.id && (
-                                <button className="text-sm p-1.5 px-3 border border-(--border-color) rounded-lg w-fit flex gap-2 items-center hover:cursor-pointer hover:bg-[#121212] active:bg-[#181818]">
-                                    <img src="/edit.png" className="size-3.5" />
-                                    <div>Edit channel</div>
-                                </button>
-                            )}
-                        </div>
+                        {room?.room_type === RoomTypeChoices.SERVER_TEXT && (
+                            <ServerTextStart />
+                        )}
+                        {room?.room_type === RoomTypeChoices.DM && <DmStart />}
+
                         {messages.length > 0 && (
                             <div className="border-b border-b-(--border-color)"></div>
                         )}

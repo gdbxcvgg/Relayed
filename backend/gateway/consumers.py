@@ -59,15 +59,19 @@ class GatewayConsumer(websocket.JsonWebsocketConsumer):
 
         if not serializer.is_valid():
             return self.close()
-        
-        server_id = serializer.validated_data['server_id']
-        server = self.get_object(Server, pk=server_id)
-        if not server: return self.close()
+        try:
+            server_id = serializer.validated_data['server_id']
+        except:
+            server_id = None
 
-        member = ServerMember.objects.filter(user=self.user, server=server)
+        if server_id:
+            server = self.get_object(Server, pk=server_id)
+            if not server: return self.close()
 
-        if not member.exists():
-            return
+            member = ServerMember.objects.filter(user=self.user, server=server)
+
+            if not member.exists():
+                return
     
         rooms = serializer.validated_data.get('rooms', [])
 
@@ -76,12 +80,13 @@ class GatewayConsumer(websocket.JsonWebsocketConsumer):
             room = self.get_object(Room, pk=room_id)
             if not room: return self.close()
 
-            if room.server != server:
+            if server_id and room.server != server:
                 return self.close()
             
             self.subscribe(f'room_{room_id}')
 
-        self.subscribe(f'server_{server_id}')
+        if server_id:
+            self.subscribe(f'server_{server_id}')
 
 
     def login(self, token):

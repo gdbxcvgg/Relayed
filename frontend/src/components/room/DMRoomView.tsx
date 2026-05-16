@@ -5,6 +5,7 @@ import useRoom from "../../hooks/useRoom";
 import MessagesList from "../message/MessagesList";
 import MessageInput from "../message/MessageInput";
 import { useParams } from "react-router";
+import UserAvatar from "../user/UserAvatar";
 
 const DMRoomView = () => {
     const { room } = useRoom();
@@ -53,7 +54,11 @@ const DMRoomView = () => {
                         className="md:hidden w-6 h-7"
                         onClick={openMenu}
                     />
-                    <div># {room?.name}</div>
+                    <div className="flex items-center gap-3">
+                        <UserAvatar user={room?.recipients?.at(0)} />
+                        {room?.recipients?.at(0)?.display_name ??
+                            room?.recipients?.at(0)?.username}
+                    </div>
                 </div>
                 <div className="flex flex-1 min-h-0 w-full">
                     <div className="border-r border-r-(--border-color) flex flex-col flex-1 min-w-0">

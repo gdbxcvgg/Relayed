@@ -6,9 +6,7 @@ import PopUpModal from "../PopUpModal";
 import CreateRoomPopup from "./CreateRoomPopup";
 import CategoryHead from "./CategoryHead";
 import Room from "./Room";
-
-const SERVER_TEXT = 1;
-const SERVER_CATEGORY = 2;
+import { RoomTypeChoices } from "../../shared/constants";
 
 const RoomList = () => {
     const { server } = useServer();
@@ -52,19 +50,25 @@ const RoomList = () => {
             };
 
             server.rooms.forEach((room) => {
-                if (room.room_type === SERVER_CATEGORY) {
+                if (room.room_type === RoomTypeChoices.SERVER_CATEGORY) {
                     roomMap[room.id] = {
                         room: room,
                         children: [],
                         hidden: false,
                     };
-                } else if (room.room_type === SERVER_TEXT && !room.parent) {
+                } else if (
+                    room.room_type === RoomTypeChoices.SERVER_TEXT &&
+                    !room.parent
+                ) {
                     roomMap["root"].children.push(room);
                 }
             });
 
             server.rooms.forEach((room) => {
-                if (room.room_type === SERVER_TEXT && room.parent) {
+                if (
+                    room.room_type === RoomTypeChoices.SERVER_TEXT &&
+                    room.parent
+                ) {
                     roomMap[room.parent].children.push(room);
                 }
             });
