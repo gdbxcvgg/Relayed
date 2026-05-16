@@ -1,21 +1,9 @@
-import { useEffect, useState } from "react";
+import useUser from "../hooks/useUser";
 import BaseSidebar from "./BaseSidebar";
-import type { RoomType } from "../types/room";
-import api from "../services/api";
 import DM from "./DM";
 
 const FriendsSidebar = () => {
-    const [dmRooms, setDmRooms] = useState<RoomType[]>([]);
-
-    useEffect(() => {
-        const getDms = async () => {
-            const res = await api.get<RoomType[]>("users/@me/channels");
-            if (res.status !== 200) return;
-            setDmRooms(res.data);
-        };
-
-        getDms();
-    }, []);
+    const { dmChannels } = useUser();
 
     return (
         <BaseSidebar>
@@ -24,7 +12,7 @@ const FriendsSidebar = () => {
             </div>
             <div className="scrollbar-hide overflow-y-scroll p-3">
                 <div className="flex flex-col gap-3">
-                    {dmRooms.map((room) => (
+                    {dmChannels?.map((room) => (
                         <DM room={room} key={room.id} />
                     ))}
                 </div>
