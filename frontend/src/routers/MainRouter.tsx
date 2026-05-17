@@ -18,7 +18,14 @@ const MainRouter = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route index element={<HomePage />} />
+                <Route
+                    index
+                    element={
+                        <ViewProvider>
+                            <HomePage />
+                        </ViewProvider>
+                    }
+                />
                 <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<RegisterPage />} />
                 <Route
