@@ -53,7 +53,7 @@ const CreateRoomPopup = ({
                             required
                         />
                         <label
-                            htmlFor="text"
+                            htmlFor="category"
                             className="flex flex-col hover:cursor-pointer"
                         >
                             <p className="font-bold">Category</p>
