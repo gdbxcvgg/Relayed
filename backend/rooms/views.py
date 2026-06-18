@@ -13,16 +13,17 @@ from django.db.models import Count
 
 User = get_user_model()
 
+
 class RoomRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.RoomSerializer
-    queryset = models.Room.objects.select_related('server')
+    queryset = models.Room.objects.select_related("server")
 
-    perm_server_path = 'server'
+    perm_server_path = "server"
     permission_classes = [IsAuthenticated, IsServerOwner | IsServerMember & ReadOnly]
 
     def get_object(self):
         qs = self.get_queryset()
-        obj = get_object_or_404(qs, pk=self.kwargs['pk'], is_deleted=False)
+        obj = get_object_or_404(qs, pk=self.kwargs["pk"], is_deleted=False)
         self.check_object_permissions(self.request, obj)
         return obj
 
@@ -33,16 +34,15 @@ class RoomRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class DMRoomListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = serializers.DMRoomSerializer
-    
+
     def get_queryset(self):
         user = self.request.user
 
-        qs = models.Room.objects.prefetch_related('recipients')
-        return qs.annotate(num_recipients=Count('recipients', distinct=True)).filter(
-            room_type=models.Room.TypeChoices.DM,
-            recipients=user
+        qs = models.Room.objects.prefetch_related("recipients")
+        return qs.annotate(num_recipients=Count("recipients", distinct=True)).filter(
+            room_type=models.Room.TypeChoices.DM, recipients=user
         )
-        
+
     def perform_create(self, serializer):
         room = serializer.save(room_type=models.Room.TypeChoices.DM)
         room.recipients.add(self.request.user)
@@ -53,9 +53,9 @@ class DMRoomListCreateAPIView(generics.ListCreateAPIView):
 
         user = self.request.user
 
-        recipients = serializer.validated_data['recipients']
+        recipients = serializer.validated_data["recipients"]
         recipients_count = len(recipients)
-        
+
         if recipients_count <= 0:
             return Response(
                 {"detail": "You need to specify the user you want to create DM with."},
@@ -71,16 +71,16 @@ class DMRoomListCreateAPIView(generics.ListCreateAPIView):
         qs = self.get_queryset()
 
         existing_room = (
-            qs.filter(recipients=recipients[0])
-            .filter(num_recipients=2)
-            .first()
+            qs.filter(recipients=recipients[0]).filter(num_recipients=2).first()
         )
-        
+
         if recipients_count == 1 and existing_room:
             data = self.get_serializer(existing_room).data
             return Response(data, status=status.HTTP_200_OK)
 
         self.perform_create(serializer)
-        
+
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )

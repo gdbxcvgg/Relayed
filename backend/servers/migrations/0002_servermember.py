@@ -9,18 +9,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('servers', '0001_initial'),
+        ("servers", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ServerMember',
+            name="ServerMember",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid7, editable=False, primary_key=True, serialize=False)),
-                ('joined_at', models.DateTimeField(auto_now_add=True)),
-                ('server', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='servers.server')),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid7,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("joined_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "server",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="servers.server"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

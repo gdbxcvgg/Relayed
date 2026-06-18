@@ -7,14 +7,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('rooms', '0001_initial'),
+        ("rooms", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='room',
-            name='recipients',
+            model_name="room",
+            name="recipients",
             field=models.ManyToManyField(to=settings.AUTH_USER_MODEL),
         ),
     ]

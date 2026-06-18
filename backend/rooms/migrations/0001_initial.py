@@ -10,21 +10,53 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('servers', '0002_servermember'),
+        ("servers", "0002_servermember"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Room',
+            name="Room",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid7, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(blank=True, max_length=100, null=True)),
-                ('description', models.CharField(blank=True, max_length=200, null=True)),
-                ('room_type', models.IntegerField(choices=[(0, 'DM'), (1, 'SERVER_TEXT'), (2, 'SERVER_CATEGORY')])),
-                ('is_deleted', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='rooms.room')),
-                ('server', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='servers.server')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid7,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=100, null=True)),
+                (
+                    "description",
+                    models.CharField(blank=True, max_length=200, null=True),
+                ),
+                (
+                    "room_type",
+                    models.IntegerField(
+                        choices=[(0, "DM"), (1, "SERVER_TEXT"), (2, "SERVER_CATEGORY")]
+                    ),
+                ),
+                ("is_deleted", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="rooms.room",
+                    ),
+                ),
+                (
+                    "server",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="servers.server",
+                    ),
+                ),
             ],
         ),
     ]

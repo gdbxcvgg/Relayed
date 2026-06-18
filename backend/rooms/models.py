@@ -6,11 +6,12 @@ import uuid
 
 User = get_user_model()
 
+
 class Room(models.Model):
     class TypeChoices(models.IntegerChoices):
-        DM = 0, 'DM'
-        SERVER_TEXT = 1, 'SERVER_TEXT'
-        SERVER_CATEGORY = 2, 'SERVER_CATEGORY'
+        DM = 0, "DM"
+        SERVER_TEXT = 1, "SERVER_TEXT"
+        SERVER_CATEGORY = 2, "SERVER_CATEGORY"
 
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid7)
 
@@ -20,7 +21,7 @@ class Room(models.Model):
 
     # last_message = models.ForeignKey(..., null=True)
     server = models.ForeignKey(Server, null=True, blank=True, on_delete=models.SET_NULL)
-    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL)
 
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,16 +36,17 @@ class Room(models.Model):
         TEXT = 1
         CATEGORY = 2
 
-        if not self.parent: return
+        if not self.parent:
+            return
 
         if self.room_type == CATEGORY:
-            raise ValidationError('Category cannot have parent!')
+            raise ValidationError("Category cannot have parent!")
 
         if self.parent.room_type != CATEGORY:
-            raise ValidationError('Room parent must be of category type!')
-        
+            raise ValidationError("Room parent must be of category type!")
+
         if self.server != self.parent.server:
-            raise ValidationError('Room\'s parent must be in the same server!')
+            raise ValidationError("Room's parent must be in the same server!")
 
     def save(self, **kwargs):
         self.full_clean()

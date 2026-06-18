@@ -7,13 +7,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('servers', '0002_servermember'),
+        ("servers", "0002_servermember"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddConstraint(
-            model_name='servermember',
-            constraint=models.UniqueConstraint(fields=('user', 'server'), name='unique_user_per_server'),
+            model_name="servermember",
+            constraint=models.UniqueConstraint(
+                fields=("user", "server"), name="unique_user_per_server"
+            ),
         ),
     ]

@@ -17,28 +17,73 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Server',
+            name="Server",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid7, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=100)),
-                ('icon', models.CharField(blank=True, max_length=200, null=True)),
-                ('is_deleted', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('owner', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid7,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("icon", models.CharField(blank=True, max_length=200, null=True)),
+                ("is_deleted", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ServerInvite',
+            name="ServerInvite",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid7, editable=False, primary_key=True, serialize=False)),
-                ('code', models.CharField(default=servers.utils.generate_code, max_length=16, unique=True)),
-                ('is_deleted', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('expires_at', models.DateTimeField(default=servers.utils.time_in_a_week, null=True)),
-                ('uses', models.IntegerField(default=0)),
-                ('max_uses', models.IntegerField(blank=True, null=True)),
-                ('inviter', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('server', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='servers.server')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid7,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "code",
+                    models.CharField(
+                        default=servers.utils.generate_code, max_length=16, unique=True
+                    ),
+                ),
+                ("is_deleted", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "expires_at",
+                    models.DateTimeField(
+                        default=servers.utils.time_in_a_week, null=True
+                    ),
+                ),
+                ("uses", models.IntegerField(default=0)),
+                ("max_uses", models.IntegerField(blank=True, null=True)),
+                (
+                    "inviter",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "server",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="servers.server"
+                    ),
+                ),
             ],
         ),
     ]

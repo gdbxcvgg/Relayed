@@ -5,14 +5,12 @@ from django.db.models import Q, F
 from . import utils
 import uuid
 
-
 User = get_user_model()
 
 
 class ServerFilteredManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_deleted=False)
-
 
 
 class Server(models.Model):
@@ -23,7 +21,7 @@ class Server(models.Model):
     icon = models.CharField(max_length=200, null=True, blank=True)
 
     is_deleted = models.BooleanField(default=False)
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     objects = models.Manager()
@@ -33,14 +31,17 @@ class Server(models.Model):
         return self.name
 
 
-
 class ServerInviteFilteredManager(models.Manager):
     def get_queryset(self):
         now = timezone.now()
-        return super().get_queryset().filter(
-            Q(max_uses__isnull=True) | Q(uses__lt=F('max_uses')),
-            Q(expires_at__isnull=True) | Q(expires_at__gt=now),
-            is_deleted=False
+        return (
+            super()
+            .get_queryset()
+            .filter(
+                Q(max_uses__isnull=True) | Q(uses__lt=F("max_uses")),
+                Q(expires_at__isnull=True) | Q(expires_at__gt=now),
+                is_deleted=False,
+            )
         )
 
 
@@ -65,15 +66,13 @@ class ServerInvite(models.Model):
     objects = models.Manager()
     valid_objects = ServerInviteFilteredManager()
 
-
     def __str__(self):
         return self.code
-
 
     def save(self, *args, **kwargs):
         if self.pk:
             return super().save(*args, **kwargs)
-        
+
         for _ in range(self.MAX_CODE_GENERATION_RETRIES):
             try:
                 with transaction.atomic():
@@ -83,12 +82,13 @@ class ServerInvite(models.Model):
 
         raise IntegrityError("Failed to generate unique invite code!")
 
-    
     @property
     def is_expired(self):
-        if not self.expires_at and not self.max_uses: return False
+        if not self.expires_at and not self.max_uses:
+            return False
 
-        if self.max_uses and self.uses >= self.max_uses: return True
+        if self.max_uses and self.uses >= self.max_uses:
+            return True
 
         if self.expires_at and (timezone.now() > self.expires_at):
             return True
@@ -106,7 +106,9 @@ class ServerMember(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user', 'server'], name='unique_user_per_server')
+            models.UniqueConstraint(
+                fields=["user", "server"], name="unique_user_per_server"
+            )
         ]
 
 

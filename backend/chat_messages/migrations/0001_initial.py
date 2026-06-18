@@ -11,21 +11,43 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('rooms', '0001_initial'),
+        ("rooms", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Message',
+            name="Message",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid7, editable=False, primary_key=True, serialize=False)),
-                ('content', models.CharField(blank=True, max_length=10000, null=True)),
-                ('is_deleted', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('edited_at', models.DateTimeField(blank=True, null=True)),
-                ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('room', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='rooms.room')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid7,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("content", models.CharField(blank=True, max_length=10000, null=True)),
+                ("is_deleted", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("edited_at", models.DateTimeField(blank=True, null=True)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "room",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="rooms.room",
+                    ),
+                ),
             ],
         ),
     ]

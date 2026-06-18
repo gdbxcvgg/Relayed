@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class ChatMessagesConfig(AppConfig):
-    name = 'chat_messages'
+    name = "chat_messages"
 
-    def  ready(self):
+    def ready(self):
         from . import signals

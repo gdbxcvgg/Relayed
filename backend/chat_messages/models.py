@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from rooms.models import Room
 import uuid
 
-
 User = get_user_model()
 
 
@@ -14,7 +13,7 @@ class MessagesFilteredManager(models.Manager):
 
 class Message(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid7)
-    
+
     content = models.CharField(max_length=10000, null=True, blank=True)
 
     room = models.ForeignKey(Room, null=True, on_delete=models.SET_NULL)
@@ -29,11 +28,10 @@ class Message(models.Model):
 
     def __str__(self):
         return self.content
-    
+
     @property
     def edited(self):
         return self.edited_at is not None
 
-
     class Meta:
-        ordering = ['-id']
+        ordering = ["-id"]

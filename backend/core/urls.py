@@ -3,11 +3,12 @@ from django.urls import path, include
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
-] 
+    path("admin/", admin.site.urls),
+    path("api/", include("api.urls")),
+]
 
 
 if settings.DEBUG:
     from debug_toolbar.toolbar import debug_toolbar_urls
+
     urlpatterns += debug_toolbar_urls()

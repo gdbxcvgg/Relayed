@@ -9,21 +9,23 @@ from . import serializers
 
 User = get_user_model()
 
+
 @receiver(signals.post_save, sender=User)
 def dispatch_user_updated_to_gateway(sender, instance, created, **kwargs):
-    if created: return
+    if created:
+        return
 
-    group_name = f'user_{instance.id}'
+    group_name = f"user_{instance.id}"
     channel_layer = get_channel_layer()
 
     serializer_user = serializers.SelfUserSerializer(instance=instance)
 
     async_to_sync(channel_layer.group_send)(
-        group_name, {
-            'type': 'dispatch_event', 
-            'opcode': OPCODES.DISPATCH, 
-            'data': serializer_user.data,
-            'e_type': EVENTS.USER_UPDATED
-        }
+        group_name,
+        {
+            "type": "dispatch_event",
+            "opcode": OPCODES.DISPATCH,
+            "data": serializer_user.data,
+            "e_type": EVENTS.USER_UPDATED,
+        },
     )
-

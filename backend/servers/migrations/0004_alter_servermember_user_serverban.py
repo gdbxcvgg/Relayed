@@ -9,24 +9,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('servers', '0003_servermember_unique_user_per_server'),
+        ("servers", "0003_servermember_unique_user_per_server"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='servermember',
-            name='user',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="servermember",
+            name="user",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.CreateModel(
-            name='ServerBan',
+            name="ServerBan",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid7, editable=False, primary_key=True, serialize=False)),
-                ('reason', models.CharField(blank=True, max_length=200, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('server', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='servers.server')),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid7,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("reason", models.CharField(blank=True, max_length=200, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "server",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="servers.server"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
