@@ -1,10 +1,12 @@
-from django.dispatch.dispatcher import receiver
-from django.db.models import signals
-from django.contrib.auth import get_user_model
-from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from gateway import opcodes as OPCODES
+from channels.layers import get_channel_layer
+from django.contrib.auth import get_user_model
+from django.db.models import signals
+from django.dispatch.dispatcher import receiver
+
 from gateway import events as EVENTS
+from gateway import opcodes as OPCODES
+
 from . import serializers
 
 User = get_user_model()

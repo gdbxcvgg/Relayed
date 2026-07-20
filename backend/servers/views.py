@@ -1,13 +1,15 @@
-from rest_framework import generics, response, views, status, mixins
+from django.http import Http404
+from django.shortcuts import get_object_or_404
+from rest_framework import generics, mixins, response, status, views
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-from django.http import Http404
-from .permissions import IsServerOwner, IsServerMember
+
 from core.permissions import ReadOnly
-from rooms.serializers import RoomSerializer
 from rooms.models import Room
+from rooms.serializers import RoomSerializer
+
 from . import models, serializers
+from .permissions import IsServerMember, IsServerOwner
 
 
 class ServerRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):

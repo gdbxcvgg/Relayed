@@ -1,6 +1,8 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
+
 from servers.models import Server
+
 from . import models
 
 User = get_user_model()

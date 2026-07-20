@@ -1,6 +1,8 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework_simplejwt import views as simplejwt_views
+
 from rooms import views as room_views
+
 from . import views
 
 auth_urlpatterns = [

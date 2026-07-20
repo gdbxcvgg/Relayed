@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
-from .models import Server, ServerMember
+
 from core import permissions
+
+from .models import Server, ServerMember
 
 
 class IsServerOwner(permissions.BasePermission):

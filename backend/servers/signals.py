@@ -1,11 +1,12 @@
-from django.dispatch.dispatcher import receiver
-from django.db.models import signals
-from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from gateway import opcodes as OPCODES
+from channels.layers import get_channel_layer
+from django.db.models import signals
+from django.dispatch.dispatcher import receiver
+
 from gateway import events as EVENTS
-from . import serializers
-from . import models
+from gateway import opcodes as OPCODES
+
+from . import models, serializers
 
 
 @receiver(signals.post_save, sender=models.ServerMember)

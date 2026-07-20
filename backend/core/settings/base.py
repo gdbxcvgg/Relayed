@@ -1,5 +1,6 @@
-from pathlib import Path
 from datetime import timedelta
+from pathlib import Path
+
 import environ
 
 PROJECT_PACKAGE = Path(__file__).resolve().parent.parent

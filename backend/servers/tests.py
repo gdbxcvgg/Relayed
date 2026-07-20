@@ -1,5 +1,6 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
+
 from . import models
 
 User = get_user_model()
@@ -79,8 +80,9 @@ class ServerInviteTestCase(TestCase):
         self.assertIsInstance(self.invite.pk, UUID)
 
     def test_is_expired(self):
-        from django.utils import timezone
         from datetime import timedelta
+
+        from django.utils import timezone
 
         self.assertFalse(self.invite.is_expired)
 

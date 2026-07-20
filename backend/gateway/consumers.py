@@ -1,13 +1,15 @@
-from django.shortcuts import get_object_or_404
 from asgiref.sync import async_to_sync
-from channels.generic import websocket
 from channels import auth
-from .authentication import JWTGatewayAuth
-from servers.models import Server, ServerMember
+from channels.generic import websocket
+from django.shortcuts import get_object_or_404
+
 from rooms.models import Room
-from . import opcodes as OPCODES
+from servers.models import Server, ServerMember
+
 from . import events as EVENTS
+from . import opcodes as OPCODES
 from . import serializers
+from .authentication import JWTGatewayAuth
 
 
 class GatewayConsumer(websocket.JsonWebsocketConsumer):

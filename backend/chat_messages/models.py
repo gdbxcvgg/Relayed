@@ -1,7 +1,9 @@
-from django.db import models
-from django.contrib.auth import get_user_model
-from rooms.models import Room
 import uuid
+
+from django.contrib.auth import get_user_model
+from django.db import models
+
+from rooms.models import Room
 
 User = get_user_model()
 

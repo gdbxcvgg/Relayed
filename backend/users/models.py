@@ -1,7 +1,8 @@
-from django.db import models
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.core import validators
-import uuid
+from django.db import models
 
 
 class UsernameCharactersValidator(validators.RegexValidator):

@@ -1,7 +1,8 @@
+from django.db.models.query import QuerySet
 from rest_framework.pagination import BasePagination
 from rest_framework.request import Request
 from rest_framework.response import Response
-from django.db.models.query import QuerySet
+
 from .models import Message
 
 

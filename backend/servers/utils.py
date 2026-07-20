@@ -1,13 +1,14 @@
 def time_in_a_week():
-    from django.utils import timezone
     from datetime import timedelta
+
+    from django.utils import timezone
 
     return timezone.now() + timedelta(days=7)
 
 
 def generate_code():
-    from uuid import uuid4
     from random import randint
+    from uuid import uuid4
 
     length = randint(6, 8)
 

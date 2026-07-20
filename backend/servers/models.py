@@ -1,9 +1,11 @@
+import uuid
+
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError, models, transaction
+from django.db.models import F, Q
 from django.utils import timezone
-from django.db.models import Q, F
+
 from . import utils
-import uuid
 
 User = get_user_model()
 

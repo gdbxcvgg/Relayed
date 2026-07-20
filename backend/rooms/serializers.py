@@ -1,8 +1,10 @@
-from rest_framework import serializers
-from servers.serializers import ServerSerializer
-from . import models
-from users.serializers import UserSerializer
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
+from servers.serializers import ServerSerializer
+from users.serializers import UserSerializer
+
+from . import models
 
 User = get_user_model()
 

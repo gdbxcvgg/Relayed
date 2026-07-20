@@ -1,6 +1,8 @@
-from django.contrib import admin
-from . import models
 from copy import deepcopy
+
+from django.contrib import admin
+
+from . import models
 
 
 @admin.register(models.Room)
